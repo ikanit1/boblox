@@ -223,8 +223,12 @@ while running do
 			local completed = world.Run(ruleId, context)
 			-- Check falls before restoring the floor, so it cannot rescue a lost player.
 			roster.CheckBoundaries()
-			if completed then
-				roster.AwardSurvivors(ruleId)
+			local awarded = if completed then roster.AwardSurvivors(ruleId) else 0
+			if ruleId == "ReactorRush" then
+				state:SetAttribute(
+					"FinaleSuccess",
+					state:GetAttribute("FinaleSuccess") == true and awarded > 0
+				)
 			end
 			world.Restore()
 			roster.EndRound()
@@ -247,7 +251,8 @@ while running do
 	if not running then
 		break
 	end
-	local teamSuccess = completedRun and state:GetAttribute("FinaleSuccess") == true
+	local teamSuccess = success and completedRun and state:GetAttribute("FinaleSuccess") == true
+	state:SetAttribute("FinaleSuccess", teamSuccess)
 	local winners = if success and completedRun then roster.CompleteRun(teamSuccess) else 0
 	if not success then
 		warn("[RuleRoom] Run aborted and restored:\n" .. tostring(failure))
@@ -257,8 +262,11 @@ while running do
 		)
 		publish("Results", "НОВАЯ ПОПЫТКА", "Комната перезагружается.")
 	else
+		local charged = (state:GetAttribute("TeamGoal") :: number) > 0
+			and (state:GetAttribute("TeamCharge") :: number) >= (state:GetAttribute("TeamGoal") :: number)
 		local result = if teamSuccess
 			then "Реактор заряжен! Победителей: " .. winners .. "."
+			elseif charged then "Заряд есть, но все выбыли."
 			else "Реактору не хватило энергии. Собирайте заряды вместе!"
 		state:SetAttribute(
 			"ResultsText",

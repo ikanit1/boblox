@@ -577,7 +577,8 @@ function ArenaRules.new(arena: Model)
 	end
 
 	local function spinner(context: RuleContext): boolean
-		laser.Size = Vector3.new(56, 1, 1)
+		local halfLength = RuleMath.spinnerHalfLength(Config.ArenaHalfSize)
+		laser.Size = Vector3.new(halfLength * 2, 1, 1)
 		laser.CFrame = CFrame.new(0, 1.9, 0)
 		laser.Color = Color3.fromRGB(255, 210, 88)
 		laser.Transparency = 0.4
@@ -604,7 +605,7 @@ function ArenaRules.new(arena: Model)
 						RuleMath.spinnerIntersects(
 							bounds,
 							previousAngle + (angle - previousAngle) * step / steps,
-							28,
+							halfLength,
 							0.5
 						)
 					then
@@ -648,13 +649,12 @@ function ArenaRules.new(arena: Model)
 		)
 		local charge = 0
 		local sweep = beamUpdate(context, 7, 30)
-		return context.waitFor(19, function(elapsed, delta)
+		local completed = context.waitFor(19, function(elapsed, delta)
 			sweep(elapsed, delta)
 			collect(context, pickups, function()
 				charge += 1
 				context.state:SetAttribute("TeamCharge", charge)
 				if charge >= goal then
-					context.state:SetAttribute("FinaleSuccess", true)
 					instruction(
 						context,
 						"⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
@@ -662,6 +662,11 @@ function ArenaRules.new(arena: Model)
 				end
 			end)
 		end)
+		context.state:SetAttribute(
+			"FinaleSuccess",
+			RuleMath.finaleSucceeded(charge, goal, completed, context.roster.AliveCount())
+		)
+		return completed
 	end
 
 	local handlers: { [string]: (RuleContext) -> boolean } = {

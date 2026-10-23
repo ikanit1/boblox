@@ -46,7 +46,7 @@ export type Roster = {
 	CheckBoundaries: () -> (),
 	AliveCount: () -> number,
 	ForEachAlive: ((Player, Humanoid, BasePart) -> ()) -> (),
-	AwardSurvivors: (string) -> (),
+	AwardSurvivors: (string) -> number,
 	AwardStar: (Player) -> boolean,
 	Destroy: () -> (),
 }
@@ -402,7 +402,8 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 	end
 
-	function roster.AwardSurvivors(ruleId: string)
+	function roster.AwardSurvivors(ruleId: string): number
+		local awarded = 0
 		for player, entry in participants do
 			if not entry.rewarded and entry.root.Position.Y >= 1 and award(player, Config.SurvivorPoints) then
 				entry.rewarded = true
@@ -413,8 +414,10 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 				end
 				player:SetAttribute("RunSurvived", record.survived)
 				profiles.AwardSurvival(player)
+				awarded += 1
 			end
 		end
+		return awarded
 	end
 
 	function roster.AwardStar(player: Player): boolean

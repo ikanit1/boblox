@@ -38,6 +38,40 @@ expect(not RuleMath.spinnerIntersects(jumping, 0, 28, 0.5), "Jump clears rotatin
 expect(RuleMath.spinnerIntersects(behind, math.pi / 2, 28, 0.5), "Quarter-turn hits Z axis")
 expect(not RuleMath.spinnerIntersects(behind, 0, 28, 0.5), "Quarter-turn and zero angle differ")
 expect(not RuleMath.spinnerIntersects(outside, 0, 28, 0.5), "Finite spinner does not hit beyond its endpoint")
+local spinnerLength = RuleMath.spinnerHalfLength(30)
+for _, distance in { 25, 29 } do
+	for _, xSign in { -1, 1 } do
+		for _, zSign in { -1, 1 } do
+			local x, z = distance * xSign, distance * zSign
+			local corner = { x = x, z = z, feetY = 1, headY = 5, halfX = 1, halfZ = 0.5 }
+			local jumpingCorner = { x = x, z = z, feetY = 3, headY = 7, halfX = 1, halfZ = 0.5 }
+			local crossing = math.atan2(-z, x)
+			expect(
+				RuleMath.spinnerIntersects(corner, crossing, spinnerLength, 0.5),
+				"Standing in any arena corner cannot bypass the spinner"
+			)
+			expect(
+				not RuleMath.spinnerIntersects(jumpingCorner, crossing, spinnerLength, 0.5),
+				"A clear jump still avoids the spinner in a corner"
+			)
+		end
+	end
+end
+expect(
+	not RuleMath.finaleSucceeded(11, 5, false, 0),
+	"Charged then eliminated team cannot announce a successful finale"
+)
+expect(
+	not RuleMath.finaleSucceeded(5, 5, false, 1),
+	"Meeting the charge target before completion is not success"
+)
+expect(not RuleMath.finaleSucceeded(5, 5, true, 0), "Success requires a living participant at completion")
+expect(not RuleMath.finaleSucceeded(4, 5, true, 2), "Surviving without enough energy is not success")
+expect(RuleMath.finaleSucceeded(5, 5, true, 1), "Completing a charged finale works for a solo survivor")
+expect(
+	RuleMath.finaleSucceeded(11, 5, true, 2),
+	"Excess collected energy preserves a completed team's success"
+)
 expect(RuleMath.teamGoal(1) == 5 and RuleMath.teamGoal(12) == 24, "Finale scales from solo to twelve players")
 expect(RuleMath.teamGoal(100) == 24, "Finale pickups remain bounded")
 local eligible, won = RuleMath.runOutcome(0, false, true)
