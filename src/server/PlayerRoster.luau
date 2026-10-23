@@ -2,6 +2,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
+local PhysicsService = game:GetService("PhysicsService")
 local Config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
 local RuleMath = require(script.Parent.RuleMath)
 
@@ -34,6 +35,8 @@ type PlayerScope = {
 	ready: boolean,
 	connections: { RBXScriptConnection },
 	deathConnection: RBXScriptConnection?,
+	collisionConnections: { RBXScriptConnection },
+	partGroups: { [BasePart]: string },
 	score: IntValue,
 	best: IntValue,
 }
@@ -78,6 +81,16 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	local destroyed = false
 	local arena = Workspace:FindFirstChild("Arena")
 	assert(arena, "Arena must exist before the roster")
+	local characterGroup = "RuleRoomCharacters"
+	local createdCharacterGroup = not PhysicsService:IsCollisionGroupRegistered(characterGroup)
+	if createdCharacterGroup then
+		PhysicsService:RegisterCollisionGroup(characterGroup)
+	end
+	local originalSelfCollision = PhysicsService:CollisionGroupsAreCollidable(characterGroup, characterGroup)
+	local originalWorldCollision = PhysicsService:CollisionGroupsAreCollidable(characterGroup, "Default")
+	PhysicsService:CollisionGroupSetCollidable(characterGroup, characterGroup, false)
+	PhysicsService:CollisionGroupSetCollidable(characterGroup, "Default", true)
+	local partOwners: { [BasePart]: PlayerScope } = {}
 	local groundQuery = RaycastParams.new()
 	groundQuery.FilterType = Enum.RaycastFilterType.Include
 	groundQuery.FilterDescendantsInstances = { arena }
@@ -108,6 +121,27 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 	end
 
+	local function restorePartGroup(scope: PlayerScope, descendant: Instance)
+		if not descendant:IsA("BasePart") then
+			return
+		end
+		local original = scope.partGroups[descendant]
+		if not original then
+			return
+		end
+		scope.partGroups[descendant] = nil
+		if partOwners[descendant] ~= scope then
+			return
+		end
+		partOwners[descendant] = nil
+		-- Removed accessories can already be unparented when deferred signals run.
+		if descendant.CollisionGroup == characterGroup then
+			descendant.CollisionGroup = if PhysicsService:IsCollisionGroupRegistered(original)
+				then original
+				else "Default"
+		end
+	end
+
 	local function clearCharacter(scope: PlayerScope)
 		scope.generation += 1
 		scope.character = nil
@@ -115,6 +149,13 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		if scope.deathConnection then
 			scope.deathConnection:Disconnect()
 			scope.deathConnection = nil
+		end
+		for _, connection in scope.collisionConnections do
+			connection:Disconnect()
+		end
+		table.clear(scope.collisionConnections)
+		for descendant in scope.partGroups do
+			restorePartGroup(scope, descendant)
 		end
 	end
 
@@ -128,6 +169,43 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		clearCharacter(scope)
 		scope.character = character
 		local generation = scope.generation
+		local function assignCollisionGroup(descendant: Instance)
+			if
+				destroyed
+				or scopes[player] ~= scope
+				or scope.generation ~= generation
+				or scope.character ~= character
+				or not descendant:IsDescendantOf(character)
+			then
+				return
+			end
+			if descendant:IsA("BasePart") and not scope.partGroups[descendant] then
+				local previousOwner = partOwners[descendant]
+				local original = descendant.CollisionGroup
+				-- Preserve the original group if an accessory moves between two characters.
+				if previousOwner and previousOwner ~= scope then
+					if original == characterGroup then
+						original = previousOwner.partGroups[descendant] or "Default"
+					end
+					previousOwner.partGroups[descendant] = nil
+				end
+				scope.partGroups[descendant] = original
+				partOwners[descendant] = scope
+				descendant.CollisionGroup = characterGroup
+			end
+		end
+		table.insert(scope.collisionConnections, character.DescendantAdded:Connect(assignCollisionGroup))
+		table.insert(
+			scope.collisionConnections,
+			character.DescendantRemoving:Connect(function(descendant)
+				if scope.generation == generation and scope.character == character then
+					restorePartGroup(scope, descendant)
+				end
+			end)
+		)
+		for _, descendant in character:GetDescendants() do
+			assignCollisionGroup(descendant)
+		end
 		local humanoid = character:WaitForChild("Humanoid", 10)
 		local root = character:WaitForChild("HumanoidRootPart", 10)
 		if
@@ -168,6 +246,8 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 			generation = 0,
 			ready = false,
 			connections = {},
+			collisionConnections = {},
+			partGroups = {},
 			deathConnection = nil,
 			score = intValue(stats :: Folder, "Score"),
 			best = intValue(stats :: Folder, "Best"),
@@ -451,6 +531,18 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 		for player in scopes do
 			removePlayer(player)
+		end
+		if PhysicsService:IsCollisionGroupRegistered(characterGroup) then
+			if createdCharacterGroup then
+				PhysicsService:UnregisterCollisionGroup(characterGroup)
+			else
+				PhysicsService:CollisionGroupSetCollidable(
+					characterGroup,
+					characterGroup,
+					originalSelfCollision
+				)
+				PhysicsService:CollisionGroupSetCollidable(characterGroup, "Default", originalWorldCollision)
+			end
 		end
 	end
 	table.insert(connections, Players.PlayerAdded:Connect(addPlayer))
