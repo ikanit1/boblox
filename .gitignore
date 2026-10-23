@@ -1,0 +1,7 @@
+/build/
+/evidence/
+*.lock
+*.rbxl.lock
+*.rbxlx.lock
+__pycache__/
+.DS_Store

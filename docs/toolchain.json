@@ -1,0 +1,64 @@
+{
+  "platform": "Windows x86_64",
+  "installation_root": "%LOCALAPPDATA%/RobloxDev",
+  "assets": [
+    {
+      "repository": "rojo-rbx/rojo",
+      "tag": "v7.7.1",
+      "release_url": "https://github.com/rojo-rbx/rojo/releases/tag/v7.7.1",
+      "published_at": "2026-10-02T06:36:33Z",
+      "asset_name": "rojo-7.7.1-windows-x86_64.zip",
+      "source_url": "https://github.com/rojo-rbx/rojo/releases/download/v7.7.1/rojo-7.7.1-windows-x86_64.zip",
+      "official_sha256": "d4dfa3493a1613a43fc87312d6dac660d7c8bf38e6a99aa5dcd0d26154ba0b82"
+    },
+    {
+      "repository": "rojo-rbx/rojo",
+      "tag": "v7.7.1",
+      "release_url": "https://github.com/rojo-rbx/rojo/releases/tag/v7.7.1",
+      "published_at": "2026-10-02T06:36:33Z",
+      "asset_name": "Rojo.rbxm",
+      "source_url": "https://github.com/rojo-rbx/rojo/releases/download/v7.7.1/Rojo.rbxm",
+      "official_sha256": "50a8d83db87deab4d65fd6100eb74396de232355b1ae89c641035d02c49db6f4"
+    },
+    {
+      "repository": "JohnnyMorganz/StyLua",
+      "tag": "v2.6.0",
+      "release_url": "https://github.com/JohnnyMorganz/StyLua/releases/tag/v2.6.0",
+      "published_at": "2026-10-10T14:42:24Z",
+      "asset_name": "stylua-windows-x86_64.zip",
+      "source_url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.6.0/stylua-windows-x86_64.zip",
+      "official_sha256": "fd13b4014e3b779c244bbc03f2c282e357f15bc526de6a6fa5ecbc447538313c"
+    },
+    {
+      "repository": "Kampfkarren/selene",
+      "tag": "0.32.0",
+      "release_url": "https://github.com/Kampfkarren/selene/releases/tag/0.32.0",
+      "published_at": "2026-10-01T22:47:56Z",
+      "asset_name": "selene-0.32.0-windows.zip",
+      "source_url": "https://github.com/Kampfkarren/selene/releases/download/0.32.0/selene-0.32.0-windows.zip",
+      "official_sha256": "c8b693de81d0ddc11490d8e1170dd98d775c2b21431144bd8286f738ef416109"
+    },
+    {
+      "repository": "luau-lang/luau",
+      "tag": "0.743",
+      "release_url": "https://github.com/luau-lang/luau/releases/tag/0.743",
+      "published_at": "2026-10-16T20:48:51Z",
+      "asset_name": "luau-windows.zip",
+      "source_url": "https://github.com/luau-lang/luau/releases/download/0.743/luau-windows.zip",
+      "official_sha256": "9e019b584ea653e53781f1b9f25aa192175f2c057bbf88fc7f72e2720d710b31"
+    },
+    {
+      "repository": "lune-org/lune",
+      "tag": "v0.11.1",
+      "release_url": "https://github.com/lune-org/lune/releases/tag/v0.11.1",
+      "published_at": "2026-10-21T10:05:45Z",
+      "asset_name": "lune-0.11.1-windows-x86_64.zip",
+      "source_url": "https://github.com/lune-org/lune/releases/download/v0.11.1/lune-0.11.1-windows-x86_64.zip",
+      "official_sha256": "83f1dc29d9e35c494907521f2ca6561f6c204fdf6f1b06525d2e9fdd1e6b4301"
+    }
+  ],
+  "limitations": [
+    "Standalone Luau does not contain Roblox engine globals; Studio validation remains necessary.",
+    "The Studio plugin Rojo.rbxm is not installed by the CI bootstrap; use rojo plugin install for local Studio."
+  ]
+}

@@ -1,0 +1,27 @@
+name: Build and verify RuleRoom
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install verified pinned tools
+        run: python tools/bootstrap_tools.py
+      - name: Build, lint, compile and test
+        shell: pwsh
+        run: ./Build.ps1
+      - name: Upload local playable place
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: RuleRoom-local-place
+          path: |
+            build/RuleRoom.rbxlx
+            build/structure-check.json
+          if-no-files-found: error

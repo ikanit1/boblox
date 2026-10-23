@@ -1,0 +1,42 @@
+{
+  "name": "Rule Room",
+  "servePort": 34872,
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": {
+      "$properties": { "FilteringEnabled": true, "Gravity": 196.2 },
+      "Arena": { "$path": "assets/Arena.rbxmx" }
+    },
+    "Lighting": {
+      "$properties": {
+        "Ambient": [0.18, 0.20, 0.30],
+        "OutdoorAmbient": [0.35, 0.38, 0.48],
+        "Brightness": 2,
+        "ClockTime": 14,
+        "GlobalShadows": true
+      }
+    },
+    "ReplicatedStorage": {
+      "RuleRoomShared": { "$path": "src/shared" },
+      "RuleRoomState": { "$className": "Folder" },
+      "RuleRoomRemotes": {
+        "$className": "Folder",
+        "Vote": { "$className": "RemoteEvent" },
+        "ProfileAction": { "$className": "RemoteEvent" }
+      }
+    },
+    "ServerScriptService": {
+      "RuleRoomServer": { "$path": "src/server" }
+    },
+    "StarterPlayer": {
+      "$properties": { "CameraMaxZoomDistance": 60 },
+      "StarterPlayerScripts": {
+        "RuleRoomClient": { "$path": "src/client" }
+      }
+    },
+    "StarterGui": {
+      "RuleRoomHUD": { "$path": "assets/RuleRoomHUD.rbxmx" }
+    },
+    "SoundService": { "$properties": { "RespectFilteringEnabled": true } }
+  }
+}
