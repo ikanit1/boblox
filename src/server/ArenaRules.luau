@@ -280,7 +280,7 @@ function ArenaRules.new(arena: Model)
 		showBeam(false)
 		instruction(
 			context,
-			"Прыгай через красный луч! Три касания — поражение."
+			"Прыгай через красный луч! Каждое касание отнимает здоровье."
 		)
 		return context.waitFor(
 			Config.LaserSweep.ActiveSeconds,
