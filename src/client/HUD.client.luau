@@ -30,6 +30,7 @@ local state = ReplicatedStorage:WaitForChild("RuleRoomState")
 local remotes = ReplicatedStorage:WaitForChild("RuleRoomRemotes")
 local voteRemote = remotes:WaitForChild("Vote") :: RemoteEvent
 local profileRemote = remotes:WaitForChild("ProfileAction") :: RemoteEvent
+local config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
 local economy = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("EconomyConfig"))
 local collection = CollectionPanel.new(root, player, profileRemote, economy)
 local characters = CharacterPresentation.new(player, economy, root.SpectateNext)
@@ -62,7 +63,7 @@ local phase = "Waiting"
 local deadline = 0
 local shownSecond = -1
 local selectedVote: string? = nil
-local lastVoteAt = 0
+local lastVoteAt = -math.huge
 local short = false
 local lastInput = UserInputService:GetLastInputType()
 local reducedMotion = GuiService.ReducedMotionEnabled
@@ -236,9 +237,14 @@ local function renderClock()
 end
 
 local function renderVotes()
+	local acknowledged = player:GetAttribute("VotedMode")
+	selectedVote = nil
 	for _, mode in modes do
 		local button = votePanel.Cards[mode.Id] :: TextButton
-		local selected = selectedVote == mode.Id
+		local selected = acknowledged == mode.Id
+		if selected then
+			selectedVote = mode.Id
+		end
 		button.Text = string.format(
 			"%s%s\n%s\n%d ГОЛОСОВ",
 			if selected then "✓ " else "",
@@ -259,9 +265,6 @@ local function renderState()
 	deadline = num(state, "PhaseEndsAt")
 	local index = num(state, "RuleIndex")
 	local round = num(state, "Round")
-	if phase == "Voting" and previousPhase ~= "Voting" then
-		selectedVote = nil
-	end
 	local ruleKey = tostring(round) .. ":" .. tostring(index)
 	if phase == "Rule" and ruleKey ~= lastRuleKey then
 		lastRuleKey = ruleKey
@@ -479,11 +482,13 @@ for index, mode in modes do
 	button.NextSelectionRight = votePanel.Cards[modes[index % #modes + 1].Id]
 	button.NextSelectionDown = actions.Collection
 	connect(button.Activated, function()
-		if phase == "Voting" and not collection.IsOpen() and os.clock() - lastVoteAt >= 0.3 then
+		if
+			phase == "Voting"
+			and not collection.IsOpen()
+			and os.clock() - lastVoteAt >= config.VoteCooldown
+		then
 			lastVoteAt = os.clock()
-			selectedVote = mode.Id
 			voteRemote:FireServer(mode.Id)
-			renderVotes()
 		end
 	end)
 end
@@ -515,6 +520,9 @@ connect(root:GetPropertyChangedSignal("AbsoluteSize"), applyComposition)
 connect(root.SpectateNext:GetPropertyChangedSignal("Visible"), applyComposition)
 connect(player.AttributeChanged, function(name)
 	renderPlayer()
+	if name == "VotedMode" then
+		renderVotes()
+	end
 	if name == "InRound" or name == "Eliminated" then
 		renderControls()
 	end

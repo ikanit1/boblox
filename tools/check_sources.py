@@ -23,9 +23,17 @@ def run(args, quiet=False):
     if result.returncode:
         raise SystemExit(result.returncode)
 
-run([tool('stylua'), '--check', 'src', 'tests'])
-run([tool('selene'), 'src', 'tests'])
-sources = sorted((ROOT / 'src').rglob('*.luau')) + sorted((ROOT / 'tests').rglob('*.luau'))
+source_dirs = ['src', 'tests']
+studio_tools = ROOT / 'tools' / 'studio'
+if studio_tools.is_dir():
+    source_dirs.append('tools/studio')
+run([tool('stylua'), '--check', *source_dirs])
+run([tool('selene'), *source_dirs])
+sources = sorted(source for folder in source_dirs for source in (ROOT / folder).rglob('*.luau'))
 for source in sources:
     run([tool('luau-compile'), '--text', str(source)], quiet=True)
-print(f'Static checks passed: {len(sources)} Luau files. Studio not implied.')
+python_sources = sorted(studio_tools.rglob('*.py')) if studio_tools.is_dir() else []
+if python_sources:
+    # Compile syntax without importing or running installers/report scripts.
+    run([sys.executable, '-m', 'py_compile', *(str(source) for source in python_sources)])
+print(f'Static checks passed: {len(sources)} Luau files, {len(python_sources)} Python QA files. Studio not implied.')
