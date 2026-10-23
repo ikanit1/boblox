@@ -21,6 +21,8 @@ foreach ($testFile in Get-ChildItem -LiteralPath tests -Filter '*.spec.luau' | S
     & (Find-RuleRoomTool 'luau') $testFile.FullName
     if ($LASTEXITCODE -ne 0) { throw "Luau test failed: $($testFile.Name)" }
 }
+& (Find-RuleRoomTool 'lune') run tests/ProfileService.integration.luau
+if ($LASTEXITCODE -ne 0) { throw 'ProfileService integration checks failed.' }
 & (Find-RuleRoomTool 'lune') run tools/verify_model.luau
 if ($LASTEXITCODE -ne 0) { throw 'Offline model semantics failed.' }
 Write-Host "Built: $(Join-Path $PSScriptRoot 'build\RuleRoom.rbxlx')"

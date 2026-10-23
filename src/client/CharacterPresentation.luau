@@ -2,6 +2,7 @@
 -- Local, bounded visual effects. Neither trails nor the spectator camera affect gameplay.
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
+local GuiService = game:GetService("GuiService")
 
 local CharacterPresentation = {}
 
@@ -9,11 +10,13 @@ function CharacterPresentation.new(localPlayer: Player, economy: any, nextButton
 	local connections: { RBXScriptConnection } = {}
 	local watched: { [Player]: { RBXScriptConnection } } = {}
 	local effects: { [Player]: { Instance } } = {}
+	local deathConnections: { [Player]: RBXScriptConnection } = {}
 	local colors: { [string]: Color3 } = {}
 	local phase = "Waiting"
 	local reducedMotion = false
 	local spectateSuspended = false
 	local target: Player? = nil
+	local destroyed = false
 	for _, item in economy.Trails do
 		colors[item.Id] = item.Color
 	end
@@ -26,6 +29,9 @@ function CharacterPresentation.new(localPlayer: Player, economy: any, nextButton
 	end
 
 	local function refreshTrail(player: Player)
+		if destroyed then
+			return
+		end
 		clearTrail(player)
 		local id = player:GetAttribute("EquippedTrail")
 		if reducedMotion or typeof(id) ~= "string" or id == "None" or not colors[id] then
@@ -85,6 +91,9 @@ function CharacterPresentation.new(localPlayer: Player, economy: any, nextButton
 	end
 
 	local function refreshCamera(cycle: boolean?)
+		if destroyed then
+			return
+		end
 		local camera = Workspace.CurrentCamera
 		if not camera then
 			return
@@ -115,6 +124,9 @@ function CharacterPresentation.new(localPlayer: Player, economy: any, nextButton
 				camera.CameraSubject = ownHumanoid
 			end
 		end
+		if not nextButton.Visible and GuiService.SelectedObject == nextButton then
+			GuiService.SelectedObject = nil
+		end
 	end
 
 	local function watch(player: Player)
@@ -122,10 +134,14 @@ function CharacterPresentation.new(localPlayer: Player, economy: any, nextButton
 		watched[player] = list
 		local function onCharacter(character: Model)
 			clearTrail(player)
+			if deathConnections[player] then
+				deathConnections[player]:Disconnect()
+				deathConnections[player] = nil
+			end
 			task.spawn(function()
 				local humanoid = character:WaitForChild("Humanoid", 10)
 				character:WaitForChild("HumanoidRootPart", 10)
-				if player.Character == character and watched[player] == list then
+				if not destroyed and player.Character == character and watched[player] == list then
 					if player == localPlayer then
 						-- Respawn restores the lobby character's camera; the button resumes spectating.
 						spectateSuspended = player:GetAttribute("Eliminated") == true
@@ -133,8 +149,7 @@ function CharacterPresentation.new(localPlayer: Player, economy: any, nextButton
 					refreshTrail(player)
 					refreshCamera()
 					if humanoid and humanoid:IsA("Humanoid") then
-						-- Destroying a character disconnects this character-owned signal.
-						humanoid.Died:Once(function()
+						deathConnections[player] = humanoid.Died:Once(function()
 							refreshCamera()
 						end)
 					end
@@ -175,6 +190,10 @@ function CharacterPresentation.new(localPlayer: Player, economy: any, nextButton
 	table.insert(
 		connections,
 		Players.PlayerRemoving:Connect(function(player)
+			if deathConnections[player] then
+				deathConnections[player]:Disconnect()
+				deathConnections[player] = nil
+			end
 			for _, connection in watched[player] or {} do
 				connection:Disconnect()
 			end
@@ -211,8 +230,16 @@ function CharacterPresentation.new(localPlayer: Player, economy: any, nextButton
 			end
 		end,
 		Destroy = function()
+			if destroyed then
+				return
+			end
 			phase = "Waiting"
 			refreshCamera()
+			destroyed = true
+			for _, connection in deathConnections do
+				connection:Disconnect()
+			end
+			table.clear(deathConnections)
 			for _, connection in connections do
 				connection:Disconnect()
 			end

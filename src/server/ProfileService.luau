@@ -105,13 +105,19 @@ function ProfileService.new(): Service
 
 	local function budgetReady(): boolean
 		local ok, available = pcall(function()
-			return DataStoreService:GetRequestBudgetForRequestType(Enum.DataStoreRequestType.GetAsync) >= 1
+			return DataStoreService:GetRequestBudgetForRequestType(Enum.DataStoreRequestType.StandardRead)
+					>= 1
 				and DataStoreService:GetRequestBudgetForRequestType(
-						Enum.DataStoreRequestType.SetIncrementAsync
+						Enum.DataStoreRequestType.StandardWrite
 					)
 					>= 1
 		end)
 		return ok and available
+	end
+
+	local function associatedUsers(player: Player): { number }
+		-- Studio's local multi-client identities are negative, not Roblox user IDs.
+		return if player.UserId > 0 then { player.UserId } else {}
 	end
 
 	-- An in-flight engine request cannot be cancelled. Deadlines bound our retries and
@@ -145,6 +151,24 @@ function ProfileService.new(): Service
 			"Сохранение недоступно. Прогресс действует до выхода."
 		)
 		warn("[RuleRoom profiles] Session switched to memory: " .. reason)
+	end
+
+	local function releaseUncertainAcquire(scope: Scope)
+		if not store then
+			return
+		end
+		request(function()
+			return store:UpdateAsync("Player_" .. scope.player.UserId, function(raw, keyInfo)
+				if scope.persistent then
+					return nil
+				end
+				local released = ProfileData.releaseUncertainAcquire(raw, scope.owner)
+				if not released then
+					return nil
+				end
+				return released, associatedUsers(scope.player), if keyInfo then keyInfo:GetMetadata() else {}
+			end)
+		end, os.clock() + 8)
 	end
 
 	local function save(scope: Scope, release: boolean, deadline: number): boolean
@@ -186,7 +210,7 @@ function ProfileService.new(): Service
 					return nil
 				end
 				local metadata = if keyInfo then keyInfo:GetMetadata() else {}
-				return updated, { scope.player.UserId }, metadata
+				return updated, associatedUsers(scope.player), metadata
 			end)
 		end, deadline)
 		scope.saving = false
@@ -273,7 +297,9 @@ function ProfileService.new(): Service
 					if not acquired then
 						return nil
 					end
-					return acquired, { scope.player.UserId }, if keyInfo then keyInfo:GetMetadata() else {}
+					return acquired,
+						associatedUsers(scope.player),
+						if keyInfo then keyInfo:GetMetadata() else {}
 				end)
 			end, deadline)
 			if not ok or record or refusal ~= "Busy" or scope.closing then
@@ -298,6 +324,9 @@ function ProfileService.new(): Service
 					then "Профиль занят другой сессией. Этот забег без сохранения."
 					else "Облако недоступно. Этот забег без сохранения."
 			)
+			-- Every UpdateAsync attempt may have committed before throwing. This
+			-- best-effort cleanup never saves the fresh/session-only fallback profile.
+			task.spawn(releaseUncertainAcquire, scope)
 		end
 		scope.loading = false
 		scope.ready = not scope.closing and not destroyed

@@ -209,4 +209,15 @@ blocked, blockedReason =
 	Data.acquire({ Session = { Owner = "other", ExpiresAt = 0 / 0 } }, "server-A", timestamp, 180, config)
 expect(blocked == nil and blockedReason == "InvalidLease", "Corrupt lease is never silently stolen")
 
+local uncertain = assert(Data.releaseUncertainAcquire(first, "server-A"))
+expect(uncertain.Session == nil and first.Session ~= nil, "Uncertain acquire release is pure")
+expect(uncertain.Coins == first.Coins, "Uncertain acquire cleanup never writes fallback data")
+expect(Data.releaseUncertainAcquire(first, "server-B") == nil, "Cleanup cannot release another session")
+expect(Data.releaseUncertainAcquire(nil, "server-A") == nil, "Cleanup cannot create a default profile")
+expect(Data.releaseUncertainAcquire(released, "server-A") == nil, "Cleanup safely repeats after release")
+local infiniteLease = table.clone(first)
+infiniteLease.Session = { Owner = "server-A", ExpiresAt = math.huge }
+blocked, blockedReason =
+	Data.prepareSave(infiniteLease, snapshot, "server-A", timestamp, 180, false, "infinite")
+expect(blocked == nil and blockedReason == "LeaseExpired", "Non-finite lease cannot authorize a save")
 print("ProfileData: " .. checks .. " checks passed")

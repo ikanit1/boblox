@@ -254,7 +254,11 @@ function ProfileData.prepareSave(
 	if type(session) ~= "table" or session.Owner ~= owner or type(session.ExpiresAt) ~= "number" then
 		return nil, "LeaseLost"
 	end
-	if session.ExpiresAt <= now or session.ExpiresAt ~= session.ExpiresAt then
+	if
+		session.ExpiresAt <= now
+		or session.ExpiresAt ~= session.ExpiresAt
+		or math.abs(session.ExpiresAt) == math.huge
+	then
 		return nil, "LeaseExpired"
 	end
 	local record: any = ProfileData.clone(data)
@@ -263,6 +267,17 @@ function ProfileData.prepareSave(
 		record.Session = { Owner = owner, ExpiresAt = now + leaseSeconds }
 	end
 	return record, nil
+end
+
+-- An acquire can commit even when its response is lost. Release only our unique
+-- owner token, preserving the cloud record verbatim; never write fallback data.
+function ProfileData.releaseUncertainAcquire(raw: any, owner: string): any
+	if type(raw) ~= "table" or type(raw.Session) ~= "table" or raw.Session.Owner ~= owner then
+		return nil
+	end
+	local record = table.clone(raw)
+	record.Session = nil
+	return record
 end
 
 return ProfileData

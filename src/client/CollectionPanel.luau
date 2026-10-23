@@ -3,11 +3,13 @@
 -- Requests contain an allowlisted item id. Balances, ownership and rewards stay on the server.
 local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
+local ContextActionService = game:GetService("ContextActionService")
 
 local CollectionPanel = {}
 
 function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, economy: any)
 	local panel = root:WaitForChild("CollectionPanel") :: Frame
+	local backdrop = root:WaitForChild("CollectionBackdrop") :: Frame
 	local openButton = root.Actions.Collection :: TextButton
 	local closeButton = panel.Close :: TextButton
 	local cosmeticsTab = panel.CosmeticsTab :: TextButton
@@ -24,6 +26,13 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 	local dark = Color3.fromRGB(24, 36, 57)
 	local muted = Color3.fromRGB(179, 197, 219)
 	local lastAction = 0
+	local previousSelection: GuiObject? = nil
+	local closeAction = "RuleRoomCloseCollection"
+	panel.SelectionGroup = true
+	panel.SelectionBehaviorUp = Enum.SelectionBehavior.Stop
+	panel.SelectionBehaviorDown = Enum.SelectionBehavior.Stop
+	panel.SelectionBehaviorLeft = Enum.SelectionBehavior.Stop
+	panel.SelectionBehaviorRight = Enum.SelectionBehavior.Stop
 
 	local function connect(signal, callback)
 		table.insert(connections, signal:Connect(callback))
@@ -133,6 +142,23 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 					end
 				end)
 			)
+			table.insert(
+				rowConnections,
+				row.Action.SelectionGained:Connect(function()
+					local top = row.AbsolutePosition.Y - scroll.AbsolutePosition.Y + scroll.CanvasPosition.Y
+					local bottom = top + row.AbsoluteSize.Y
+					local y = scroll.CanvasPosition.Y
+					if top < y then
+						y = top
+					elseif bottom > y + scroll.AbsoluteSize.Y then
+						y = bottom - scroll.AbsoluteSize.Y
+					end
+					scroll.CanvasPosition = Vector2.new(
+						0,
+						math.clamp(y, 0, math.max(0, scroll.AbsoluteCanvasSize.Y - scroll.AbsoluteSize.Y))
+					)
+				end)
+			)
 		end
 		for index, entry in rows do
 			local action = entry.Frame.Action :: TextButton
@@ -146,25 +172,67 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 			questsTab.NextSelectionDown = rows[1].Frame.Action
 		end
 		cosmeticsTab.NextSelectionRight = questsTab
+		cosmeticsTab.NextSelectionLeft = questsTab
 		questsTab.NextSelectionLeft = cosmeticsTab
+		questsTab.NextSelectionRight = cosmeticsTab
 		cosmeticsTab.NextSelectionUp = closeButton
 		questsTab.NextSelectionUp = closeButton
 		closeButton.NextSelectionDown = cosmeticsTab
 		closeButton.NextSelectionLeft = cosmeticsTab
 		closeButton.NextSelectionRight = questsTab
+		closeButton.NextSelectionUp = if #rows > 0 then rows[#rows].Frame.Action else cosmeticsTab
 		scroll.CanvasPosition = Vector2.zero
 		refresh()
 	end
 
-	local function setVisible(visible: boolean)
+	local function canRestore(object: GuiObject?): boolean
+		if not object or not object:IsDescendantOf(root) or not object.Selectable then
+			return false
+		end
+		local ancestor: Instance? = object
+		while ancestor and ancestor ~= root do
+			if ancestor:IsA("GuiObject") and not ancestor.Visible then
+				return false
+			end
+			ancestor = ancestor.Parent
+		end
+		return true
+	end
+
+	local function focusPanel()
+		if not GuiService.MenuIsOpen and string.find(UserInputService:GetLastInputType().Name, "Gamepad") then
+			local selected = GuiService.SelectedObject
+			if not selected or not selected:IsDescendantOf(panel) then
+				GuiService.SelectedObject = if currentTab == "Quests" then questsTab else cosmeticsTab
+			end
+		end
+	end
+
+	local setVisible: (boolean) -> ()
+	setVisible = function(visible: boolean)
+		if visible and not panel.Visible then
+			previousSelection = GuiService.SelectedObject
+		end
 		panel.Visible = visible and phase ~= "Rule"
+		backdrop.Visible = panel.Visible
 		if panel.Visible then
 			refresh()
-			if string.find(UserInputService:GetLastInputType().Name, "Gamepad") then
-				GuiService.SelectedObject = cosmeticsTab
+			focusPanel()
+			ContextActionService:BindAction(closeAction, function(_, inputState)
+				if inputState == Enum.UserInputState.Begin then
+					setVisible(false)
+				end
+				return Enum.ContextActionResult.Sink
+			end, false, Enum.KeyCode.ButtonB, Enum.KeyCode.Backspace)
+		else
+			ContextActionService:UnbindAction(closeAction)
+			if GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(panel) then
+				GuiService.SelectedObject = if canRestore(previousSelection)
+					then previousSelection
+					elseif canRestore(openButton) then openButton
+					else nil
 			end
-		elseif GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(panel) then
-			GuiService.SelectedObject = if openButton.Visible then openButton else nil
+			previousSelection = nil
 		end
 	end
 
@@ -181,6 +249,11 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 		selectTab("Quests")
 	end)
 	connect(player.AttributeChanged, refresh)
+	connect(UserInputService.LastInputTypeChanged, function()
+		if panel.Visible then
+			focusPanel()
+		end
+	end)
 	connect(root:GetPropertyChangedSignal("AbsoluteSize"), function()
 		panel.Size = UDim2.new(1, -24, 0, math.min(420, math.max(230, root.AbsoluteSize.Y - 20)))
 	end)
@@ -199,6 +272,7 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 			return panel.Visible
 		end,
 		Destroy = function()
+			setVisible(false)
 			for _, connection in connections do
 				connection:Disconnect()
 			end

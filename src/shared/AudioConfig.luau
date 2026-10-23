@@ -1,0 +1,51 @@
+--!strict
+-- Roblox-installed engine assets, not uploaded or third-party asset IDs.
+-- Source provenance and the deliberately small 2D mix are documented in docs/AUDIO.md.
+return {
+	Enabled = true,
+	MasterGainDb = -2,
+	FadeSeconds = 0.045,
+	Sources = {
+		Tone = { SoundId = "rbxasset://sounds/volume_slider.ogg", Voices = 3 },
+		Impact = { SoundId = "rbxasset://sounds/action_jump_land.mp3", Voices = 1 },
+	},
+	Cues = {
+		UI = { Source = "Tone", GainDb = -29, Speed = 1.6, Seconds = 0.10, Cooldown = 0.10, Priority = 0 },
+		Rule = { Source = "Tone", GainDb = -18, Speed = 1.0, Seconds = 0.20, Cooldown = 0.8, Priority = 3 },
+		Countdown = {
+			Source = "Tone",
+			GainDb = -22,
+			Speed = 1.3,
+			Seconds = 0.12,
+			Cooldown = 0.45,
+			Priority = 2,
+		},
+		Damage = {
+			Source = "Impact",
+			GainDb = -18,
+			Speed = 0.85,
+			Seconds = 0.23,
+			Cooldown = 0.4,
+			Priority = 4,
+		},
+		Reward = {
+			Source = "Tone",
+			GainDb = -23,
+			Speed = 1.65,
+			Seconds = 0.13,
+			Cooldown = 0.55,
+			Priority = 1,
+		},
+		Finale = {
+			Source = "Tone",
+			GainDb = -17,
+			Speed = 1.0,
+			Seconds = 0.22,
+			Cooldown = 2,
+			Priority = 3,
+			Notes = { 1, 1.25, 1.5 },
+			Spacing = 0.18,
+		},
+		RunEnd = { Source = "Tone", GainDb = -23, Speed = 0.85, Seconds = 0.23, Cooldown = 2, Priority = 2 },
+	},
+}
