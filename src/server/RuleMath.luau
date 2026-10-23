@@ -68,6 +68,15 @@ function RuleMath.spinnerIntersects(
 		and body.headY >= 1.4
 end
 
+function RuleMath.spinnerHalfLength(arenaHalfSize: number): number
+	-- Cover the diagonal to the square's corners, not only the middle of each edge.
+	return arenaHalfSize * math.sqrt(2)
+end
+
+function RuleMath.finaleSucceeded(charge: number, goal: number, completed: boolean, alive: number): boolean
+	return completed and charge >= goal and alive > 0
+end
+
 function RuleMath.runOutcome(
 	survived: number,
 	survivedFinale: boolean,

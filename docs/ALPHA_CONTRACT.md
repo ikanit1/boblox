@@ -30,6 +30,8 @@ ReplicatedStorage.RuleRoomRemotes contains authored Vote and ProfileAction Remot
 
 Player attributes: InRound, Eliminated, RunScore, RunSurvived, Coins, XP, Level, Wins, EquippedTrail, Owned_<id> booleans, DataStatus (Session/Loading/Saved/Unavailable/Busy), Quest_survive/stars/runs counts, Claimed_survive/stars/runs booleans, ActionMessage. leaderstats Score and Best remain session scores. RunScore and RunSurvived reset only at BeginRun, not per-trial StartRound.
 
+Roster.AwardSurvivors(ruleId) -> number returns the number of newly awarded eligible survivors. Main calls it once after a completed trial and requires a positive count before confirming FinaleSuccess; repeat calls return zero without duplicate rewards.
+
 ## Progression API
 Main creates ProfileService.new() once, then PlayerRoster.new(lobbyCFrame, profiles). Dot-methods:
 - IsReady(player) -> boolean. Failed loading may play explicitly session-only, but never save fallback over a failed record.
