@@ -31,6 +31,7 @@ local remotes = ReplicatedStorage:WaitForChild("RuleRoomRemotes")
 local voteRemote = remotes:WaitForChild("Vote") :: RemoteEvent
 local profileRemote = remotes:WaitForChild("ProfileAction") :: RemoteEvent
 local economy = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("EconomyConfig"))
+local config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
 local collection = CollectionPanel.new(root, player, profileRemote, economy)
 local characters = CharacterPresentation.new(player, economy, root.SpectateNext)
 local audio = AudioController.new(player, state, root, root.Actions.Audio)
@@ -49,14 +50,9 @@ local phaseNames = {
 	Results = "ЭКСПЕРИМЕНТ ЗАВЕРШЁН",
 }
 local modes = {
-	{ Id = "Balanced", Name = "БАЛАНС", Detail = "Всего понемногу", Color = cyan },
-	{ Id = "Reflex", Name = "РЕАКЦИЯ", Detail = "Движение и прыжки", Color = pink },
-	{
-		Id = "Cosmic",
-		Name = "КОСМОС",
-		Detail = "Гравитация и энергия",
-		Color = green,
-	},
+	{ Id = "Balanced", Color = cyan },
+	{ Id = "Reflex", Color = pink },
+	{ Id = "Cosmic", Color = green },
 }
 local phase = "Waiting"
 local deadline = 0
@@ -153,20 +149,35 @@ end
 
 local function renderStatus()
 	local points = num(player, "RunScore")
+	local index = num(state, "RuleIndex")
+	local count = num(state, "RuleCount", 6)
+	local nextTrial = if index < count
+		then string.format("ИСПЫТАНИЕ %d/%d", index + 1, count)
+		else "НОВЫЙ ЗАБЕГ"
+	column.Instruction.Text = str(
+		state,
+		"Instruction",
+		"Читай правило. Двигайся. Попробуй ещё раз!"
+	)
 	status.Visible = phase ~= "Voting" and phase ~= "Results"
 	if player:GetAttribute("InRound") == true and phase == "Rule" then
 		status.Text = string.format(
-			"В ИГРЕ  •  ЗДОРОВЬЕ %d  •  ОЧКИ %d",
+			"ЗДОРОВЬЕ %d  •  ЦЕЛЬ %d/4  •  ОЧКИ %d",
 			math.ceil(health),
+			math.min(4, num(player, "RunSurvived")),
 			points
 		)
 		status.TextColor3 = if health <= 35 then pink else white
 	elseif player:GetAttribute("Eliminated") == true and phase == "Rule" then
-		status.Text = "ВЕРНЁШЬСЯ В СЛЕДУЮЩЕМ ИСПЫТАНИИ  •  ОЧКИ " .. points
+		status.Text = "ВЫБЫЛ  •  ВЕРНЁШЬСЯ: " .. nextTrial
+		column.Instruction.Text = str(
+			player,
+			"LastTrialReason",
+			"Это испытание закончено для тебя."
+		) .. " Очки сохраняются."
 		status.TextColor3 = pink
 	elseif phase == "Rule" then
-		status.Text =
-			"СМОТРИ ЗА КОМНАТОЙ  •  ВХОД В СЛЕДУЮЩЕМ ИСПЫТАНИИ"
+		status.Text = "НАБЛЮДАЕШЬ  •  ДАЛЬШЕ: " .. nextTrial
 		status.TextColor3 = muted
 	elseif phase == "Results" then
 		status.Text = string.format(
@@ -176,16 +187,147 @@ local function renderStatus()
 		)
 		status.TextColor3 = yellow
 	elseif phase == "Break" then
-		status.Text = "ВСЕ СНОВА В ИГРЕ В СЛЕДУЮЩЕМ ИСПЫТАНИИ"
-		status.TextColor3 = green
+		local result = str(player, "TrialResult" .. tostring(index), "Pending")
+		status.Text = if result == "Survived"
+			then "✓ ИСПЫТАНИЕ ПРОЙДЕНО  •  ДАЛЬШЕ: " .. nextTrial
+			else "ПРОБУЕМ СНОВА  •  ДАЛЬШЕ: " .. nextTrial
+		status.TextColor3 = if result == "Survived" then green else white
 	else
-		status.Text = "ВЫБЕРИ РЕЖИМ  •  6 ИСПЫТАНИЙ  •  ОБЩИЙ ФИНАЛ"
+		status.Text = "ЦЕЛЬ: ВЫЖИТЬ 4 РАЗА И ПРОЙТИ ОБЩИЙ ФИНАЛ"
 		status.TextColor3 = white
+	end
+	if phase == "Voting" then
+		column.Instruction.Text = if root.AbsoluteSize.Y < 290
+			then "4 испытания + выжить в финале"
+			else "Выживи в 4 из 6 испытаний и в финале. Реактор заряжаем вместе!"
+	elseif phase == "Results" and root.AbsoluteSize.Y < 290 then
+		column.Instruction.Text = "Новый забег начнётся автоматически"
 	end
 	local compactFinale = root.AbsoluteSize.Y < 260 and str(state, "RuleId", "") == "ReactorRush"
 	healthBar.Visible = phase == "Rule" and player:GetAttribute("InRound") == true and not compactFinale
 	healthBar.Fill.BackgroundColor3 = if health <= 35 then pink else green
 	fillBar(healthBar.Fill, health / math.max(1, maxHealth))
+end
+
+local function trackParticipation()
+	-- Observing an ongoing trial must not consume a late joiner's first control hint.
+	if
+		phase ~= "Rule"
+		or player:GetAttribute("InRound") ~= true
+		or str(state, "RuleId", "") == "ReactorRush"
+	then
+		return
+	end
+	local ruleKey = tostring(num(state, "Round")) .. ":" .. tostring(num(state, "RuleIndex"))
+	if ruleKey ~= lastRuleKey then
+		lastRuleKey = ruleKey
+		onboardingRules += 1
+	end
+end
+
+local function renderTrialProgress()
+	local accentValue = state:GetAttribute("Accent")
+	local accent = if typeof(accentValue) == "Color3" then accentValue else cyan
+	for index = 1, 6 do
+		local step = root.TrialProgress["Step" .. index] :: Frame
+		local result = str(player, "TrialResult" .. index, "Pending")
+		local mark = "·"
+		local ink = muted
+		local color = Color3.fromRGB(54, 70, 91)
+		if result == "Survived" then
+			mark, color, ink = "✓", green, Color3.fromRGB(18, 30, 50)
+		elseif result == "Failed" then
+			mark, color, ink = "×", pink, Color3.fromRGB(18, 30, 50)
+		elseif result == "Active" then
+			mark, color, ink = "▶", accent, Color3.fromRGB(18, 30, 50)
+		elseif result == "Missed" then
+			mark = "—"
+		end
+		step.BackgroundColor3 = color
+		step.Mark.Text = string.format("%d %s", index, mark)
+		step.Mark.TextColor3 = ink
+	end
+end
+
+local function nextCollectionGoal(): string
+	for id, quest in economy.Quests do
+		if player:GetAttribute("Claimed_" .. id) ~= true and num(player, "Quest_" .. id) >= quest.Target then
+			return "Награда за цель готова"
+		end
+	end
+	local nextTrail = nil
+	for _, trail in economy.Trails do
+		if
+			trail.Price > 0
+			and player:GetAttribute("Owned_" .. trail.Id) ~= true
+			and (not nextTrail or trail.Price < nextTrail.Price)
+		then
+			nextTrail = trail
+		end
+	end
+	if nextTrail then
+		local remaining = math.max(0, nextTrail.Price - num(player, "Coins"))
+		return if remaining == 0
+			then "Доступен след: " .. nextTrail.Name
+			else string.format("%s: ещё %d монет", nextTrail.Name, remaining)
+	end
+	return "Все следы открыты"
+end
+
+local function renderNextRun()
+	local remaining = math.max(0, math.ceil(deadline - Workspace:GetServerTimeNow()))
+	resultsPanel.Next.Text =
+		string.format("%s  •  новый забег: %d с", nextCollectionGoal(), remaining)
+end
+
+local function renderResults()
+	local survived = num(player, "RunSurvived")
+	local charges = num(player, "RunCharges")
+	local won = player:GetAttribute("RunWon") == true
+	local participated = survived > 0
+	for index = 1, 6 do
+		participated = participated or player:GetAttribute("TrialResult" .. index) == "Failed"
+	end
+	resultsPanel.Heading.Text = if won
+		then "ТВОЯ ПОБЕДА!"
+		elseif participated then "ТВОЙ РЕЗУЛЬТАТ"
+		else "СЛЕДУЮЩИЙ ЗАБЕГ — ТВОЙ"
+	local outcome: string
+	if won then
+		outcome = string.format("Реактор заряжен! Твои заряды: %d.", charges)
+	elseif not participated then
+		outcome = "Следующий забег — твой. Начнём вместе!"
+	elseif state:GetAttribute("FinaleSuccess") ~= true then
+		outcome = if num(state, "TeamGoal") > 0
+				and num(state, "TeamCharge") >= num(state, "TeamGoal")
+			then "Реактор заряжен, но финал не пережили."
+			else string.format(
+				"Реактор %d/%d. Твои заряды: %d.",
+				num(state, "TeamCharge"),
+				num(state, "TeamGoal", 1),
+				charges
+			)
+	elseif survived < 4 then
+		outcome = string.format(
+			"Реактор заряжен. Выживаний %d/4 — нужно ещё.",
+			survived
+		)
+	else
+		outcome = "До победы осталось выжить в финале."
+	end
+	resultsPanel.Summary.Text = string.format(
+		"%s\n+%d монет  •  +%d опыта",
+		outcome,
+		num(player, "RunCoinsEarned"),
+		num(player, "RunXPEarned")
+	)
+	resultsPanel.Personal.Text = string.format(
+		"%d очков  •  %d/6 выжил  •  рекорд %d",
+		num(player, "RunScore"),
+		survived,
+		best
+	)
+	renderNextRun()
 end
 
 local function renderPlayer()
@@ -200,12 +342,14 @@ local function renderPlayer()
 		num(state, "RuleCount", 6),
 		num(player, "RunScore")
 	)
-	resultsPanel.Personal.Text = string.format(
-		"%d очков  •  %d / 6 испытаний  •  рекорд %d",
-		num(player, "RunScore"),
-		num(player, "RunSurvived"),
-		best
+	teamPanel.ChargeLabel.Text = string.format(
+		"РЕАКТОР %d/%d  •  ТЫ ЗА ЗАБЕГ: %d",
+		num(state, "TeamCharge"),
+		num(state, "TeamGoal", 1),
+		num(player, "RunCharges")
 	)
+	renderTrialProgress()
+	renderResults()
 	renderStatus()
 end
 
@@ -233,17 +377,26 @@ local function renderClock()
 	shownSecond = remaining
 	timer.Countdown.Text = if remaining >= 0 then tostring(remaining) else "—"
 	timer.UnitLabel.Text = if remaining < 0 then "ЖДЁМ" else "СЕК"
+	if phase == "Results" then
+		renderNextRun()
+	end
 end
 
 local function renderVotes()
+	local accepted = player:GetAttribute("VotedMode")
+	selectedVote = nil
 	for _, mode in modes do
 		local button = votePanel.Cards[mode.Id] :: TextButton
-		local selected = selectedVote == mode.Id
+		local selected = accepted == mode.Id
+		if selected then
+			selectedVote = mode.Id
+		end
+		local metadata = config.Modes[mode.Id]
 		button.Text = string.format(
 			"%s%s\n%s\n%d ГОЛОСОВ",
 			if selected then "✓ " else "",
-			mode.Name,
-			mode.Detail,
+			metadata.Name,
+			metadata.Description,
 			num(state, "Votes" .. mode.Id)
 		)
 		button.BackgroundColor3 = if selected then mode.Color else Color3.fromRGB(39, 56, 78)
@@ -258,48 +411,28 @@ local function renderState()
 	phase = str(state, "Phase", "Waiting")
 	deadline = num(state, "PhaseEndsAt")
 	local index = num(state, "RuleIndex")
-	local round = num(state, "Round")
-	if phase == "Voting" and previousPhase ~= "Voting" then
-		selectedVote = nil
-	end
-	local ruleKey = tostring(round) .. ":" .. tostring(index)
-	if phase == "Rule" and ruleKey ~= lastRuleKey then
-		lastRuleKey = ruleKey
-		onboardingRules += 1
-	end
-	column.PhaseLabel.Text = phaseNames[phase] or "КОМНАТА ПРАВИЛ"
+	trackParticipation()
+	column.PhaseLabel.Text = if phase == "Rule"
+		then string.format(
+			"ИСПЫТАНИЕ %d/%d  •  %s",
+			index,
+			num(state, "RuleCount", 6),
+			if str(state, "RuleId", "") == "ReactorRush"
+				then "СОБИРАЕМ ВМЕСТЕ"
+				else "ВЫЖИВАЙ"
+		)
+		else phaseNames[phase] or "КОМНАТА ПРАВИЛ"
 	column.RuleLabel.Text = str(state, "RuleName", "КОМНАТА ПРОСЫПАЕТСЯ")
-	column.Instruction.Text = str(
-		state,
-		"Instruction",
-		"Читай правило. Двигайся. Попробуй ещё раз!"
-	)
 	local color = state:GetAttribute("Accent")
 	local accent = if typeof(color) == "Color3" then color else cyan
 	panel.AccentBar.BackgroundColor3 = accent
 	timer.BackgroundColor3 = accent
-	for step = 1, 6 do
-		root.TrialProgress["Step" .. step].BackgroundColor3 = if step < index or phase == "Results"
-			then green
-			elseif step == index then accent
-			else Color3.fromRGB(54, 70, 91)
-	end
 	teamPanel.Visible = phase == "Rule" and str(state, "RuleId", "") == "ReactorRush"
 	local charge = num(state, "TeamCharge")
 	local goal = num(state, "TeamGoal", 1)
-	teamPanel.ChargeLabel.Text =
-		string.format("ОБЩАЯ ЭНЕРГИЯ  %d / %d  •  СОБИРАЕМ ВМЕСТЕ", charge, goal)
 	fillBar(teamPanel.Meter.Fill, charge / math.max(1, goal))
 	votePanel.Visible = phase == "Voting"
 	resultsPanel.Visible = phase == "Results"
-	resultsPanel.Heading.Text = if state:GetAttribute("FinaleSuccess") == true
-		then "РЕАКТОР ЗАРЯЖЕН!"
-		else "ЭКСПЕРИМЕНТ ЗАВЕРШЁН"
-	resultsPanel.Summary.Text = str(
-		state,
-		"ResultsText",
-		"Каждая попытка помогает лучше узнать комнату."
-	)
 	collection.SetPhase(phase)
 	characters.SetPhase(phase)
 	renderVotes()
@@ -381,8 +514,9 @@ applyComposition = function()
 		if extremeMenu then 18 elseif tinyMenu then 24 elseif compactMenu then 32 elseif short then 40 else 48
 	)
 	timer.UnitLabel.Position = UDim2.new(0, 4, 1, if tinyMenu then -17 else -20)
-	root.TrialProgress.Position = UDim2.new(0.5, 0, 0, top + height + 5)
-	status.Position = UDim2.new(0.5, 0, 0, top + height + 13)
+	root.TrialProgress.Position = UDim2.new(0.5, 0, 0, top + height + 1)
+	status.Position = UDim2.new(0.5, 0, 0, top + height + 15)
+	status.Size = UDim2.new(1, -24, 0, if short then 20 else 22)
 	healthBar.Position = UDim2.new(0.5, 0, 0, top + height + 39)
 	controls.Position = UDim2.new(0.5, 0, 0, top + height + 47)
 	teamPanel.Position = UDim2.new(0.5, 0, 0, top + height + (if compactFinale then 38 else 47))
@@ -392,24 +526,13 @@ applyComposition = function()
 	teamPanel.ChargeLabel.TextSize = if compactFinale then 12 else 13
 	teamPanel.Meter.Position = UDim2.new(0, 8, 1, if compactFinale then -6 else -10)
 	teamPanel.Meter.Size = UDim2.new(1, -16, 0, if compactFinale then 4 else 5)
-	votePanel.Position = UDim2.new(
-		0.5,
-		0,
-		0,
-		if extremeMenu
-			then 86
-			elseif tinyMenu then 92
-			elseif compactMenu then 102
-			elseif short then 125
-			else math.max(220, root.AbsoluteSize.Y * 0.43)
-	)
+	local menuTop = if short then top + height + 14 else math.max(220, root.AbsoluteSize.Y * 0.43)
+	votePanel.Position = UDim2.new(0.5, 0, 0, menuTop)
 	resultsPanel.Position = votePanel.Position
-	local menuHeight = if extremeMenu
-		then math.min(106, root.AbsoluteSize.Y - 64 - 86)
-		elseif tinyMenu then 106
-		elseif compactMenu then 114
-		elseif short then 132
-		else 154
+	local menuHeight = if tinyMenu then 106 elseif compactMenu then 114 elseif short then 132 else 154
+	if short then
+		menuHeight = math.min(menuHeight, root.AbsoluteSize.Y - 64 - menuTop)
+	end
 	votePanel.Size = UDim2.new(1, -32, 0, menuHeight)
 	votePanel.Cards.Size = UDim2.new(1, -20, 0, if compactMenu then 54 elseif short then 62 else 78)
 	votePanel.Heading.Size = UDim2.new(1, -24, 0, if tinyMenu then 20 elseif short then 23 else 28)
@@ -420,13 +543,17 @@ applyComposition = function()
 	votePanel.Hint.Visible = not extremeMenu
 	resultsPanel.Size = UDim2.new(1, -36, 0, if short then menuHeight else 148)
 	resultsPanel.Next.Visible = not extremeMenu
-	resultsPanel.Heading.Size = UDim2.new(1, -28, 0, if short then 25 else 30)
-	resultsPanel.Summary.Position = UDim2.fromOffset(14, if compactMenu then 33 elseif short then 35 else 43)
-	resultsPanel.Summary.Size =
-		UDim2.new(1, -28, 0, if tinyMenu then 22 elseif compactMenu then 27 elseif short then 37 else 46)
+	resultsPanel.Heading.Position = UDim2.fromOffset(14, if compactMenu then 6 else 8)
+	resultsPanel.Heading.Size =
+		UDim2.new(1, -28, 0, if extremeMenu then 21 elseif compactMenu then 23 elseif short then 25 else 30)
+	resultsPanel.Summary.Position =
+		UDim2.fromOffset(14, if extremeMenu then 29 elseif compactMenu then 31 elseif short then 35 else 43)
+	resultsPanel.Summary.Size = UDim2.new(1, -28, 0, if compactMenu then 28 elseif short then 37 else 46)
 	resultsPanel.Personal.Position =
-		UDim2.fromOffset(14, if tinyMenu then 56 elseif compactMenu then 63 elseif short then 76 else 92)
-	resultsPanel.Personal.Size = UDim2.new(1, -28, 0, if tinyMenu then 21 else 25)
+		UDim2.fromOffset(14, if extremeMenu then 59 elseif compactMenu then 61 elseif short then 76 else 92)
+	resultsPanel.Personal.Size = UDim2.new(1, -28, 0, if compactMenu then 20 else 25)
+	resultsPanel.Next.Position = UDim2.new(0, 14, 1, if compactMenu then -20 else -24)
+	resultsPanel.Next.Size = UDim2.new(1, -28, 0, if compactMenu then 17 else 19)
 	local collectionWidth = if narrow then 136 else 160
 	local motionWidth = if narrow then 106 else 128
 	local audioWidth = if narrow then 86 else 104
@@ -479,11 +606,13 @@ for index, mode in modes do
 	button.NextSelectionRight = votePanel.Cards[modes[index % #modes + 1].Id]
 	button.NextSelectionDown = actions.Collection
 	connect(button.Activated, function()
-		if phase == "Voting" and not collection.IsOpen() and os.clock() - lastVoteAt >= 0.3 then
+		if
+			phase == "Voting"
+			and not collection.IsOpen()
+			and os.clock() - lastVoteAt >= config.VoteCooldown
+		then
 			lastVoteAt = os.clock()
-			selectedVote = mode.Id
 			voteRemote:FireServer(mode.Id)
-			renderVotes()
 		end
 	end)
 end
@@ -514,7 +643,13 @@ end)
 connect(root:GetPropertyChangedSignal("AbsoluteSize"), applyComposition)
 connect(root.SpectateNext:GetPropertyChangedSignal("Visible"), applyComposition)
 connect(player.AttributeChanged, function(name)
+	if name == "InRound" then
+		trackParticipation()
+	end
 	renderPlayer()
+	if name == "VotedMode" then
+		renderVotes()
+	end
 	if name == "InRound" or name == "Eliminated" then
 		renderControls()
 	end

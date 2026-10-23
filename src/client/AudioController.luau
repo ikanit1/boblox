@@ -43,6 +43,7 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 	local lastPhase = ""
 	local countdownSeen: { [string]: boolean } = {}
 	local playbackCount = 0
+	local reactorMilestone = 0
 
 	local function connect(signal: RBXScriptSignal, callback)
 		table.insert(connections, signal:Connect(callback))
@@ -200,7 +201,17 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 			if key ~= lastRule then
 				lastRule = key
 				table.clear(countdownSeen)
+				reactorMilestone = 0
 				cue("Rule")
+			end
+			if state:GetAttribute("RuleId") == "ReactorRush" then
+				local goal = numberAttribute(state, "TeamGoal")
+				local charge = numberAttribute(state, "TeamCharge")
+				local milestone = if goal > 0 then math.min(3, math.floor(charge / goal * 3)) else 0
+				if milestone > reactorMilestone then
+					reactorMilestone = milestone
+					cue("ReactorStage")
+				end
 			end
 		elseif phase == "Results" and lastPhase ~= "Results" then
 			cue(if state:GetAttribute("FinaleSuccess") == true then "Finale" else "RunEnd")
@@ -274,10 +285,19 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 			typeof(previousCoins) == "number"
 			and value > previousCoins
 			and player:GetAttribute("DataStatus") ~= "Loading"
+			and not (state:GetAttribute("Phase") == "Rule" and state:GetAttribute("RuleId") == "ReactorRush")
 		then
 			cue("Reward")
 		end
 		previousCoins = value
+	end)
+	local previousCharges = numberAttribute(player, "RunCharges")
+	connect(player:GetAttributeChangedSignal("RunCharges"), function()
+		local value = numberAttribute(player, "RunCharges")
+		if value > previousCharges and state:GetAttribute("Phase") == "Rule" then
+			cue("Charge")
+		end
+		previousCharges = value
 	end)
 	connect(player.CharacterAdded, bindCharacter)
 	if player.Character then

@@ -20,7 +20,7 @@ type TileSnapshot = {
 export type RuleContext = {
 	roster: PlayerRoster.Roster,
 	state: Folder,
-	waitFor: (number, ((number, number) -> ())?) -> boolean,
+	waitFor: (number, ((number, number) -> ())?, (() -> boolean)?) -> boolean,
 }
 local ArenaRules = {}
 local function requiredPart(parent: Instance, name: string): BasePart
@@ -182,7 +182,7 @@ function ArenaRules.new(arena: Model)
 		gui.Parent = p
 		return p
 	end
-	local function collect(context: RuleContext, pickups: { BasePart }, onCollected: (() -> ())?)
+	local function collect(context: RuleContext, pickups: { BasePart }, onCollected: ((Player) -> ())?)
 		context.roster.ForEachAlive(function(player, _, root)
 			for index = #pickups, 1, -1 do
 				local pickup = pickups[index]
@@ -193,7 +193,7 @@ function ArenaRules.new(arena: Model)
 					pickup:Destroy()
 					table.remove(pickups, index)
 					if onCollected then
-						onCollected()
+						onCollected(player)
 					end
 				end
 			end
@@ -577,40 +577,46 @@ function ArenaRules.new(arena: Model)
 	end
 
 	local function spinner(context: RuleContext): boolean
-		laser.Size = Vector3.new(56, 1, 1)
-		laser.CFrame = CFrame.new(0, 1.9, 0)
+		local halfLength = RuleMath.spinnerHalfLength(Config.ArenaHalfSize)
+		local startAngle = rng:NextInteger(0, 3) * math.pi / 4
+		local direction = if rng:NextInteger(0, 1) == 0 then 1 else -1
+		local directionText = if direction > 0
+			then "↺ ПРОТИВ ЧАСОВОЙ"
+			else "↻ ПО ЧАСОВОЙ"
+		laser.Size = Vector3.new(halfLength * 2, 1, 1)
+		laser.CFrame = CFrame.new(0, 1.9, 0) * CFrame.Angles(0, startAngle, 0)
 		laser.Color = Color3.fromRGB(255, 210, 88)
 		laser.Transparency = 0.4
 		instruction(
 			context,
-			"Луч начнёт вращаться. Прыгай через него и держись подальше от центра!"
+			directionText
+				.. ". Луч достанет до углов! Приготовься прыгать."
 		)
 		if not context.waitFor(3, nil) then
 			return false
 		end
 		laser.Color = Config.Rules.Spinner.Accent
 		laser.Transparency = 0.05
-		instruction(context, "↻ ПРЫГАЙ ЧЕРЕЗ ВРАЩАЮЩИЙСЯ ЛУЧ!")
+		instruction(
+			context,
+			directionText .. " — ПРЫГАЙ! Держись подальше от центра."
+		)
 		local hit = damageGate(1.2)
-		local previousAngle = 0
+		local previousAngle = startAngle
 		return context.waitFor(15, function(elapsed)
-			local angle = elapsed * math.pi / 4
+			local angle = startAngle + direction * elapsed * math.pi / 4
 			laser.CFrame = CFrame.new(0, 1.9, 0) * CFrame.Angles(0, angle, 0)
-			local steps = math.clamp(math.ceil((angle - previousAngle) / 0.035), 1, 16)
 			context.roster.ForEachAlive(function(player, humanoid, root)
-				local bounds = bodyBounds(humanoid, root)
-				for step = 1, steps do
-					if
-						RuleMath.spinnerIntersects(
-							bounds,
-							previousAngle + (angle - previousAngle) * step / steps,
-							28,
-							0.5
-						)
-					then
-						hit(player, humanoid, 35)
-						break
-					end
+				if
+					RuleMath.sweptSpinnerIntersects(
+						bodyBounds(humanoid, root),
+						previousAngle,
+						angle,
+						halfLength,
+						0.5
+					)
+				then
+					hit(player, humanoid, 35)
 				end
 			end)
 			previousAngle = angle
@@ -622,6 +628,55 @@ function ArenaRules.new(arena: Model)
 		context.state:SetAttribute("TeamCharge", 0)
 		context.state:SetAttribute("TeamGoal", goal)
 		context.state:SetAttribute("FinaleSuccess", false)
+		-- The reactor is a visual landmark; every piece is non-collidable/non-queryable.
+		local core = part(
+			"ReactorCore",
+			Vector3.new(3.5, 3.5, 3.5),
+			Vector3.new(0, 6, 0),
+			Color3.fromRGB(65, 100, 130)
+		)
+		core.Shape = Enum.PartType.Ball
+		core.Transparency = 0.2
+		local stages: { BasePart } = {}
+		for index = 1, 3 do
+			table.insert(
+				stages,
+				part(
+					"ReactorStage" .. index,
+					Vector3.new(1.4, 1, 1.4),
+					Vector3.new((index - 2) * 2, 2.2, 0),
+					Color3.fromRGB(65, 100, 130)
+				)
+			)
+		end
+		local sign = Instance.new("BillboardGui")
+		sign.Name = "ReactorStatus"
+		sign.Size = UDim2.fromOffset(260, 52)
+		sign.StudsOffset = Vector3.new(0, 3, 0)
+		sign.Parent = core
+		local status = Instance.new("TextLabel")
+		status.Size = UDim2.fromScale(1, 1)
+		status.BackgroundTransparency = 1
+		status.Font = Enum.Font.GothamBold
+		status.TextSize = 20
+		status.TextColor3 = Color3.fromRGB(180, 240, 255)
+		status.TextStrokeTransparency = 0.2
+		status.Parent = sign
+		local function updateReactor(charge: number)
+			local stage = RuleMath.reactorStage(charge, goal)
+			for index, indicator in stages do
+				indicator.Color = if index <= stage
+					then Color3.fromRGB(80, 225, 255)
+					else Color3.fromRGB(65, 100, 130)
+			end
+			core.Color = if stage == 3
+				then Color3.fromRGB(95, 255, 170)
+				else Color3.fromRGB(65 + stage * 15, 100 + stage * 40, 130 + stage * 40)
+			status.Text = if stage == 3
+				then "⚡ РЕАКТОР ГОТОВ!"
+				else string.format("РЕАКТОР %d/3  •  ⚡ %d/%d", stage, charge, goal)
+		end
+		updateReactor(0)
 		local pickups: { BasePart } = {}
 		local shuffled = table.clone(tiles)
 		for index = #shuffled, 2, -1 do
@@ -648,20 +703,36 @@ function ArenaRules.new(arena: Model)
 		)
 		local charge = 0
 		local sweep = beamUpdate(context, 7, 30)
-		return context.waitFor(19, function(elapsed, delta)
+		local completed = context.waitFor(19, function(elapsed, delta)
 			sweep(elapsed, delta)
-			collect(context, pickups, function()
+			collect(context, pickups, function(player)
+				if not context.roster.AwardCharge(player) then
+					return
+				end
 				charge += 1
 				context.state:SetAttribute("TeamCharge", charge)
+				updateReactor(charge)
 				if charge >= goal then
-					context.state:SetAttribute("FinaleSuccess", true)
+					laser.Transparency = 1
 					instruction(
 						context,
-						"⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
+						"⚡ РЕАКТОР ЗАРЯЖЕН! Луч выключен — команда завершает испытание!"
 					)
 				end
 			end)
+		end, function()
+			return charge >= goal
 		end)
+		if completed and charge >= goal then
+			-- Success is committed only after a short safe finish with living players.
+			laser.Transparency = 1
+			completed = context.waitFor(2, nil)
+		end
+		context.state:SetAttribute(
+			"FinaleSuccess",
+			RuleMath.finaleSucceeded(charge, goal, completed, context.roster.AliveCount())
+		)
+		return completed
 	end
 
 	local handlers: { [string]: (RuleContext) -> boolean } = {

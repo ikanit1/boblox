@@ -28,10 +28,13 @@ type Scope = {
 	lastSurvival: string,
 	lastRun: number,
 	sessionRuns: number,
+	runCoinsEarned: number,
+	runXPEarned: number,
 }
 
 export type Service = {
 	IsReady: (player: Player) -> boolean,
+	BeginRun: () -> (),
 	AwardSurvival: (player: Player) -> (),
 	AwardStar: (player: Player) -> (),
 	CompleteRun: (player: Player, won: boolean) -> (),
@@ -83,6 +86,14 @@ function ProfileService.new(): Service
 		end
 	end
 
+	local function replicateRunEarnings(scope: Scope)
+		if scope.player.Parent ~= Players then
+			return
+		end
+		scope.player:SetAttribute("RunCoinsEarned", scope.runCoinsEarned)
+		scope.player:SetAttribute("RunXPEarned", scope.runXPEarned)
+	end
+
 	local function replicate(scope: Scope)
 		local player, data = scope.player, scope.data
 		if player.Parent ~= Players then
@@ -94,12 +105,23 @@ function ProfileService.new(): Service
 		player:SetAttribute("Wins", data.Wins)
 		player:SetAttribute("EquippedTrail", data.EquippedTrail)
 		player:SetAttribute("SessionRuns", scope.sessionRuns)
+		replicateRunEarnings(scope)
 		for _, trail in Config.Trails do
 			player:SetAttribute("Owned_" .. trail.Id, data.OwnedTrails[trail.Id] == true)
 		end
 		for id in Config.Quests do
 			player:SetAttribute("Quest_" .. id, data.Quests[id])
 			player:SetAttribute("Claimed_" .. id, data.ClaimedQuests[id])
+		end
+	end
+
+	local function reward(scope: Scope, kind: string, won: boolean)
+		local coinsBefore, xpBefore = scope.data.Coins, scope.data.XP
+		if ProfileData.reward(scope.data, kind, won, currentDay(), Config) then
+			-- Count the actual accepted reward, including caps, independently of
+			-- purchases, quest claims and profile loads. These fields never persist.
+			scope.runCoinsEarned += math.max(0, scope.data.Coins - coinsBefore)
+			scope.runXPEarned += math.max(0, scope.data.XP - xpBefore)
 		end
 	end
 
@@ -363,6 +385,8 @@ function ProfileService.new(): Service
 			lastSurvival = "",
 			lastRun = -1,
 			sessionRuns = 0,
+			runCoinsEarned = 0,
+			runXPEarned = 0,
 		}
 		scopes[player] = scope
 		status(scope, "Loading", "Загружаем прогресс…")
@@ -458,6 +482,18 @@ function ProfileService.new(): Service
 		IsReady = function(player: Player): boolean
 			return readyScope(player) ~= nil
 		end,
+		BeginRun = function()
+			if destroyed then
+				return
+			end
+			for _, scope in scopes do
+				if not scope.closing and scope.player.Parent == Players then
+					scope.runCoinsEarned = 0
+					scope.runXPEarned = 0
+					replicateRunEarnings(scope)
+				end
+			end
+		end,
 		AwardSurvival = function(player: Player)
 			local scope = readyScope(player)
 			if not scope or player:GetAttribute("InRound") ~= true then
@@ -470,7 +506,7 @@ function ProfileService.new(): Service
 				return
 			end
 			scope.lastSurvival = key
-			ProfileData.reward(scope.data, "Survival", false, currentDay(), Config)
+			reward(scope, "Survival", false)
 			replicate(scope)
 		end,
 		AwardStar = function(player: Player)
@@ -478,7 +514,7 @@ function ProfileService.new(): Service
 			if not scope or player:GetAttribute("InRound") ~= true then
 				return
 			end
-			ProfileData.reward(scope.data, "Star", false, currentDay(), Config)
+			reward(scope, "Star", false)
 			replicate(scope)
 		end,
 		CompleteRun = function(player: Player, won: boolean)
@@ -493,7 +529,7 @@ function ProfileService.new(): Service
 			end
 			scope.lastRun = round
 			scope.sessionRuns += 1
-			ProfileData.reward(scope.data, "Run", won == true, currentDay(), Config)
+			reward(scope, "Run", won == true)
 			replicate(scope)
 		end,
 		Destroy = function()

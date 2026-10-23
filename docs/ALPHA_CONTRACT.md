@@ -7,7 +7,9 @@ One room, 1–12 intended players, six trials per run. Voting 8s -> five distinc
 
 Rule catalog: SafeColor, LaserSweep, LowGravity (existing), RedLight (stop on red, grace before movement checks), LavaRise (safe platforms), MeteorRain (marked impacts), DisappearingTiles (warned waves), SafeZone (marked safe zone), Spinner (jump a rotating beam), ReactorRush (collect energy together while dodging a sweep). Every hazard warns, validates on server, and cleans up unconditionally.
 
-Modes Balanced / Reflex / Cosmic alter deck weights, not movement stats or rewards. No repeats within a run; readable first trial, finale last. Pure seeded deck module. No rewards for lobby idling.
+Modes Balanced / Reflex / Cosmic alter deck weights, not movement stats or rewards. No repeats within a run; readable first trial, finale last. Pure seeded deck module. After the first server run, a valid previous deck constrains the next to four unseen ordinary rules and one repeat; its first rule differs from the previous opener. Thus two complete consecutive runs cover all nine ordinary rules plus the finale. Under this constraint modes mainly affect order and the repeated rule. History is server-local, not a promise to late joiners and not profile data. No rewards for lobby idling.
+
+Reactor charge is a team objective; each accepted pickup has one credited collector. Full charge disables the beam and enters a short safe completion. `FinaleSuccess` is committed only after completion with a living participant; charging followed by total elimination never reports victory. A living finalist still needs four survived trials for a personal win. Spinner reaches the whole square arena. Player characters collide with the world but not with each other, preventing pushes during stop/position rules.
 
 ## Ownership
 - Gameplay: Main.server.luau, PlayerRoster.luau, ArenaRules.luau, RuleMath.luau, StudioChecks.luau; shared/GameConfig.luau, shared/RuleDeck.luau; tests/RuleMath.spec.luau, RuleDeck.spec.luau.
@@ -30,13 +32,24 @@ ReplicatedStorage.RuleRoomRemotes contains authored Vote and ProfileAction Remot
 
 Player attributes: InRound, Eliminated, RunScore, RunSurvived, Coins, XP, Level, Wins, EquippedTrail, Owned_<id> booleans, DataStatus (Session/Loading/Saved/Unavailable/Busy), Quest_survive/stars/runs counts, Claimed_survive/stars/runs booleans, ActionMessage. leaderstats Score and Best remain session scores. RunScore and RunSurvived reset only at BeginRun, not per-trial StartRound.
 
+Session-only run feedback:
+- TrialResult1 through TrialResult6: Pending / Active / Survived / Failed / Missed. Late joiners see past/current unentered trials as Missed. Only server admission sets Active; only accepted survival sets Survived. Ending an unrewarded active trial sets Failed.
+- LastTrialReason: short server-authored feedback for the last result, reset on admission/new run.
+- RunCharges: personally collected reactor charges; no additional reward beyond the existing pickup award.
+- RunWon: actual personal outcome, reset false at BeginRun and set at the first eligible completion.
+- RunCoinsEarned / RunXPEarned: accepted gameplay earnings since BeginRun. Purchase spending, quest claims and profile loading do not count. These are not calculated from balance differences and are not stored in DataStore.
+- VotedMode: accepted server vote, or empty when voting resets. The client displays this confirmation, not an optimistic unchecked choice.
+
 ## Progression API
 Main creates ProfileService.new() once, then PlayerRoster.new(lobbyCFrame, profiles). Dot-methods:
+- BeginRun(): reset session-only earnings counters; Main calls before roster.BeginRun().
 - IsReady(player) -> boolean. Failed loading may play explicitly session-only, but never save fallback over a failed record.
 - AwardSurvival(player): +12 coins/+20 XP, daily survive count; once per completed trial/eligible player.
 - AwardStar(player): +2 coins/+3 XP, daily stars count.
 - CompleteRun(player, won): +15 coins/+25 XP, daily runs; +1 Wins/+20 coins if won. Main calls exactly once per run for participants who survived at least one trial. won = survived >=4 trials AND survived finale AND team goal completed.
 - Destroy(): bounded flush/release, no overlapping saves.
+
+Roster.StartRound(arenaCFrame, trialIndex?, ruleId?) admits ready characters atomically and initializes personal trial feedback. Roster.AwardCharge(player) credits only a current living participant. RuleContext.waitFor(seconds, update?, finishWhen?) supports successful early completion; it rechecks survival after the update before returning true. False always means interruption/elimination, never a shortcut for victory.
 
 EconomyConfig.Trails array {Id, Name, Price, Color}, default None free and four earnable trails, first ~60 coins. EconomyConfig.Quests keyed survive/stars/runs with Name, Target 8/10/2, Reward 50/50/60. Start Coins=0, XP=0. Level from XP, cosmetic only. Define exact catalog IDs before presentation uses them.
 

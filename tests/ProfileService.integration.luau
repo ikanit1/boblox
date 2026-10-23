@@ -13,6 +13,11 @@ local function expect(value: boolean, message: string)
 	checks += 1
 end
 
+local function expectEarnings(player: any, coins: number, xp: number, message: string)
+	expect(player:GetAttribute("RunCoinsEarned") == coins, message .. " (coins)")
+	expect(player:GetAttribute("RunXPEarned") == xp, message .. " (XP)")
+end
+
 local function copy(value: any): any
 	if type(value) ~= "table" then
 		return value
@@ -342,12 +347,16 @@ do
 		server.service.AwardSurvival(player)
 		server.service.AwardSurvival(player)
 	end
+	expectEarnings(player, 96, 160, "Accepted survival rewards count once per trial")
 	player:SetAttribute("RunSurvived", 8)
 	server.remote.OnServerEvent:Fire(player, "ClaimQuest", "survive")
 	server.remote.OnServerEvent:Fire(player, "ClaimQuest", "survive")
+	expectEarnings(player, 96, 160, "Quest coins do not inflate gameplay earnings")
 	server.remote.OnServerEvent:Fire(player, "Purchase", "Cyan")
+	expectEarnings(player, 96, 160, "Purchases do not subtract from gameplay earnings")
 	server.service.CompleteRun(player, true)
 	server.service.CompleteRun(player, true)
+	expectEarnings(player, 131, 185, "Winning run bonus counts once independently of wallet balance")
 	expect(
 		player:GetAttribute("Coins") == 121 and player:GetAttribute("Wins") == 1,
 		"Survival/run/claim idempotence and genuine purchase use service boundary"
@@ -359,6 +368,13 @@ do
 	server.players:remove(player)
 	h.advance(0)
 	local saved = h.store.records.Player_101
+	expect(
+		saved.RunCoinsEarned == nil
+			and saved.RunXPEarned == nil
+			and saved.runCoinsEarned == nil
+			and saved.runXPEarned == nil,
+		"Run counters never become fields in the persisted profile"
+	)
 	expect(
 		saved.Coins == 121 and saved.Session == nil,
 		"PlayerRemoving saves earned balance and releases lease"
@@ -374,6 +390,7 @@ do
 	local nextServer = h.server({})
 	local rejoined = nextServer.players:add(101)
 	h.advance(0)
+	expectEarnings(rejoined, 0, 0, "Loaded balances are not new run earnings")
 	expect(
 		rejoined:GetAttribute("Coins") == 121 and rejoined:GetAttribute("EquippedTrail") == "Cyan",
 		"Independent service rejoin restores persisted purchase"
@@ -391,6 +408,122 @@ do
 	nextServer:close()
 	server:close()
 	table.insert(scenarios, "save, purchase, quest claim, leave and independent rejoin")
+end
+
+do
+	local h = harness()
+	local server = h.server({ optIn = false })
+	local player = server.players:add(201)
+	expectEarnings(player, 0, 0, "New players have zero counters before loading finishes")
+	player:SetAttribute("RunSurvived", 1)
+	server.service.AwardSurvival(player)
+	server.service.AwardStar(player)
+	server.service.CompleteRun(player, true)
+	expectEarnings(player, 0, 0, "Rejected loading-state rewards do not change counters")
+	h.advance(0)
+	server.service.BeginRun()
+	server.service.AwardSurvival(player)
+	server.service.AwardStar(player)
+	server.service.AwardSurvival(player)
+	expectEarnings(player, 14, 23, "Accepted star and survival accumulate, duplicate survival does not")
+	player:SetAttribute("InRound", false)
+	server.service.AwardSurvival(player)
+	server.service.AwardStar(player)
+	player:SetAttribute("RunSurvived", 0)
+	server.service.CompleteRun(player, true)
+	expectEarnings(player, 14, 23, "Inactive and zero-survival awards are rejected")
+	player:SetAttribute("InRound", true)
+	player:SetAttribute("RunSurvived", 1)
+	server.service.CompleteRun(player, false)
+	server.service.CompleteRun(player, true)
+	expectEarnings(player, 29, 48, "Completion counts once and cannot be upgraded by replaying the call")
+
+	local latePlayer = server.players:add(202)
+	h.advance(0)
+	expectEarnings(latePlayer, 0, 0, "Late join starts its own counters at zero")
+	server.service.AwardStar(latePlayer)
+	expectEarnings(latePlayer, 2, 3, "Each player owns independent run counters")
+	server.service.BeginRun()
+	server.service.BeginRun()
+	expectEarnings(player, 0, 0, "Repeated BeginRun resets counters")
+	expectEarnings(latePlayer, 0, 0, "BeginRun resets all active players")
+	expect(
+		player:GetAttribute("Coins") == 29
+			and player:GetAttribute("XP") == 48
+			and latePlayer:GetAttribute("Coins") == 2,
+		"Resetting run earnings leaves player wallets and XP intact"
+	)
+	server.service.AwardSurvival(player)
+	server.service.CompleteRun(player, true)
+	expectEarnings(player, 0, 0, "BeginRun never clears existing reward idempotency guards")
+	server.state:SetAttribute("Round", 2)
+	server.service.AwardStar(player)
+	server.service.AwardSurvival(player)
+	server.service.CompleteRun(player, false)
+	expectEarnings(player, 29, 48, "A new round accepts a fresh set of gameplay rewards")
+	server.players:remove(player)
+	h.advance(0)
+	server.service.AwardStar(player)
+	server.service.CompleteRun(player, true)
+	server.service.BeginRun()
+	expectEarnings(player, 29, 48, "Removed players cannot gain or reset earnings")
+	server.service.AwardStar(latePlayer)
+	server:close()
+	server.service.BeginRun()
+	server.service.AwardStar(latePlayer)
+	expectEarnings(latePlayer, 2, 3, "Destroyed service cannot mutate former counters")
+	expect(h.store.calls == 0, "Session earnings require no new datastore calls")
+	table.insert(scenarios, "run earnings, rejected rewards, reset and bounded player lifecycle")
+end
+
+do
+	local h = harness()
+	local server = h.server({})
+	local prior = Data.fresh(20000)
+	prior.Coins = 480
+	prior.XP = 250
+	h.store.records.Player_203 = copy(prior)
+	h.store.plans = { { DelayBefore = 3 } }
+	local player = server.players:add(203)
+	h.advance(0)
+	local calls = h.store.calls
+	server.service.BeginRun()
+	server.service.AwardStar(player)
+	expectEarnings(player, 0, 0, "BeginRun during a delayed load remains session-only")
+	expect(h.store.calls == calls, "BeginRun does not initiate a datastore request")
+	h.advance(3)
+	expectEarnings(player, 0, 0, "A delayed loaded balance never appears as run income")
+	expect(
+		player:GetAttribute("Coins") == 480 and player:GetAttribute("XP") == 250,
+		"Delayed load still restores its original profile balances"
+	)
+	server.service.AwardStar(player)
+	expectEarnings(player, 2, 3, "Rewards after loading count normally")
+	server:close()
+	table.insert(scenarios, "run reset during delayed profile load")
+end
+
+do
+	local h = harness()
+	local server = h.server({})
+	local prior = Data.fresh(20000)
+	prior.Coins = 999_999_999
+	prior.XP = 999_999_998
+	h.store.records.Player_204 = copy(prior)
+	local player = server.players:add(204)
+	h.advance(0)
+	server.service.AwardSurvival(player)
+	expectEarnings(player, 1, 2, "Capped reward counts the actual accepted delta")
+	server.service.AwardStar(player)
+	player:SetAttribute("RunSurvived", 1)
+	server.service.CompleteRun(player, true)
+	expectEarnings(player, 1, 2, "Already capped balances cannot create fictional earnings")
+	expect(
+		player:GetAttribute("Coins") == 1_000_000_000 and player:GetAttribute("XP") == 1_000_000_000,
+		"Earnings tracking does not change existing profile limits"
+	)
+	server:close()
+	table.insert(scenarios, "actual run earnings at profile balance caps")
 end
 
 do

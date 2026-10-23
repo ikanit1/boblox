@@ -26,6 +26,7 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 	local dark = Color3.fromRGB(24, 36, 57)
 	local muted = Color3.fromRGB(179, 197, 219)
 	local lastAction = 0
+	local showActionMessage = false
 	local previousSelection: GuiObject? = nil
 	local closeAction = "RuleRoomCloseCollection"
 	panel.SelectionGroup = true
@@ -43,9 +44,43 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 		return if typeof(value) == "number" then value else 0
 	end
 
+	local function readyQuests(): number
+		local ready = 0
+		for id, quest in economy.Quests do
+			if
+				player:GetAttribute("Claimed_" .. id) ~= true
+				and numberAttribute("Quest_" .. id) >= quest.Target
+			then
+				ready += 1
+			end
+		end
+		return ready
+	end
+
+	local function hasAffordableTrail(): boolean
+		local coins = numberAttribute("Coins")
+		for _, trail in economy.Trails do
+			if
+				trail.Price > 0
+				and trail.Price <= coins
+				and player:GetAttribute("Owned_" .. trail.Id) ~= true
+			then
+				return true
+			end
+		end
+		return false
+	end
+
 	local function refresh()
 		local coins = numberAttribute("Coins")
 		local loading = player:GetAttribute("DataStatus") == "Loading"
+		local ready = if loading then 0 else readyQuests()
+		openButton.Text = if ready > 0
+			then "ЦЕЛИ: НАГРАДА"
+			elseif not loading and hasAffordableTrail() then "ДОСТУПЕН СЛЕД"
+			else "КОСМЕТИКА / ЦЕЛИ"
+		panel.Heading.Text = string.format("ШКАФЧИК  •  %d МОНЕТ", coins)
+		questsTab.Text = if ready > 0 then string.format("ЗАДАНИЯ (%d)", ready) else "ЗАДАНИЯ"
 		for _, entry in rows do
 			local row = entry.Frame
 			local action = row.Action :: TextButton
@@ -91,7 +126,11 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 		local defaultText = if currentTab == "Quests"
 			then "Задания на сегодня. Пропуск дня не отнимает награды."
 			else "Следы меняют только внешний вид. Монеты зарабатываются в испытаниях."
-		message.Text = if typeof(text) == "string" and text ~= "" then text else defaultText
+		message.Text = if showActionMessage
+				and typeof(text) == "string"
+				and text ~= ""
+			then text
+			else defaultText
 		if status == "Session" then
 			message.Text ..= "  •  Тест Studio: без сохранения."
 		elseif status == "Unavailable" or status == "Busy" then
@@ -103,6 +142,7 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 
 	local function selectTab(tab: string)
 		currentTab = tab
+		showActionMessage = false
 		for _, connection in rowConnections do
 			connection:Disconnect()
 		end
@@ -138,6 +178,8 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 				row.Action.Activated:Connect(function()
 					if entry.Enabled and panel.Visible and os.clock() - lastAction >= 0.35 then
 						lastAction = os.clock()
+						showActionMessage = false
+						refresh()
 						remote:FireServer(entry.Action, entry.Id)
 					end
 				end)
@@ -210,8 +252,14 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 
 	local setVisible: (boolean) -> ()
 	setVisible = function(visible: boolean)
-		if visible and not panel.Visible then
+		if visible and not panel.Visible and phase ~= "Rule" then
 			previousSelection = GuiService.SelectedObject
+			showActionMessage = false
+			if readyQuests() > 0 then
+				selectTab("Quests")
+			elseif hasAffordableTrail() then
+				selectTab("Cosmetics")
+			end
 		end
 		panel.Visible = visible and phase ~= "Rule"
 		backdrop.Visible = panel.Visible
@@ -248,7 +296,12 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 	connect(questsTab.Activated, function()
 		selectTab("Quests")
 	end)
-	connect(player.AttributeChanged, refresh)
+	connect(player.AttributeChanged, function(name)
+		if name == "ActionMessage" then
+			showActionMessage = true
+		end
+		refresh()
+	end)
 	connect(UserInputService.LastInputTypeChanged, function()
 		if panel.Visible then
 			focusPanel()

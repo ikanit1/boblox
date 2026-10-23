@@ -68,6 +68,54 @@ function RuleMath.spinnerIntersects(
 		and body.headY >= 1.4
 end
 
+function RuleMath.spinnerHalfLength(arenaHalfSize: number): number
+	assert(RuleMath.isFinite(arenaHalfSize) and arenaHalfSize > 0, "Arena size must be positive")
+	-- A square's farthest playable point is its corner, not the midpoint of an edge.
+	return arenaHalfSize * math.sqrt(2)
+end
+
+function RuleMath.sweptSpinnerIntersects(
+	body: BodyBounds,
+	previousAngle: number,
+	currentAngle: number,
+	halfLength: number,
+	radius: number
+): boolean
+	local steps = math.clamp(math.ceil(math.abs(currentAngle - previousAngle) / 0.035), 1, 16)
+	for step = 0, steps do
+		local angle = previousAngle + (currentAngle - previousAngle) * step / steps
+		if RuleMath.spinnerIntersects(body, angle, halfLength, radius) then
+			return true
+		end
+	end
+	return false
+end
+
+function RuleMath.reactorStage(charge: number, goal: number): number
+	if not RuleMath.isFinite(charge) or not RuleMath.isFinite(goal) or goal <= 0 then
+		return 0
+	end
+	return math.clamp(math.floor(charge / goal * 3), 0, 3)
+end
+
+function RuleMath.finaleSucceeded(charge: number, goal: number, completed: boolean, alive: number): boolean
+	return completed
+		and RuleMath.isFinite(charge)
+		and RuleMath.isFinite(goal)
+		and RuleMath.isFinite(alive)
+		and goal > 0
+		and charge >= goal
+		and alive > 0
+end
+
+function RuleMath.joinedTrialResults(startedTrial: number, count: number): { string }
+	local results: { string } = {}
+	for index = 1, count do
+		results[index] = if index <= startedTrial then "Missed" else "Pending"
+	end
+	return results
+end
+
 function RuleMath.runOutcome(
 	survived: number,
 	survivedFinale: boolean,

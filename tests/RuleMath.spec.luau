@@ -38,6 +38,76 @@ expect(not RuleMath.spinnerIntersects(jumping, 0, 28, 0.5), "Jump clears rotatin
 expect(RuleMath.spinnerIntersects(behind, math.pi / 2, 28, 0.5), "Quarter-turn hits Z axis")
 expect(not RuleMath.spinnerIntersects(behind, 0, 28, 0.5), "Quarter-turn and zero angle differ")
 expect(not RuleMath.spinnerIntersects(outside, 0, 28, 0.5), "Finite spinner does not hit beyond its endpoint")
+local spinnerLength = RuleMath.spinnerHalfLength(30)
+for _, x in { -29, 29 } do
+	for _, z in { -29, 29 } do
+		local corner = { x = x, z = z, feetY = 1, headY = 5, halfX = 1, halfZ = 0.5 }
+		local clearCorner = { x = x, z = z, feetY = 3, headY = 7, halfX = 1, halfZ = 0.5 }
+		local crossing = math.atan2(-z, x)
+		expect(
+			RuleMath.spinnerIntersects(corner, crossing, spinnerLength, 0.5),
+			"Every playable corner meets the rotating beam"
+		)
+		expect(
+			not RuleMath.spinnerIntersects(clearCorner, crossing, spinnerLength, 0.5),
+			"A corner jump still clears the extended beam"
+		)
+		expect(
+			RuleMath.sweptSpinnerIntersects(corner, crossing - 0.15, crossing + 0.15, spinnerLength, 0.5),
+			"Forward sweep cannot skip a corner between observations"
+		)
+		expect(
+			RuleMath.sweptSpinnerIntersects(corner, crossing + 0.15, crossing - 0.15, spinnerLength, 0.5),
+			"Reverse sweep uses the same corner coverage"
+		)
+	end
+end
+expect(not pcall(RuleMath.spinnerHalfLength, math.huge), "An invalid arena cannot create an unbounded beam")
+expect(RuleMath.reactorStage(0, 5) == 0, "Empty reactor has no lit stages")
+expect(
+	RuleMath.reactorStage(1, 5) == 0 and RuleMath.reactorStage(2, 5) == 1,
+	"First solo stage lights at the one-third threshold"
+)
+expect(
+	RuleMath.reactorStage(4, 5) == 2 and RuleMath.reactorStage(5, 5) == 3,
+	"Second and final solo stages reflect earned charge"
+)
+expect(
+	RuleMath.reactorStage(8, 24) == 1 and RuleMath.reactorStage(16, 24) == 2,
+	"Stage thresholds also scale for a full team"
+)
+expect(
+	RuleMath.reactorStage(30, 24) == 3 and RuleMath.reactorStage(-1, 5) == 0,
+	"Stage display stays within its three indicators"
+)
+expect(
+	RuleMath.reactorStage(1, 0) == 0 and RuleMath.reactorStage(0 / 0, 5) == 0,
+	"Invalid charge data cannot light a stage"
+)
+expect(not RuleMath.finaleSucceeded(5, 5, false, 1), "Charged reactor is not a win before safe completion")
+expect(
+	not RuleMath.finaleSucceeded(5, 5, true, 0),
+	"A charged reactor with no survivors cannot announce success"
+)
+expect(not RuleMath.finaleSucceeded(4, 5, true, 2), "Survival without enough energy is not team success")
+expect(RuleMath.finaleSucceeded(5, 5, true, 1), "A solo survivor can complete the charged reactor")
+expect(RuleMath.finaleSucceeded(6, 5, true, 2), "Simultaneous pickups over the goal preserve team success")
+expect(not RuleMath.finaleSucceeded(math.huge, 5, true, 1), "Non-finite energy cannot grant success")
+expect(not RuleMath.finaleSucceeded(5, 0, true, 1), "An invalid zero goal cannot grant success")
+local beforeRun = RuleMath.joinedTrialResults(0, 6)
+local lateJoin = RuleMath.joinedTrialResults(3, 6)
+local afterFinale = RuleMath.joinedTrialResults(6, 6)
+for index = 1, 6 do
+	expect(beforeRun[index] == "Pending", "A new run leaves every trial pending")
+	expect(
+		lateJoin[index] == (if index <= 3 then "Missed" else "Pending"),
+		"Late joining cannot claim the current or earlier hazards"
+	)
+	expect(
+		afterFinale[index] == "Missed",
+		"Joining after the final admission cannot claim any completed trial"
+	)
+end
 expect(RuleMath.teamGoal(1) == 5 and RuleMath.teamGoal(12) == 24, "Finale scales from solo to twelve players")
 expect(RuleMath.teamGoal(100) == 24, "Finale pickups remain bounded")
 local eligible, won = RuleMath.runOutcome(0, false, true)

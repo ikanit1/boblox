@@ -45,6 +45,7 @@ local runNumber = 0
 local rng = Random.new()
 local votes: { [Player]: string } = {}
 local lastVote: { [Player]: number } = {}
+local previousDeck: { string }? = nil
 local respawnTime = Players.RespawnTime
 Players.RespawnTime = 2
 
@@ -96,7 +97,12 @@ local function publish(phase: string, title: string, instruction: string)
 	state:SetAttribute("Phase", phase)
 end
 
-local function waitFor(seconds: number, active: boolean, update: ((number, number) -> ())?): boolean
+local function waitFor(
+	seconds: number,
+	active: boolean,
+	update: ((number, number) -> ())?,
+	finishWhen: (() -> boolean)?
+): boolean
 	local startedAt = Workspace:GetServerTimeNow()
 	local deadline = startedAt + seconds
 	local previousAt = startedAt
@@ -122,6 +128,15 @@ local function waitFor(seconds: number, active: boolean, update: ((number, numbe
 		if update then
 			update(now - startedAt, now - previousAt)
 		end
+		if finishWhen and finishWhen() then
+			-- The update can damage or eliminate a player while collecting the last charge.
+			-- Early completion must pass the same survival check as the normal deadline.
+			if active then
+				roster.CheckBoundaries()
+				return roster.AliveCount() > 0
+			end
+			return true
+		end
 		previousAt = now
 		task.wait(Config.StepSeconds)
 	end
@@ -146,8 +161,8 @@ game:BindToClose(cleanup)
 local context: ArenaRules.RuleContext = {
 	roster = roster,
 	state = state,
-	waitFor = function(seconds, update)
-		return waitFor(seconds, true, update)
+	waitFor = function(seconds, update, finishWhen)
+		return waitFor(seconds, true, update, finishWhen)
 	end,
 }
 
@@ -167,6 +182,7 @@ while running do
 	end
 	roster.PrepareIntermission()
 	table.clear(votes)
+	table.clear(lastVote)
 	publishVotes()
 	for _, player in Players:GetPlayers() do
 		player:SetAttribute("VotedMode", "")
@@ -189,8 +205,10 @@ while running do
 	state:SetAttribute("ModeId", mode)
 	runNumber += 1
 	state:SetAttribute("Round", runNumber)
+	profiles.BeginRun()
 	roster.BeginRun()
-	local deck = RuleDeck.draw(seed, mode)
+	local deck = RuleDeck.draw(seed, mode, previousDeck)
+	previousDeck = table.clone(deck)
 	local completedRun = false
 	local success, failure = xpcall(function()
 		for index, ruleId in deck do
@@ -198,7 +216,7 @@ while running do
 				return
 			end
 			world.Restore()
-			local entered = roster.StartRound(world.ArenaSpawn)
+			local entered = roster.StartRound(world.ArenaSpawn, index, ruleId)
 			-- Joining/loading clients are never dropped into an already running hazard.
 			while entered == 0 and running and #Players:GetPlayers() > 0 do
 				publish(
@@ -207,7 +225,7 @@ while running do
 					"Загрузка игрока. Испытание начнётся вместе со всеми."
 				)
 				task.wait(0.5)
-				entered = roster.StartRound(world.ArenaSpawn)
+				entered = roster.StartRound(world.ArenaSpawn, index, ruleId)
 			end
 			if not running or entered == 0 then
 				return
@@ -247,7 +265,8 @@ while running do
 	if not running then
 		break
 	end
-	local teamSuccess = completedRun and state:GetAttribute("FinaleSuccess") == true
+	local teamSuccess = success and completedRun and state:GetAttribute("FinaleSuccess") == true
+	state:SetAttribute("FinaleSuccess", teamSuccess)
 	local winners = if success and completedRun then roster.CompleteRun(teamSuccess) else 0
 	if not success then
 		warn("[RuleRoom] Run aborted and restored:\n" .. tostring(failure))
@@ -257,8 +276,13 @@ while running do
 		)
 		publish("Results", "НОВАЯ ПОПЫТКА", "Комната перезагружается.")
 	else
+		local charged = (state:GetAttribute("TeamGoal") :: number) > 0
+			and (state:GetAttribute("TeamCharge") :: number) >= (state:GetAttribute("TeamGoal") :: number)
 		local result = if teamSuccess
 			then "Реактор заряжен! Победителей: " .. winners .. "."
+			elseif
+				charged
+			then "Реактор заряжен, но команда не пережила финал. Попробуем ещё!"
 			else "Реактору не хватило энергии. Собирайте заряды вместе!"
 		state:SetAttribute(
 			"ResultsText",

@@ -2,6 +2,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
+local PhysicsService = game:GetService("PhysicsService")
 local Config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
 local RuleMath = require(script.Parent.RuleMath)
 
@@ -26,20 +27,24 @@ type Participant = {
 	travelStartedAt: number,
 	travelDistance: number,
 	airborneSeconds: number,
+	trialIndex: number,
+	ruleName: string,
 }
-type RunRecord = { points: number, survived: number, finale: boolean, completed: boolean }
+type RunRecord = { points: number, survived: number, finale: boolean, completed: boolean, charges: number }
 type PlayerScope = {
 	character: Model?,
 	generation: number,
 	ready: boolean,
 	connections: { RBXScriptConnection },
 	deathConnection: RBXScriptConnection?,
+	collisionConnections: { RBXScriptConnection },
+	partGroups: { [BasePart]: string },
 	score: IntValue,
 	best: IntValue,
 }
 export type Roster = {
 	BeginRun: () -> (),
-	StartRound: (CFrame) -> number,
+	StartRound: (CFrame, number?, string?) -> number,
 	EndRound: () -> (),
 	PrepareIntermission: () -> (),
 	CompleteRun: (boolean) -> number,
@@ -48,6 +53,7 @@ export type Roster = {
 	ForEachAlive: ((Player, Humanoid, BasePart) -> ()) -> (),
 	AwardSurvivors: (string) -> (),
 	AwardStar: (Player) -> boolean,
+	AwardCharge: (Player) -> boolean,
 	Destroy: () -> (),
 }
 local PlayerRoster = {}
@@ -76,6 +82,17 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	local records: { [Player]: RunRecord } = {}
 	local connections: { RBXScriptConnection } = {}
 	local destroyed = false
+	local currentTrial = 0
+	local runInProgress = false
+	local characterGroup = "RuleRoomCharacters"
+	local createdCharacterGroup = not PhysicsService:IsCollisionGroupRegistered(characterGroup)
+	if createdCharacterGroup then
+		PhysicsService:RegisterCollisionGroup(characterGroup)
+	end
+	local originalSelfCollision = PhysicsService:CollisionGroupsAreCollidable(characterGroup, characterGroup)
+	local originalWorldCollision = PhysicsService:CollisionGroupsAreCollidable(characterGroup, "Default")
+	PhysicsService:CollisionGroupSetCollidable(characterGroup, characterGroup, false)
+	PhysicsService:CollisionGroupSetCollidable(characterGroup, "Default", true)
 	local arena = Workspace:FindFirstChild("Arena")
 	assert(arena, "Arena must exist before the roster")
 	local groundQuery = RaycastParams.new()
@@ -94,7 +111,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 	end
 
-	local function eliminate(player: Player, kill: boolean)
+	local function eliminate(player: Player, kill: boolean, reason: string?)
 		local entry = participants[player]
 		if not entry or not entry.alive then
 			return
@@ -103,8 +120,25 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		restoreMovement(entry)
 		player:SetAttribute("InRound", false)
 		player:SetAttribute("Eliminated", true)
+		player:SetAttribute("TrialResult" .. entry.trialIndex, "Failed")
+		player:SetAttribute("LastTrialReason", reason or ("Опасность: " .. entry.ruleName))
 		if kill and entry.humanoid.Health > 0 then
 			entry.humanoid.Health = 0
+		end
+	end
+
+	local function restorePartGroup(scope: PlayerScope, descendant: Instance)
+		if not descendant:IsA("BasePart") then
+			return
+		end
+		local original = scope.partGroups[descendant]
+		if original then
+			if descendant.Parent and descendant.CollisionGroup == characterGroup then
+				descendant.CollisionGroup = if PhysicsService:IsCollisionGroupRegistered(original)
+					then original
+					else "Default"
+			end
+			scope.partGroups[descendant] = nil
 		end
 	end
 
@@ -115,6 +149,13 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		if scope.deathConnection then
 			scope.deathConnection:Disconnect()
 			scope.deathConnection = nil
+		end
+		for _, connection in scope.collisionConnections do
+			connection:Disconnect()
+		end
+		table.clear(scope.collisionConnections)
+		for descendant in scope.partGroups do
+			restorePartGroup(scope, descendant)
 		end
 	end
 
@@ -140,6 +181,33 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 		if not humanoid or not humanoid:IsA("Humanoid") or not root or not root:IsA("BasePart") then
 			return
+		end
+		local function assignCollisionGroup(descendant: Instance)
+			if
+				destroyed
+				or scopes[player] ~= scope
+				or scope.generation ~= generation
+				or scope.character ~= character
+				or not descendant:IsDescendantOf(character)
+			then
+				return
+			end
+			if descendant:IsA("BasePart") and not scope.partGroups[descendant] then
+				scope.partGroups[descendant] = descendant.CollisionGroup
+				descendant.CollisionGroup = characterGroup
+			end
+		end
+		table.insert(scope.collisionConnections, character.DescendantAdded:Connect(assignCollisionGroup))
+		table.insert(
+			scope.collisionConnections,
+			character.DescendantRemoving:Connect(function(descendant)
+				if scope.generation == generation and scope.character == character then
+					restorePartGroup(scope, descendant)
+				end
+			end)
+		)
+		for _, descendant in character:GetDescendants() do
+			assignCollisionGroup(descendant)
 		end
 		scope.deathConnection = humanoid.Died:Connect(function()
 			local entry = participants[player]
@@ -168,6 +236,8 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 			generation = 0,
 			ready = false,
 			connections = {},
+			collisionConnections = {},
+			partGroups = {},
 			deathConnection = nil,
 			score = intValue(stats :: Folder, "Score"),
 			best = intValue(stats :: Folder, "Best"),
@@ -177,6 +247,14 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		player:SetAttribute("Eliminated", false)
 		player:SetAttribute("RunScore", 0)
 		player:SetAttribute("RunSurvived", 0)
+		player:SetAttribute("RunCharges", 0)
+		player:SetAttribute("RunWon", false)
+		player:SetAttribute("LastTrialReason", "")
+		for index, result in
+			RuleMath.joinedTrialResults(if runInProgress then currentTrial else 0, Config.RuleCount)
+		do
+			player:SetAttribute("TrialResult" .. index, result)
+		end
 		table.insert(
 			scope.connections,
 			player.CharacterAdded:Connect(function(character)
@@ -272,20 +350,41 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	local roster = {} :: Roster
 	function roster.BeginRun()
 		table.clear(records)
+		currentTrial = 0
+		runInProgress = true
 		for _, player in Players:GetPlayers() do
 			player:SetAttribute("RunScore", 0)
 			player:SetAttribute("RunSurvived", 0)
 			player:SetAttribute("Eliminated", false)
+			player:SetAttribute("RunCharges", 0)
+			player:SetAttribute("RunWon", false)
+			player:SetAttribute("LastTrialReason", "")
+			for index = 1, Config.RuleCount do
+				player:SetAttribute("TrialResult" .. index, "Pending")
+			end
 		end
 	end
 
-	function roster.StartRound(arenaCFrame: CFrame): number
+	function roster.StartRound(arenaCFrame: CFrame, trialIndex: number?, ruleId: string?): number
 		-- Main ends the previous trial before this atomic admission pass (no yields).
 		assert(next(participants) == nil, "EndRound must precede StartRound")
+		local index = trialIndex or math.min(currentTrial + 1, Config.RuleCount)
+		assert(index % 1 == 0 and index >= 1 and index <= Config.RuleCount, "Invalid trial index")
+		currentTrial = index
+		runInProgress = true
+		local metadata = if ruleId then Config.Rules[ruleId] else nil
+		local ruleName = if metadata then metadata.Name else "испытание комнаты"
 		local entered = 0
 		for _, player in Players:GetPlayers() do
 			player:SetAttribute("InRound", false)
 			player:SetAttribute("Eliminated", false)
+			for previous = 1, index do
+				local attribute = "TrialResult" .. previous
+				local result = player:GetAttribute(attribute)
+				if result == nil or result == "Pending" then
+					player:SetAttribute(attribute, "Missed")
+				end
+			end
 			local scope = scopes[player]
 			local character = player.Character
 			local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
@@ -303,7 +402,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 				and root:IsA("BasePart")
 			then
 				records[player] = records[player]
-					or { points = 0, survived = 0, finale = false, completed = false }
+					or { points = 0, survived = 0, finale = false, completed = false, charges = 0 }
 				participants[player] = {
 					character = character,
 					humanoid = humanoid,
@@ -319,6 +418,8 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					travelStartedAt = os.clock(),
 					travelDistance = 0,
 					airborneSeconds = 0,
+					trialIndex = index,
+					ruleName = ruleName,
 				}
 				for _, child in character:GetChildren() do
 					if child:IsA("ForceField") then
@@ -331,6 +432,8 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 				-- Only this server-authorized teleport resets the trial's movement anchor.
 				participants[player].lastPosition = root.Position
 				player:SetAttribute("MovementViolation", "")
+				player:SetAttribute("TrialResult" .. index, "Active")
+				player:SetAttribute("LastTrialReason", "")
 				player:SetAttribute("InRound", true)
 				entered += 1
 			end
@@ -339,8 +442,12 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	end
 
 	function roster.EndRound()
-		for _, entry in participants do
+		for player, entry in participants do
 			restoreMovement(entry)
+			if player:GetAttribute("TrialResult" .. entry.trialIndex) == "Active" then
+				player:SetAttribute("TrialResult" .. entry.trialIndex, "Failed")
+				player:SetAttribute("LastTrialReason", "Испытание не завершено")
+			end
 		end
 		table.clear(participants)
 		for _, player in Players:GetPlayers() do
@@ -367,17 +474,28 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					eliminate(player, false)
 				else
 					local p = entry.root.Position
+					local reason: string? = nil
 					if
 						not RuleMath.isFinite(p.X)
 						or not RuleMath.isFinite(p.Y)
 						or not RuleMath.isFinite(p.Z)
-						or p.Y < Config.EliminationY
-						or p.Y > 110
+					then
+						reason = "Некорректное положение персонажа"
+					elseif p.Y < Config.EliminationY then
+						reason = "Упал за край или в провал"
+					elseif
+						p.Y > 110
 						or math.abs(p.X) > Config.ArenaHalfSize + 3
 						or math.abs(p.Z) > Config.ArenaHalfSize + 3
-						or not movementPlausible(player, entry, p)
 					then
-						eliminate(player, true)
+						reason = "Вышел за пределы комнаты"
+					elseif not movementPlausible(player, entry, p) then
+						reason = if player:GetAttribute("MovementViolation") == "Travel"
+							then "Слишком резкое перемещение"
+							else "Слишком долго без опоры"
+					end
+					if reason then
+						eliminate(player, true, reason)
 					end
 				end
 			end
@@ -412,6 +530,8 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					record.finale = true
 				end
 				player:SetAttribute("RunSurvived", record.survived)
+				player:SetAttribute("TrialResult" .. entry.trialIndex, "Survived")
+				player:SetAttribute("LastTrialReason", "Испытание пройдено")
 				profiles.AwardSurvival(player)
 			end
 		end
@@ -425,12 +545,24 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		return true
 	end
 
+	function roster.AwardCharge(player: Player): boolean
+		local entry, record = participants[player], records[player]
+		if not entry or not record or not isCurrent(player, entry) then
+			return false
+		end
+		record.charges += 1
+		player:SetAttribute("RunCharges", record.charges)
+		return true
+	end
+
 	function roster.CompleteRun(teamSuccess: boolean): number
+		runInProgress = false
 		local winners = 0
 		for player, record in records do
 			local eligible, won = RuleMath.runOutcome(record.survived, record.finale, teamSuccess)
 			if eligible and not record.completed and player.Parent == Players then
 				record.completed = true
+				player:SetAttribute("RunWon", won)
 				profiles.CompleteRun(player, won)
 				if won then
 					winners += 1
@@ -451,6 +583,12 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 		for player in scopes do
 			removePlayer(player)
+		end
+		if createdCharacterGroup then
+			PhysicsService:UnregisterCollisionGroup(characterGroup)
+		else
+			PhysicsService:CollisionGroupSetCollidable(characterGroup, characterGroup, originalSelfCollision)
+			PhysicsService:CollisionGroupSetCollidable(characterGroup, "Default", originalWorldCollision)
 		end
 	end
 	table.insert(connections, Players.PlayerAdded:Connect(addPlayer))

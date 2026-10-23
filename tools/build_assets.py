@@ -287,10 +287,11 @@ def hud():
     label(timer, "Countdown", "—", (1, -8, 0, 48), (0, 4, 0, 4), color=NAVY, text_size=37, bold=True, align=2, scaled=True)
     label(timer, "UnitLabel", "СЕК", (1, -8, 0, 15), (0, 4, 1, -20), color=NAVY, text_size=10, bold=True, align=2)
 
-    progress = centered(frame(content, "TrialProgress", (1, -28, 0, 4), (0.5, 0, 0, 153), transparency=1))
-    width_bound(progress, 672, 6)
+    progress = centered(frame(content, "TrialProgress", (1, -28, 0, 12), (0.5, 0, 0, 149), transparency=1))
+    width_bound(progress, 672, 14)
     for index in range(6):
-        frame(progress, f"Step{index + 1}", (1 / 6, -4, 1, 0), (index / 6, 2, 0, 0), color=(54, 70, 91))
+        step = frame(progress, f"Step{index + 1}", (1 / 6, -4, 1, 0), (index / 6, 2, 0, 0), color=(54, 70, 91))
+        label(step, "Mark", f"{index + 1} ·", color=MUTED, text_size=11, bold=True, align=2)
     status = centered(label(content, "PlayerStatus", "Следующее испытание начнётся автоматически", (1, -24, 0, 22), (0.5, 0, 0, 163), text_size=13, bold=True, align=2, scaled=True))
     prop(status, "Color3", "BackgroundColor3", NAVY)
     status.find("Properties/float[@name='BackgroundTransparency']").text = "0.1"

@@ -17,6 +17,7 @@ local REFLEX: { [string]: boolean } =
 	{ LaserSweep = true, RedLight = true, MeteorRain = true, Spinner = true }
 local COSMIC: { [string]: boolean } =
 	{ SafeColor = true, LowGravity = true, SafeZone = true, DisappearingTiles = true }
+local OPENERS: { [string]: boolean } = { SafeColor = true, LowGravity = true, SafeZone = true }
 
 function RuleDeck.isMode(id: unknown): boolean
 	return id == "Balanced" or id == "Reflex" or id == "Cosmic"
@@ -50,9 +51,41 @@ function RuleDeck.chooseMode(counts: { [string]: number }, seed: number): string
 	return tied[math.floor(randomSource(seed)() * #tied) + 1]
 end
 
-function RuleDeck.draw(seed: number, mode: string): { string }
+-- History is optional. Only a complete five-rule deck, with an optional finale,
+-- can constrain the next run; malformed/partial input behaves like no history.
+local function readPreviousDeck(previousDeck: { string }?): ({ [string]: boolean }?, string?)
+	if type(previousDeck) ~= "table" then
+		return nil, nil
+	end
+	local entries = 0
+	for key in previousDeck do
+		entries += 1
+		if entries > 6 or type(key) ~= "number" or key % 1 ~= 0 or key < 1 or key > 6 then
+			return nil, nil
+		end
+	end
+	if entries ~= 5 and entries ~= 6 then
+		return nil, nil
+	end
+	if entries == 6 and previousDeck[6] ~= "ReactorRush" then
+		return nil, nil
+	end
+	local previous: { [string]: boolean } = {}
+	for index = 1, 5 do
+		local id = previousDeck[index]
+		if type(id) ~= "string" or not table.find(RULES, id) or previous[id] then
+			return nil, nil
+		end
+		previous[id] = true
+	end
+	return previous, previousDeck[1]
+end
+
+function RuleDeck.draw(seed: number, mode: string, previousDeck: { string }?): { string }
 	assert(RuleDeck.isMode(mode), "Unknown mode")
 	local random = randomSource(seed)
+	local previous, previousFirst = readPreviousDeck(previousDeck)
+	local repeated = false
 	local deck: { string } = {}
 	local available = table.clone(RULES)
 	for trial = 1, 5 do
@@ -67,12 +100,18 @@ function RuleDeck.draw(seed: number, mode: string): { string }
 				weight = 3
 			end
 			-- First encounter always has one simple spatial instruction.
-			if trial == 1 and id ~= "SafeColor" and id ~= "LowGravity" and id ~= "SafeZone" then
+			if trial == 1 and (not OPENERS[id] or id == previousFirst) then
+				weight = 0
+			end
+			-- Five draws with at most one repeat must include all four unseen rules.
+			-- If every opener was seen, a different opener uses the one repeat.
+			if previous and repeated and previous[id] then
 				weight = 0
 			end
 			weights[index] = weight
 			total += weight
 		end
+		assert(total > 0, "Deck constraints must leave an eligible rule")
 		local pick = random() * total
 		local chosen = #available
 		for index, weight in weights do
@@ -84,6 +123,9 @@ function RuleDeck.draw(seed: number, mode: string): { string }
 		end
 		local selected = table.remove(available, chosen)
 		assert(selected, "Weighted draw must select an available rule")
+		if previous and previous[selected] then
+			repeated = true
+		end
 		table.insert(deck, selected)
 	end
 	table.insert(deck, "ReactorRush")
