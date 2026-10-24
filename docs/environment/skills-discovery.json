@@ -1,0 +1,706 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-24T06:48:19.549010+00:00",
+  "method": "Codex app-server initialize + skills/list(cwds=[repository], forceReload=true)",
+  "codexVersion": "codex-cli 0.164.0-alpha.11.1",
+  "repository": "C:\\Users\\admin\\Documents\\Codex\\2026-10-23\\new-chat\\outputs\\RuleRoomRelease",
+  "expectedCount": 84,
+  "discoveredExpectedCount": 84,
+  "selectedEntryCount": 86,
+  "missing": [],
+  "disabled": [],
+  "relevantErrors": [],
+  "unrelatedErrorCount": 0,
+  "skills": [
+    {
+      "name": "obsidian-gamedev-workflow",
+      "description": "Maintain an existing game project's Obsidian knowledge vault, decisions, asset provenance, QA and roadmap from verified code and test evidence. Use when the game repository identifies an Obsidian vault; do not inspect unrelated personal notes.",
+      "path": "C:\\Users\\admin\\Documents\\Codex\\2026-10-23\\new-chat\\outputs\\RuleRoomRelease\\.agents\\skills\\obsidian-gamedev-workflow\\SKILL.md",
+      "scope": "repo",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "roblox-development-orchestrator",
+      "description": "Coordinate work in an existing Roblox game repository using its skill catalog, source ownership, Studio MCP, QA and project Obsidian vault. Use for Roblox development or environment setup when the repository identifies this workflow.",
+      "path": "C:\\Users\\admin\\Documents\\Codex\\2026-10-23\\new-chat\\outputs\\RuleRoomRelease\\.agents\\skills\\roblox-development-orchestrator\\SKILL.md",
+      "scope": "repo",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-analytics",
+      "description": "Use when adding, changing, or auditing Roblox analytics: AnalyticsService events, economy, funnels, onboarding traces, rate limits.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-analytics\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-animation-vfx",
+      "description": "Use when adding, changing, or fixing Roblox animations, particles, beams, trails, tweens, camera shake, or other visual effects.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-animation-vfx\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-architecture",
+      "description": "Use when adding, moving, refactoring, or reviewing Roblox feature ownership, code layout, dependencies, startup, or client-server boundaries.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-architecture\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-audio",
+      "description": "Use when adding, changing, or fixing Roblox audio: playback, spatial sound, music, sound effects, SoundGroups, or dynamic effects.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-audio\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-building",
+      "description": "Use when building or editing geometry, maps, props, or generated assets with MCP or standalone Luau.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-building\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-camera",
+      "description": "Use when scripting or fixing Roblox camera behavior: CFrame placement, screen raycasts, first/third-person, shoulder views, cutscenes.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-camera\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-cloud",
+      "description": "Use for Roblox Open Cloud: API keys, OAuth 2.0, webhooks, scopes, token lifecycle, DataStore or messaging access from outside the game.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-cloud\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-collaboration-mode",
+      "description": "Load FIRST for any Roblox task: build, change, fix, debug, review, audit, or plan. Sets initiative and which decisions need the user.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-collaboration-mode\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-data",
+      "description": "Use when writing, changing, debugging, or auditing Roblox player saves: DataStore, ProfileStore, session locks, schemas, migrations.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-data\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-game-design",
+      "description": "Use when designing or reworking a Roblox game: core loop, tutorial/FTUE, levels, economy, retention phases, juice, grind, curation.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-game-design\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-growth-design",
+      "description": "Use for Roblox growth: diagnosing stats, discovery, retention, onboarding, experiments, LiveOps, thumbnails, and packaging.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-growth-design\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-gui",
+      "description": "Use when building or fixing Roblox menus, HUDs, shops, dialogs, or UI that must work on phones, tablets, desktop and console.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-gui\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-input",
+      "description": "Use when handling Roblox touch, gamepad, keyboard, mouse or motion input, on-screen action buttons, or cross-platform action binding.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-input\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-lighting",
+      "description": "Use when setting up or changing Roblox lighting, atmosphere, day/night cycles, or post-processing effects.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-lighting\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-localization",
+      "description": "Use when adding or fixing Roblox translation: localization tables, auto-translation, locale-specific content, or region detection.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-localization\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-luau-core",
+      "description": "Use when writing, editing, or debugging any Luau: tables, control flow, string patterns, scope, closures, and errors ported from JS/Python.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-luau-core\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-luau-patterns",
+      "description": "Use when writing or refactoring Roblox Luau modules, object lifecycles, signals, task scheduling, pcall, and cleanup.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-luau-patterns\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-luau-types",
+      "description": "Use when adding or fixing Luau type annotations: generics, unions, narrowing, strict mode, sealed tables, module type exports, typed metatables.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-luau-types\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-monetization",
+      "description": "Use when adding, changing, or auditing Roblox purchases: GamePasses, Developer Products, subscriptions, private servers, policy checks.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-monetization\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-networking",
+      "description": "Use when adding, changing, or auditing RemoteEvents/RemoteFunctions: argument validation, rate limits, server authority, exploit prevention.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-networking\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-npc-ai",
+      "description": "Use when creating or fixing Roblox NPCs, bots or enemies: pathfinding, state machines, line of sight, spawns, AI update loops.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-npc-ai\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-performance",
+      "description": "Use when profiling or fixing Roblox performance: low FPS, lag, memory, network load, slow phones, hot paths.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-performance\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-physics",
+      "description": "Use when building or fixing Roblox physics: vehicles, ragdolls, projectiles, elevators, constraints, forces, network ownership.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-physics\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-player-psychology",
+      "description": "Use when designing or reviewing player-behavior mechanics: first minute, rewards, streaks, daily rewards, pricing, RNG/pity, community.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-player-psychology\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-publish-checklist",
+      "description": "Use before publishing or updating a Roblox experience to run evidence-backed release gates and a pre-release audit.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-publish-checklist\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-security",
+      "description": "Use when auditing or hardening Roblox code against exploits: authority, remotes, economy, purchases, and DataStore flows.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-security\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-server-data",
+      "description": "Use when building or fixing Roblox cross-server data: OrderedDataStore leaderboards, MessagingService, MemoryStore, world state, seasons.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-server-data\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-studio-mcp",
+      "description": "Use when working in Roblox Studio through MCP: editing scripts or scenes, generating assets, playtesting, screenshots, or input.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-studio-mcp\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "brain-roblox-tooling",
+      "description": "Use when setting up or fixing Roblox tooling: Rojo, Wally, pesde, Selene, StyLua, Lune, Rokit, luau-lsp, tests, or CI/CD.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\brain-roblox-tooling\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-animation-quality-gate",
+      "description": "Validate Blender animation attempts before accepting them by rendering contact sheets, checking silhouette stability, flicker, framing, subject dominance, layer separation, export compatibility, and motion-design coherence. Use after animation renders or when the user says motion/morph/outside elements look bad.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-animation-quality-gate\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-atlas-uv-fitting",
+      "description": "Detect texture-atlas regions and map each source part to its own UV rectangle or projected UV surface. Use when a texture pack must fit a Blender model 1:1, when textures look off/stretched, when alpha decals or lightmaps are provided, or before exporting a textured GLB for a brand mascot/logo.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-atlas-uv-fitting\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-animation",
+      "description": "Animate objects, cameras, lights, and properties in Blender — keyframes, F-curves, easing (Bezier, Linear, Sine, Bounce, Elastic), shape keys (morph targets / blendshapes / visemes), drivers (Python expressions on properties), NLA actions for reuse and layering. Use whenever the user asks to \"animate this\", \"make it move / rotate / scale over time\", \"add keyframes\", \"loop / oscillate\", \"shape key / morph / blendshape\", \"visemes for lip sync\", or any time-based property change. Make sure to use this skill even if the user does not say \"animate\" — also covers \"spin it slowly\", \"make it wave\", \"fade in / out\", \"pulse\", \"facial expression\".",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-animation\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-cameras",
+      "description": "Set up Blender cameras with cinematic intent — focal length, depth of field (f-stop / focus object), composition (rule of thirds, leading lines), animated cameras (orbit, dolly, push-in), tracking constraints. Use whenever the user asks to \"set up the camera\", \"frame the shot\", \"make it look cinematic / hero / portrait / wide-angle / telephoto\", \"add depth of field\", \"orbit the camera\", or any composition/framing request. Make sure to use this skill even if the user does not say \"camera\" — also covers \"hero shot\", \"close-up\", \"from above\", \"shallow focus\", \"85mm portrait look\".",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-cameras\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-export",
+      "description": "Export Blender scenes to glTF/GLB (web/AR), FBX (game engines), OBJ (universal), USD (VFX pipelines), STL (3D printing). Includes Unreal collision hulls and Multires normal-map baking for low-poly export, per-format settings, embed/unpack textures, axis conversion, polygon optimization (Decimate), and target-platform validation. Use whenever the user asks to \"export this\", \"save as glTF / FBX / OBJ / STL / USD\", \"package for Unity / Unreal / Three.js / web / AR / 3D print\", or any output format conversion. Make sure to use this skill even if the user does not say \"export\" — also covers \"package this for the web\", \"make it work in Unity\", \"send to Unreal\", \"save for 3D printing\".",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-export\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-lighting",
+      "description": "Light Blender scenes professionally — three-point setups, HDRI environments, studio/cinematic/dramatic configurations, light groups, color temperature, soft vs hard shadows. Use whenever the user asks to \"light the scene\", \"set up lighting\", \"make it look cinematic / dramatic / studio / outdoor / sunset\", \"add a key light\", \"use HDRI\", or any lighting-related request. Make sure to use this skill even if the user does not say \"light\" — also covers \"make it look professional\", \"studio shot\", \"moody atmosphere\", \"golden hour\", \"rim light\". Pairs with ccb-blender-materials (lighting reveals materials) and ccb-blender-cameras (lighting + composition together = shot).",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-lighting\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-materials",
+      "description": "Create and assign PBR materials in Blender via Principled BSDF — metals, glass, plastic, fabric, skin, organics. Covers physically-based material recipes with real-world values, Coat layer (varnish/car paint), Sheen (cloth), Subsurface scattering (skin/wax), Transmission (glass), and procedural patterns (wood grain, marble, fabric weave). Use whenever the user asks to \"make it look like X material\", \"give it a metallic finish\", \"apply a wood texture\", \"make this glass / plastic / brushed steel / leather / skin\", or any look-development request. Make sure to use this skill even if the user does not say \"material\" — also covers \"make it shiny\", \"matte finish\", \"looks like copper\", \"rough surface\". Works with any geometry; pairs with ccb-blender-lighting (materials only look right under proper lighting).",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-materials\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-modeling",
+      "description": "Create and edit 3D meshes in Blender — primitives, hard-surface modeling, mesh operators, modifier stacks (Bevel, Subdivision, Boolean, Mirror, Array, Solidify), bmesh-level edits, retopology basics. Use whenever the user asks to \"make/model/create/build a 3D object\", \"shape/sculpt this\", \"add a cube/sphere/cylinder/etc.\", \"extrude/inset/bevel this face\", \"add a modifier\", or any geometry-creation request that isn't a wireframe trace. Make sure to use this skill even if the user does not say \"model\" — also covers \"make a sword\", \"build a chair\", \"add a door\", \"carve out a hole\". Pairs with ccb-blender-materials for look-dev and ccb-blender-pro-workflow for full pipelines.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-modeling\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-pro-workflow",
+      "description": "End-to-end production workflow guidance for Blender — the order to assemble scenes (block-out → camera → light → forms → materials → detail → render → composite → export), critique protocols, time budgets, and recovery patterns. Use whenever the user asks to \"make a complete scene / hero shot / production-quality render\", \"what's the right order to do this\", \"set up a full pipeline\", or has a multi-step request crossing modeling + lighting + materials + rendering. Make sure to use this skill for any request that spans multiple phases of 3D work, even if the user does not say \"workflow\" — also covers \"make a final image of X\", \"produce a hero render\", \"professional-looking result\".",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-pro-workflow\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-rendering",
+      "description": "Render Blender scenes with the right engine and settings — Cycles for photoreal, EEVEE for speed/stylized, sample counts, denoising (OptiX/OIDN), light path tuning, color management (AgX/Filmic), file output (PNG/EXR/MP4), animation rendering. Use whenever the user asks to \"render this\", \"produce an image\", \"render a frame / animation\", \"make a final image\", \"save the render\", or any output-generation request. Make sure to use this skill even if the user does not say \"render\" — also covers \"make a picture\", \"save the result\", \"produce a final image\", \"export as image\".",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-rendering\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-skill-harmonizer",
+      "description": "Harmonize multiple Blender skills into a coherent pipeline with clear activation precedence, handoff artifacts, dependency gates, and conflict-resolution rules. Use when a Blender task spans several skills, when reference-locked work conflicts with generic production workflow, after adding/updating skills, or when repeated failures indicate skill interference or missing inter/intra-play.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-skill-harmonizer\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-blender-uv-texturing",
+      "description": "UV unwrap, atlas-map, project textures, use alpha decals, bake maps/lightmaps, and prepare texture-driven Blender assets for glTF/GLB export. Use whenever the user provides texture packs, texture atlases, decals, UV layouts, lightmaps, wants a texture to fit a mesh 1:1, or reports stretched/off textures. Pairs with ccb-reference-to-3d for template-accurate reconstruction and ccb-blender-materials for PBR values.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-blender-uv-texturing\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-closed-surface-uv-coverage",
+      "description": "Ensure textures and decals cover all visible surfaces of a closed or extruded Blender asset, especially front/back caps and sidewalls, instead of relying on partial projected planes, curves, or linework overlays. Use when back textures do not fill the model, side textures are missing, spin/turntable views expose plain sidewalls, or a model needs separate UV treatment for caps and side surfaces.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-closed-surface-uv-coverage\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-contour-to-mesh",
+      "description": "Build Blender mesh surfaces directly from extracted 2D contours/masks instead of approximate primitives. Use for 1:1 mascot/logo reconstruction, exact leaf/petal silhouettes, filled wireframe shapes, shallow bas-relief forms, or when the model outline must match a front template before adding depth.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-contour-to-mesh\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-fit-repair-optimizer",
+      "description": "Turn multiview fit reports into a sequential or parallel repair queue for aligning Blender products to source-of-truth templates. Use after validation shows disalignment, when the agent must iteratively fix wireframe, texture, lighting, or projection mismatches, and when skill gaps should trigger self-refinement before another rebuild.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-fit-repair-optimizer\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-landmark-fit-repair",
+      "description": "Validate and repair source-locked Blender models using named landmarks such as leaf tips, shell corners, eyes, smile, rim thickness, aura center/radius, and view-specific depth markers. Use when bbox/IoU is insufficient and the model must align to templates at designed feature points.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-landmark-fit-repair\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-mascot-logo-reconstruction",
+      "description": "Orchestrate a fail-gated, source-locked Blender reconstruction of mascots, logos, brand avatars, and stylized flat characters from wireframes, texture packs, and orthographic views. Use when the user requires a 1:1 brand/model match rather than a plausible stylized interpretation.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-mascot-logo-reconstruction\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-multiview-constraint-solver",
+      "description": "Determine whether front/side/back/top reference templates can be satisfied by one rigid 3D Blender model, choose a canonical source policy, and emit constraints before rebuilding. Use when multiview bboxes, silhouettes, part counts, or depth ratios contradict each other.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-multiview-constraint-solver\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-multiview-fit-loop",
+      "description": "Closed-loop compare-adjust-repeat workflow for fitting Blender models to supplied front/side/back/top templates and originals. Use when the user asks to compare the product to templates/originals and adjust until it fits across all dimensions, or when all views must pass measurable bbox/centroid/silhouette/edge validation before export.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-multiview-fit-loop\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-orbital-hud-motion",
+      "description": "Create tasteful circular/orbital HUD and aura animations around a Blender subject using source-derived arcs, dots, dashes, opacity, parallax, and restrained motion. Use when decorative circles, halos, orbit markers, scanner rings, or HUD effects must correlate with a logo/mascot rather than looking like random oversized rings.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-orbital-hud-motion\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-orthographic-registration",
+      "description": "Register front, side, back, and top orthographic reference views into a shared Blender coordinate contract. Use when a 3D model must match multi-view wireframes/templates, when side/back/top silhouettes are off, or before adding depth to a front-locked contour model.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-orthographic-registration\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-quality-refinement-autoloop",
+      "description": "Run a self-refinement loop when a Blender result is subpar, user expectations are not met, validation fails, or repeated issues reveal missing skill depth. The loop diagnoses the gap, decides whether to repair the artifact or acquire/refine a generic skill, sanitizes lessons for reusable publication, updates docs/versioning, validates, and prepares stage/commit/push when explicitly requested.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-quality-refinement-autoloop\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-reference-analysis-validator",
+      "description": "Measure and validate supplied reference images, wireframes, texture atlases, and Blender renders before declaring a reconstruction 1:1. Use when an asset must match a template, when visual feedback says the output is off, when part counts must be exact, or before exporting a brand mascot/logo reconstruction. Pairs with ccb-reference-to-3d, ccb-contour-to-mesh, ccb-orthographic-registration, ccb-atlas-uv-fitting, and Blender MCP.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-reference-analysis-validator\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-reference-look-calibration",
+      "description": "Calibrate Blender materials, lighting, camera crop, emission/glow, color management, and aura/HUD styling against supplied original/reference images using measurable color, brightness, saturation, bbox, and mask statistics. Use when a product must match the lighting/look of a source image or when audits say the product is too bright, desaturated, wrong hue, wrong glow, or wrong silhouette extent.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-reference-look-calibration\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-reference-to-3d",
+      "description": "Reconstruct Blender models from supplied reference sheets, branding templates, texture atlases, orthographic front/side/back/top views, or mascot/logo art where visual fidelity to the source is more important than a plausible generated object. Use when the user says the model must match a template, wireframe, texture pack, character sheet, mascot sheet, or brand asset exactly; also use after feedback like \"does not look like the reference\", \"fit the texture 1:1\", \"wrong number of visible parts\", or \"compare against the template\". Requires Blender MCP plus local Python with Pillow/OpenCV/numpy; pairs with ccb-blender-uv-texturing, ccb-wireframe-to-3d, ccb-blender-modeling, ccb-blender-materials, and ccb-blender-export.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-reference-to-3d\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-source-part-segmentation",
+      "description": "Segment overlapping visual parts from source images, wireframes, texture atlases, and decals before mesh reconstruction. Use when a mascot/logo/template contains touching or overlapping components and exact structural part masks are needed before ccb-contour-to-mesh, UV fitting, or landmark repair.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-source-part-segmentation\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-text-to-blender",
+      "description": "Drive Blender from natural language: create or edit 3D models, materials, lighting, cameras, renders, animation, and exports through Blender MCP. Route complete scenes to domain skills and wireframe/reference requests to reconstruction skills. Also use for 3D requests that do not name Blender. Requires a configured official or ahujasid MCP backend.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-text-to-blender\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-texture-driven-mesh-fitting",
+      "description": "Reshape source-locked mesh boundaries so the geometry fits texture-atlas or decal contours 1:1 before final UV/material work. Use when textures look off because the model behind them does not match the source texture region, or when the mesh must adapt to the texture instead of stretching the texture onto an approximate mesh.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-texture-driven-mesh-fitting\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-texture-state-animation",
+      "description": "Design and validate texture-state transitions for Blender animations without ugly whole-image crossfades, texture popping, misregistered morphs, or target-engine-incompatible Python-only swaps. Use when animating between multiple source textures, mascot/logo states, style states, lightmaps, decals, or UI skins.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-texture-state-animation\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "ccb-wireframe-to-3d",
+      "description": "Convert 2D orthographic wireframe PNG drawings to 3D Blender models exported as glTF/GLB. Use this skill whenever the user provides wireframe images (technical drawings, line drawings, orthographic views, side/front/back panels) and wants to generate a 3D model, mesh, or .glb file. Triggers on phrases like \"convert this wireframe to 3D\", \"make a 3D model from these drawings\", \"build a model from this wireframe\", \"generate GLB from these views\", or any image-to-3D-mesh request involving line drawings. Make sure to use this skill even if the user does not explicitly say \"wireframe\" — also covers \"orthographic views\", \"technical drawings\", \"line drawings of objects\", \"front and side views\". Requires a configured Blender MCP backend (official or ahujasid) and Python with opencv-python, numpy, scipy installed.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\ccb-wireframe-to-3d\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-analytics-liveops",
+      "description": "Analytics and live ops - AnalyticsService economy/funnel/onboarding/progression/custom events, player segments, experience configs via ConfigService, A/B experiments, badges, experience notifications, timed events, daily rewards, season passes. Use when instrumenting a game, tuning economy or onboarding, running A/B tests or feature flags, or planning live events and re-engagement.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-analytics-liveops\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-architecture",
+      "description": "Roblox project structure and client/server model - replication, where code and assets belong (ServerScriptService, ReplicatedStorage, StarterPlayer), RunContext, service/controller bootstrapping, player/character lifecycle, CollectionService components, attributes, streaming-safe client code, library choices. Use when starting a project, deciding where code goes, or fixing replication/streaming bugs.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-architecture\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-audio",
+      "description": "Sound and music - the Audio API (AudioPlayer, AudioEmitter, AudioListener, AudioDeviceOutput, Wire, effects, faders), classic Sound/SoundGroup, 2D vs 3D audio, music and SFX volume, client vs server playback, asset permissions, streaming caveats, voice routing, text-to-speech. Use when adding music, sound effects, spatial audio, mixing, or fixing sounds that don't play.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-audio\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-characters-animation",
+      "description": "Characters and animation - Humanoid properties/states, spawning (LoadCharacterAsync), health and damage, HumanoidDescription appearance, Animator/AnimationTrack playback, priorities and markers, default animation replacement, Tools, TweenService, IKControl, Character Controller Library (beta). Use when changing movement, abilities, damage, respawn, avatars, animations, tweens, or tools/weapons.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-characters-animation\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-code-review",
+      "description": "Review Roblox/Luau code for exploits, data loss, memory leaks, performance problems, lifecycle bugs, policy issues, and deprecated or superseded APIs, using a severity-ranked checklist and the full 2026 deprecation map. Use when reviewing a PR or script, auditing a game before launch, modernizing legacy code, or asked what is wrong with some Roblox code.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-code-review\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-data-stores",
+      "description": "Persistence and cross-server data - DataStoreService (UpdateAsync, retries, budgets, limits), session locking with ProfileStore, schema migrations, OrderedDataStore leaderboards, MemoryStore queues/sorted maps/hash maps, MessagingService, right-to-be-forgotten. Use when saving player data, building leaderboards or queues, or fixing data loss, duplication, or throttling.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-data-stores\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-game-systems",
+      "description": "Recipes for common systems built on server authority - currency service and leaderstats, XP/levels, round loops with intermission and teams, validated melee/ranged combat, inventory and tools, soft-currency shops, obby checkpoints, daily rewards, pets. Use when implementing or reviewing gameplay systems such as rounds, combat, weapons, inventories, shops, currencies, or progression.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-game-systems\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-input",
+      "description": "Player input and cameras across keyboard/mouse, touch, gamepad, VR - Input Action System (InputContext, InputAction, InputBinding), UserInputService (PreferredInput, gameProcessedEvent, mouse lock), ContextActionService, reserved keys, custom cameras with BindToRenderStep. Use when adding controls, keybinds, abilities, vehicles, on-screen buttons, or custom cameras.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-input\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-luau",
+      "description": "Modern, type-safe Luau for Roblox, covering --!strict and the new type solver, generics, string interpolation, if-expressions, task library, require-by-string, module/OOP patterns, error handling with retries, buffer/vector, and legacy APIs to avoid. Use when writing, refactoring, or explaining any Roblox script, fixing type errors, or modernizing old Lua code.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-luau\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-monetization",
+      "description": "Robux monetization - developer products with idempotent ProcessReceipt, passes, subscriptions, rewarded video ads, personalized shops, regional pricing and trade arbitrage, paid random item policy (PolicyService), commerce products, private servers, Roblox Plus, refunds, age checks and the US 18+ rate. Use when adding purchases, shops, game passes, subscriptions, ads, or loot boxes, or debugging lost/duplicated purchases.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-monetization\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-networking",
+      "description": "Client-server communication - RemoteEvent, UnreliableRemoteEvent, RemoteFunction, what survives serialization, typed remote modules, server validation and rate limiting, bandwidth (deltas, buffers, batching), synced time, Zap/Blink. Use when adding remotes, syncing state to clients, debugging nil/lost remote arguments, or reducing lag and bandwidth.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-networking\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-npc-ai",
+      "description": "NPCs and enemy AI - PathfindingService (CreatePath, ComputeAsync, costs, modifiers, links, blocked paths), chase/follow loops, state machines, perception and line of sight, spawning/pooling, scaling to many NPCs. Use when creating enemies, pets, followers, shopkeepers, wave spawners, or fixing NPCs that get stuck, jitter, or lag the server.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-npc-ai\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-open-cloud",
+      "description": "Open Cloud REST APIs and HttpService - API keys/OAuth, v2 patterns, data/memory stores from outside, publishMessage, place publishing, server restarts, Luau execution, bans, configs/experiments, notifications, webhooks with roblox-signature verification, rate limits, Secrets. Use when building external tools, dashboards, bots, CI/CD, admin panels, or calling web APIs from a game.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-open-cloud\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-performance",
+      "description": "Performance diagnosis and optimization - MicroProfiler, Script Profiler, Developer Console, Scene Analysis, Luau heap and memory categories, memory leaks, network/replication cost, rendering and physics cost, streaming, native codegen, Parallel Luau with Actors. Use when a game lags, stutters, drops FPS, crashes on mobile, has high ping, or before optimizing hot code.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-performance\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-physics",
+      "description": "Physics and spatial queries - Raycast/Blockcast/Spherecast, overlap queries, collision groups, Touched pitfalls, collision summaries (impact point/normal/speed), assemblies and welds, mover constraints replacing BodyMovers, mechanical constraints, network ownership, CFrame math, vehicles/projectiles, and server authority (BindToSimulation, prediction, rollback). Use when moving parts, detecting hits, building vehicles or projectiles, or fixing jitter, flinging, or ownership bugs.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-physics\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-security",
+      "description": "Anti-exploit design - never trust the client, validate every remote argument (NaN, spoofed instances, strings), rate limiting, ProximityPrompt/ClickDetector abuse, network ownership, movement and hit validation, economy/trade duplication, code confidentiality, secure teleports, heuristics, Ban API. Use when writing server handlers for client input, combat/economy/trading, or reviewing for exploits.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-security\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-studio-mcp",
+      "description": "Drive Roblox Studio from an AI agent via the built-in Studio MCP server - connecting Claude Code, Codex, Cursor, OpenCode, Gemini CLI; tools to explore the DataModel, read/edit scripts, run Luau in edit/server/client, playtest, read output, capture screenshots, simulate input, insert assets. Use when an agent should inspect, modify, or playtest an open Studio place, or to set up the connection.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-studio-mcp\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-teleport-matchmaking",
+      "description": "Multi-place and multi-server games - universes and places, TeleportAsync with TeleportOptions (reserved/specific servers, teleport data), retrying failed teleports, secure access control, lobby-to-match flows, parties and queues, Roblox matchmaking with custom signals, server type detection, data handoff. Use when adding lobbies, match servers, dungeons, parties, server browsers, or customizing server selection.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-teleport-matchmaking\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-testing",
+      "description": "Testing Roblox code - testable modules with dependency injection, Jest Lua (runCLI, .spec files), legacy TestEZ, running tests in Studio, via Studio MCP, run-in-roblox, or CI with Open Cloud Luau Execution, Lune for pure Luau, multi-client playtests, QA checklist. Use when adding tests, setting up a test runner or CI, or verifying a gameplay change works.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-testing\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-text-chat",
+      "description": "Chat and text safety - TextChatService (channels, SendAsync, ShouldDeliverCallback, OnIncomingMessage, commands, bubbles, custom UI), mandatory TextService filtering of any player-authored text, rate limits, privacy checks, PolicyService restrictions, legacy Chat migration. Use when adding chat features or commands, or any feature that shows one player's text to others (names, signs, notes).",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-text-chat\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-tooling",
+      "description": "Professional Roblox toolchain - Studio Script Sync vs Rojo, Rokit, Wally/pesde packages, luau-lsp with sourcemaps, StyLua, selene, darklua, Lune, roblox-ts, .luaurc, git, GitHub Actions CI and Open Cloud publishing. Use when creating a Roblox repo, configuring VS Code/Cursor, adding packages, fixing sourcemap/require typing, or automating builds and deploys.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-tooling\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-ui",
+      "description": "Responsive cross-platform UI - ScreenGui and safe areas (ScreenInsets), Scale vs Offset, UIListLayout flex/UIFlexItem, constraints, StyleSheets/tokens/themes, RichText, gamepad/touch navigation, UIDragDetector, CanvasGroup, tweens, BillboardGui/SurfaceGui, React-lua/Fusion/Vide. Use when building HUDs, menus, shops, inventories, or fixing UI that breaks on mobile, console, or other screen sizes.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-ui\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "el4-roblox-world-building",
+      "description": "Building worlds with code - parts, models and pivots, materials, Lighting (LightingStyle, Atmosphere, post-processing), day/night, Terrain API, in-game CSG and destruction (GeometryService Subtract/Union/Fragment), ProceduralModel, EditableMesh/EditableImage, particles/beams/trails/highlights. Use when creating maps, environments, lighting, destructible objects, procedural levels, or visual effects.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\el4-roblox-world-building\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "obsidian-gamedev-workflow",
+      "description": "Maintain an existing game project's Obsidian knowledge vault, decisions, asset provenance, QA and roadmap from verified code and test evidence. Use when the game repository identifies an Obsidian vault; do not inspect unrelated personal notes.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\obsidian-gamedev-workflow\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    },
+    {
+      "name": "roblox-development-orchestrator",
+      "description": "Coordinate work in an existing Roblox game repository using its skill catalog, source ownership, Studio MCP, QA and project Obsidian vault. Use for Roblox development or environment setup when the repository identifies this workflow.",
+      "path": "C:\\Users\\admin\\.codex\\skills\\roblox-development-orchestrator\\SKILL.md",
+      "scope": "user",
+      "enabled": true,
+      "pluginId": null
+    }
+  ],
+  "passed": true,
+  "limits": "Metadata discovery only. No model invocation, natural-language routing, MCP calls, Blender/Studio workflow or bundled script execution."
+}

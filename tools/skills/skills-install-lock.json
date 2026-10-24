@@ -1,0 +1,1411 @@
+{
+  "schemaVersion": 1,
+  "installer": "Codex skill-installer validation/copy helpers + namespaced adapter",
+  "helper": {
+    "path": "C:\\Users\\admin\\.codex\\skills\\.system\\skill-installer\\scripts\\install-skill-from-github.py",
+    "sha256": "110cc7e4e395c2c9ba070d47db7d21be5164591c35015ae364fc9c9905b08de8"
+  },
+  "libraries": [
+    {
+      "prefix": "el4",
+      "repo": "EL4CTEO/roblox-skills",
+      "sha": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "root": "skills",
+      "count": 23
+    },
+    {
+      "prefix": "brain",
+      "repo": "TabooHarmony/roblox-brain",
+      "sha": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "root": "skills",
+      "count": 29
+    },
+    {
+      "prefix": "ccb",
+      "repo": "RobLe3/cc-blender-skill",
+      "sha": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "root": "plugin/skills",
+      "count": 30
+    }
+  ],
+  "skills": {
+    "el4-roblox-analytics-liveops": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-analytics-liveops",
+      "sourceFiles": {
+        "SKILL.md": "eecbca76abe764fad33de11940129acb07b602bba47be4d5c2b65a1cf42d7203"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "SKILL.md": "e899881189837d0f07e461d1b17d5a6a8abd3c5d4dffc745f83bdd8e50187b0c",
+        "SOURCE.json": "66d1ae3e9a735d70ff63d8a4b14245e61df4e4c1c13f451c5190ae9cc9cdfdd4"
+      }
+    },
+    "el4-roblox-architecture": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-architecture",
+      "sourceFiles": {
+        "references/ecosystem.md": "d9a36d398db6bbb369b2c82575eaa5712dd9d99b40c858f6e35b947ef4e4abe7",
+        "references/streaming.md": "d8f9d130f3895e59789830a8756ff7e54528e3abaa857cebdad9476460e9aaef",
+        "SKILL.md": "fe258f8de3cc7a279429219ea36e70c6a79d7752a533e2f29120e3a6ac4ed163"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/ecosystem.md": "bfd5e519c990aabbf913aca12e5de17990e2602807104bd1bd49275f4165671c",
+        "references/streaming.md": "a7d1b580a5fce3671cc45cea4932b3cd5dbf94b94a679994e6c9e1bd42d4ee9b",
+        "SKILL.md": "21a83a5af6741f04529418eac27525e9131d3e8cf4a9a62a8fb958594fad04a2",
+        "SOURCE.json": "ddca8406a0f15e23f949f72f4e02239cabb1a8ee2c26318bddd6200d9d31a6f4"
+      }
+    },
+    "el4-roblox-audio": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-audio",
+      "sourceFiles": {
+        "SKILL.md": "10be47faa824a390faedb1cbdf8cc95e32ecc25052c9d7e11c5d3f227072bbcf"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "SKILL.md": "22afe4c4aac2de3b272fab5313183d7e0ae6708b605105f2869cf93bd3e9ef60",
+        "SOURCE.json": "3da6f735cc8acf080b2c8ff6d5bff8f95b5a79811dc562e4447dd9adff289257"
+      }
+    },
+    "el4-roblox-characters-animation": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-characters-animation",
+      "sourceFiles": {
+        "references/character-controller-library.md": "d8c2dce984a1a6bb374b1deddb765b6d2d35e0533e820d07fcb12fc4f5ede981",
+        "SKILL.md": "5033f97d05f135c424098becc5435b82dd9fff0d90a8f1781d0594059b7d9a65"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/character-controller-library.md": "d8c2dce984a1a6bb374b1deddb765b6d2d35e0533e820d07fcb12fc4f5ede981",
+        "SKILL.md": "3745f2d0c93c0f65167efffbc6aa00f8bb18ba2ab15c721e302221d88c2afed0",
+        "SOURCE.json": "ada1168d02dc8092087be5311edbfa7eadd21b8acd3e1009cbfd021b98f257e3"
+      }
+    },
+    "el4-roblox-code-review": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-code-review",
+      "sourceFiles": {
+        "references/deprecated-apis.md": "5ef6d658a6fc72a5d5f478653cbfe19b13f6c641e93bd31537578c67c88d7d85",
+        "SKILL.md": "0ad1029e26c2b66fb3ec6fe589e2a4f540f0fe8d530c47740a0c092939fdecbf"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/deprecated-apis.md": "5ef6d658a6fc72a5d5f478653cbfe19b13f6c641e93bd31537578c67c88d7d85",
+        "SKILL.md": "e80416061ffe545c81688f6fa84e5d8c5d6ff6287665b34ad2718925872cd8fc",
+        "SOURCE.json": "e30e89909f9f5ad17235c0459f0c8cdac140a5ad89cb583991f067b7f6b91695"
+      }
+    },
+    "el4-roblox-data-stores": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-data-stores",
+      "sourceFiles": {
+        "references/memory-and-messaging.md": "6394daaee03fb2df8ec21e2aabb552574762088e2af3b6f17d54b513f3f2271d",
+        "references/raw-datastore.md": "33a5c2c13db23ad4cf3394b1735c1f48171d9233cb1a46f3dab38fb69c6c4c85",
+        "SKILL.md": "5cc1ec80a074cd4558ec3b8b91d47dc9e9eecc2a77dbf27d78dd18bdadd48cfa"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/memory-and-messaging.md": "964ee3012f3007f8882158a61fc0ef4f5d361feb7c021b02605d138314a4634c",
+        "references/raw-datastore.md": "33a5c2c13db23ad4cf3394b1735c1f48171d9233cb1a46f3dab38fb69c6c4c85",
+        "SKILL.md": "f47fe00af2a1b274506f964dc928623422677e962a84648d7b07f2e98e2d2f6e",
+        "SOURCE.json": "32350799f7b1b5ad81a660451f0c93da00d9dda121aeeee7f868971424642037"
+      }
+    },
+    "el4-roblox-game-systems": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-game-systems",
+      "sourceFiles": {
+        "references/combat.md": "74c63bdcc30de8f7bfe4c3bbcb85e0aa20b32bd89382e87bb807ba896ddf3bd4",
+        "references/inventory-shop.md": "ca92a30b52d6614ac70a1a69a80672549869cba36a4255c2699c320838d71648",
+        "references/progression.md": "2112601472c6a3203eec3828163b32bd5d81a1e2f3e94ce9dd1c55f99895b19b",
+        "references/round-system.md": "362cc90c39628779ff90f329950148906dc892dd13a8e1bcc033a44876963e23",
+        "SKILL.md": "ebead0f55afbc82cfef52ba2701b0cffd6b50502430925ae17704e465168b5f1"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/combat.md": "0432979e390e5d12d1ab3b21d60b3aa9fa7450594317753eb76bd61cad6bedc8",
+        "references/inventory-shop.md": "9743437e636c11fb69f4b14ca92fcdd1c0e609b60ce23fa7bf8d49070e88d793",
+        "references/progression.md": "46049ea2065285bfda163163f940e03509c61b7491fd3238a41a8ebed76fa228",
+        "references/round-system.md": "2ff2bf98eaa286f5a106d53e2e09a163a9dc0b7974605da5e4fb7c7a0561e6b0",
+        "SKILL.md": "e35a14a0994cb3692ec14305a3668ba165183d27809c820c99a2034cf6aba6c7",
+        "SOURCE.json": "a95347343b5caf348d39f5b2ceab19830e2fef6a9e423f73d69e1bac7321fdbb"
+      }
+    },
+    "el4-roblox-input": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-input",
+      "sourceFiles": {
+        "SKILL.md": "01c5b3d83920c4ac2c6086811e637139da653c53e6bbca5c68e068c58ad83df7"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "SKILL.md": "7b9b2ed43c774d62102c5ce8b30c5e608b9a5ab5e443f260d49523a3554432b7",
+        "SOURCE.json": "49cfe577f5440f4996d2e8725361113bdccf9ceca86682f40368d6a8ca9752ea"
+      }
+    },
+    "el4-roblox-luau": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-luau",
+      "sourceFiles": {
+        "references/stdlib-cheatsheet.md": "b84e0d7e5fad2f10fe4dea3260024a3014b1dfac505a60bf3e18ed7dfb63356a",
+        "references/type-system.md": "23cec8a62dbb25dc1af627312e61dc434a49d8486a28add35c16cf163476b431",
+        "SKILL.md": "d63a362a5fa6cf98bddfda6c5db804f181fc0904450c454a6edf13f6ec56c5e1"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/stdlib-cheatsheet.md": "b84e0d7e5fad2f10fe4dea3260024a3014b1dfac505a60bf3e18ed7dfb63356a",
+        "references/type-system.md": "23cec8a62dbb25dc1af627312e61dc434a49d8486a28add35c16cf163476b431",
+        "SKILL.md": "3fcf950724544624a02a84c05b0b2a89384c458f78ceddf9a7e2a2d5883ddb0f",
+        "SOURCE.json": "bf770ca3036cb70b84de5643b5a5719dafc2302cdb54b04cae8426a60a7bc0d1"
+      }
+    },
+    "el4-roblox-monetization": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-monetization",
+      "sourceFiles": {
+        "references/ads-and-extras.md": "b89495b240542a27017df5caca121f9a6ee79ade34e993d8a155aabba9059004",
+        "SKILL.md": "f9d983db1c0798e578dd0f87cf9a97de4914b31792125e93d142f56b5f41fd88"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/ads-and-extras.md": "d5ef11024e9c6db9df89eabc20b1d7af3cc1483040f408be1c89e3665a9ec50d",
+        "SKILL.md": "5b4ad780a9398f5407c027ae8ec7ec8a104294a25177ffd937a3543cb58e93f0",
+        "SOURCE.json": "8682f050a59aa44d703f1550b14cc001899dedea1211296fb3c41138b5fb41f8"
+      }
+    },
+    "el4-roblox-networking": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-networking",
+      "sourceFiles": {
+        "references/patterns.md": "ae0c67622f2dcad0071af74a0c72a79a7f2a5e56509133d02c270fd30c3781a3",
+        "SKILL.md": "ae189c87d71dca9934690b31a711b588fd21d0ce993804e1a1232f7ed9bed143"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/patterns.md": "c417ce8f16b0566097d29675f23d647decae352b451ff01170b9fadd08ae4918",
+        "SKILL.md": "7bbfbe78e09475b2daa737a2bb47ad774bd183b5bc19bcfcee5c165ae55d464c",
+        "SOURCE.json": "120aa2fac63848a7918b8c25b88e46c3fa2ee08f3c7b989b918874339fd1c4bc"
+      }
+    },
+    "el4-roblox-npc-ai": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-npc-ai",
+      "sourceFiles": {
+        "references/scaling-npcs.md": "ecde0432a42f15679b902595e89d3193ac6b09bf785f8c2bf7d5ada4404700df",
+        "SKILL.md": "831e31fd00e81cbe2281b893c0649c42e6415923d35743372d0ea314f6bfdded"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/scaling-npcs.md": "ecde0432a42f15679b902595e89d3193ac6b09bf785f8c2bf7d5ada4404700df",
+        "SKILL.md": "dd08e6ac8cf5951c9015a316ecbf0b569d6de024b03a8a42a9566b061a169f47",
+        "SOURCE.json": "4258d1087bb9849dae38bb5e7ae9046c59a55e09d9833c8057fd0db2800dcfe0"
+      }
+    },
+    "el4-roblox-open-cloud": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-open-cloud",
+      "sourceFiles": {
+        "references/webhooks.md": "0f5ca1d188a731e532a3cec0c74f69a1d176e7bc17f9190fc4b7cf0673282ee1",
+        "SKILL.md": "179ec41fda9b0ee88dd9fca171194e9efa850902873a07139876f9b6c4507dc3"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/webhooks.md": "0fe591fc466b5784b0a5ab54e34e94739d20acb2e07f82c7d1058ac57645e0a5",
+        "SKILL.md": "f2b5f55d6afc866c4e10420ce243d29053d96dc84dc154a68b31a56533e215da",
+        "SOURCE.json": "324d727fe226a9307379cc8279d5695bf1d214f7d81c57fa363b719a7e40bc50"
+      }
+    },
+    "el4-roblox-performance": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-performance",
+      "sourceFiles": {
+        "references/profiling.md": "df7efd7a2303a3963d267c6bd0581f137ef52b5c6b5a50cd88dfd1e24db61b1f",
+        "SKILL.md": "eafe3ffe61d75849bb0cb180289f7cda38bc9934c7f61cbe6935b0de51724481"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/profiling.md": "df7efd7a2303a3963d267c6bd0581f137ef52b5c6b5a50cd88dfd1e24db61b1f",
+        "SKILL.md": "e64177b2a0ee42439f11ac445c4696b7ed2cbf2995da3d79e51d395f547848b1",
+        "SOURCE.json": "9c850c695dad646d28b30297caf60a28e48930760d3003b816b42c5e2b55ddab"
+      }
+    },
+    "el4-roblox-physics": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-physics",
+      "sourceFiles": {
+        "references/recipes.md": "b92e6666115d80f13f8d3186f5d54fc8b805def7790ca95904944bba72109069",
+        "references/server-authority.md": "e920041018db0b2a50cb8fee927b7aec99be846da9034363231aeb0d1c574fe1",
+        "SKILL.md": "206b1034f51ce4248dad0a989f17dc17d2b74b96e1b90c3b8d77c893e027f2db"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/recipes.md": "de852859a2e3b2dd8058e0ac20addfd526583b8a18081d813fd26c5339bed14c",
+        "references/server-authority.md": "e920041018db0b2a50cb8fee927b7aec99be846da9034363231aeb0d1c574fe1",
+        "SKILL.md": "3f18eeb5d48ae602037d722ac708b182722b0715ffde0252ef7a6a3983e366e6",
+        "SOURCE.json": "5e57c43e24a6b925d45bd2ecd9d278b864279d07925c413fab18a01094897df5"
+      }
+    },
+    "el4-roblox-security": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-security",
+      "sourceFiles": {
+        "references/checklist.md": "f86d7618df0d20a908a261126bb6059482f1c38ee1a558464f4f22def1e51239",
+        "SKILL.md": "3532d31a0a9cf2017db45621410bb33d7df20bf4bc249e7b4dc063544d4b309b"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/checklist.md": "f86d7618df0d20a908a261126bb6059482f1c38ee1a558464f4f22def1e51239",
+        "SKILL.md": "5d2e2b4a6c771667beb1d3f3bd617a075a94a443e4cbd986d036b43d2a65312f",
+        "SOURCE.json": "fff878cd560f24f34d9d7eceb3610076761c0982d71e9f08745149664ab9e07c"
+      }
+    },
+    "el4-roblox-studio-mcp": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-studio-mcp",
+      "sourceFiles": {
+        "references/client-setup.md": "8f8096d4f5a2a2b685f84cffe840acd5ce3441086b1ae2d62399e85519de6d21",
+        "SKILL.md": "5fb70f4b905cecce9a087787c716039a2610d55b50f4d58d801cf791b104641d"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/client-setup.md": "8f8096d4f5a2a2b685f84cffe840acd5ce3441086b1ae2d62399e85519de6d21",
+        "SKILL.md": "09082aca807d01fe5c8e9ea52ce136ef1ed2e0c78b72215ee5a52f2dc5c3f259",
+        "SOURCE.json": "7ef9a011d3c35f66ea1e3261ef1dfff0cb4b77c1ff36d331a40d4af47f4a6d69"
+      }
+    },
+    "el4-roblox-teleport-matchmaking": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-teleport-matchmaking",
+      "sourceFiles": {
+        "SKILL.md": "fde10275f84fb92a4984971fd4b16e2b5457d4ad4ac7ee415e9653262d078dba"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "SKILL.md": "3d51ea1dce8529c2a132a2d39072494a346f72f001c6c58d24adef2639f821a1",
+        "SOURCE.json": "556e0d741b9d6af7a8a15abe9fb88cc4aa4d0702c1e0d2fa638778b76b1d4b6c"
+      }
+    },
+    "el4-roblox-testing": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-testing",
+      "sourceFiles": {
+        "references/cloud-test-runner.md": "9cdfe4688bebad7562a1a674357637018275cd48cf318974925a18cc8fc227b0",
+        "SKILL.md": "70f5d0ba3723641917cc1b9545cb8c449c67f93edb995fdccac818d5c09b6e1b"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/cloud-test-runner.md": "9cdfe4688bebad7562a1a674357637018275cd48cf318974925a18cc8fc227b0",
+        "SKILL.md": "93589f59fd06dc798a02bffaad4326830452b0346252f656d26359b7726082ea",
+        "SOURCE.json": "bb3f25853aa18b24c7fbabdf8d3dba5d0385fbaf385fa12498e8b6386c3c6951"
+      }
+    },
+    "el4-roblox-text-chat": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-text-chat",
+      "sourceFiles": {
+        "references/chat-recipes.md": "1fb0657e2926672dfcd84724946d2c26dd5d3007b906ebb1e2c337d6b397e051",
+        "SKILL.md": "ed5deb0d9638edc421bb08eaa80d57a86f3c0d6b198650e975e344577d85f7ae"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/chat-recipes.md": "1fb0657e2926672dfcd84724946d2c26dd5d3007b906ebb1e2c337d6b397e051",
+        "SKILL.md": "e2da6ccb9ce2ba2d337750154a197cb1f4716445269793fa588175daa9fd7d66",
+        "SOURCE.json": "485c9c917901983707887b91f3b98d3ab81897890fc15747b9bab1ffeb9b80af"
+      }
+    },
+    "el4-roblox-tooling": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-tooling",
+      "sourceFiles": {
+        "references/ci-workflow.md": "8f9f0141c1505eaac990878969db0ff545500c1a4769420c39587f8c256eaf76",
+        "SKILL.md": "400dc4b8942f015a608579ed9a0d65ebee6920dfb693ddaf782e5bf16ff9ee32"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/ci-workflow.md": "75fd7caffb2f9c9deb2c8fd35c333b863735d3231ddb5bd36139eeeb4be7bb13",
+        "SKILL.md": "4b6d248f844dd8a9814e19411336f037c259551b8ea0d58b8666923d2b7fb984",
+        "SOURCE.json": "4bf9cca58992e9902c9b8bd3a0044114f0d101af05c314309c8685f4dfcaa5cb"
+      }
+    },
+    "el4-roblox-ui": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-ui",
+      "sourceFiles": {
+        "references/styling-and-frameworks.md": "2ee93bc81f320b0ee6d58bb406b86706d7ab382bb08773d41f2746e9e1cad86c",
+        "SKILL.md": "9cf34a7a5b1aac913d743920c6e9eb2607d2ed4f737de37287949bd33e53bbd5"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "references/styling-and-frameworks.md": "2ee93bc81f320b0ee6d58bb406b86706d7ab382bb08773d41f2746e9e1cad86c",
+        "SKILL.md": "2578e85aa6a800f6eb52a6b2a772e06ff1708080c74d595abad17654b6f19b94",
+        "SOURCE.json": "1f622ebe2bafb6ac12f263ccc04ee459d0655c0bc56586cfb5f2e819d6a4a7b8"
+      }
+    },
+    "el4-roblox-world-building": {
+      "repo": "EL4CTEO/roblox-skills",
+      "commit": "a7538bc9a4355ab08ea141bd9d48670195078188",
+      "sourcePath": "skills/roblox-world-building",
+      "sourceFiles": {
+        "SKILL.md": "73f9fbfb9568d9ac658f559cdc4f4ceb2884604ed2969b5c32e35d7ea194b7c2"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "7aa13e693777f06e29893a57b1a9e3ca92d425f1710b9481a4adfeeddc6ac37a",
+        "SKILL.md": "ae282c4e6081e49c04783410c6659f29b24aa96428ea4d8e05a5e6f1f17340c5",
+        "SOURCE.json": "b36f1d7a8485a4f32b8e2db7f21a8184ad016333007b89c5bcf5d4fe9197ebc7"
+      }
+    },
+    "brain-roblox-architecture": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-architecture",
+      "sourceFiles": {
+        "references/full.md": "e02a54482dacfd6d04541a7bc0772b2840668ab0e502e9024bbb3bf7dfd26344",
+        "SKILL.md": "bbe3584faf0e35bbd57d9ebab7507509d3caa8a231c7f4386b3ea36b273a3560"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "ed26784d361da6ebd8163ae9ec1aa5cf355516282b341ff87b1cd194c48c7e82",
+        "SKILL.md": "057ac55050e4ac51d273d12df6aed9fa9f8e4619739409402a840974be2ff882",
+        "SOURCE.json": "396baf6d1e6dfdd25d1a4de58325a480ed8c4d7ed7616134d29741a0e09aabfa"
+      }
+    },
+    "brain-roblox-collaboration-mode": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-collaboration-mode",
+      "sourceFiles": {
+        "references/full.md": "398c5e07358b349e3b913041098096a23637bb588f9c1694e90e5e351fd62971",
+        "SKILL.md": "f9c7f23b923c8f78f2952fbdb8859270aa62b3ed26bd815708f1d47f460ded76"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "398c5e07358b349e3b913041098096a23637bb588f9c1694e90e5e351fd62971",
+        "SKILL.md": "f5265b0c28479127e9bab91b581357d854e8d78b3b858dd49051f03e2a5514c5",
+        "SOURCE.json": "c59d64fab0f755db4c8714be0ee4850aeb7ff7b8ba09b4ab185cd94620040b69"
+      }
+    },
+    "brain-roblox-data": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-data",
+      "sourceFiles": {
+        "references/full.md": "30f7f0ee612f51eba135ec70261819056c4863965fd84c5c0fdc20d56bd02ec8",
+        "SKILL.md": "926b38ab93a1e64d2f4d71e598b91322615295aef7ea1ca1b71fe75be2b0736d"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "53b5fc382387c790c6c73462b6c37dece90b250f4c91c8e27863355caf1a06cd",
+        "SKILL.md": "3eccf44426aae212d1e448e9da1c0683964a35ab209f853b038658ca4b17a9c3",
+        "SOURCE.json": "854fc8c3e57adda14e1bd9cbc6f12aa1adea3076e275495aef5ea8d9407e411f"
+      }
+    },
+    "brain-roblox-luau-core": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-luau-core",
+      "sourceFiles": {
+        "references/full.md": "d8163fd9caf5911adb332691cf0f66fb60a420c18a765032db30e86622074ddd",
+        "SKILL.md": "6ae35525652f2c53b10cfbfd42a2122827932017161cb4e33a86f5ef2f104385"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "ccfb4b961b449cbd0f5c7e120b432dfb95885dc20d216dfe9d92251ba3778c42",
+        "SKILL.md": "6c18cfbb5847f3b9fe8601d3f2c020f9fa8d1cb4db3a91de5836b5c3145a5c9a",
+        "SOURCE.json": "5f8357d95aec05231556bfae6c1ccd075dac67e86192470b1f4b5aaac3592e85"
+      }
+    },
+    "brain-roblox-luau-patterns": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-luau-patterns",
+      "sourceFiles": {
+        "references/full.md": "5bd560eb2a7ae7d68a9e0f2ca49496f7c6ab61ddeddb9afcecbc1010a08458cc",
+        "SKILL.md": "c18ca126bb1eac9b290d12fac5b9875dbd404e568c5e3d41fdc2c7699d4ffa4b"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "84d9a70c1b3fa98b98d94b45b2f149278a35a2fe8486fd775b05b3005cf131a3",
+        "SKILL.md": "6703cf8eb0f59bcf98cdb62f7a29d697af81d77e6a2bce026bf2b35eda58c0b7",
+        "SOURCE.json": "e457715c65d7254f908a691cd356eca4552cc1fd07d487fb4904ccd74f612795"
+      }
+    },
+    "brain-roblox-luau-types": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-luau-types",
+      "sourceFiles": {
+        "references/full.md": "0757494e5892cd1754595b37368dbe5129efcb410906cdfe0aae5b2efd6899d5",
+        "SKILL.md": "bc26f10ff03327d59b065283f3a6503ddab82add319797aa33611fecbebcac16"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "d7e7a2daf2ccb2705438ed4f5d47464589d0ddacb7e8c88d9c965190324e2a06",
+        "SKILL.md": "58047986cd4f678aed17e97210b681dd2148a191c0511c8ee28569c18eb017b1",
+        "SOURCE.json": "17f0a3e3b62221908dd8b86b9988d42128ccb5492ac6ae552a6bce1fd72d72c0"
+      }
+    },
+    "brain-roblox-networking": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-networking",
+      "sourceFiles": {
+        "references/full.md": "f4332b1d6c8082bec1e67aa69c06546ba5b17a85b867464273e5441a5af85b06",
+        "SKILL.md": "928e574c0b689e5777b4ec52bbca1b7814f3c5a7189879cc19014670f52446e8"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "948b14e4613ee1f99d9111fda7ca10eccd50ecdffd14247597fd40a28ff5333d",
+        "SKILL.md": "22720e1d9779012347c85f345b4c0ff2b1cf9981732f2240c773839cd2c59878",
+        "SOURCE.json": "e52971fbcd4436c700fd98038750a16ae58fb15aebc9c3b2acb8d8c0726e451c"
+      }
+    },
+    "brain-roblox-performance": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-performance",
+      "sourceFiles": {
+        "references/full.md": "d49e9a68b70faa44a55985db87515d18e13ee1782fa16fda7510ea4e8542ca19",
+        "SKILL.md": "d0da8336c5d3f897542c192ea53a2e75754767957b8c6f7f42f580507ee38064"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "bd9ddf41740a3de8d93b793cbcb6bc04ddc7809d2064bdcba63d687c0081a9f3",
+        "SKILL.md": "1b2ffd6f35cc1a82b5173f0b2947d69358fbd456cc9112072e1c23c1c9add3c9",
+        "SOURCE.json": "5eac0e043c0cf88f73e3b0b0915d0684553c2d3f779c3d333b60d056e9313cdb"
+      }
+    },
+    "brain-roblox-security": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-security",
+      "sourceFiles": {
+        "references/full.md": "d5db1ad2602dfd019a1e7c05a41631bda021e35671bc4e5e7cf0d7b180745943",
+        "SKILL.md": "87e0d7bf4ced1150479ebfa47978a534061a7ba48551f36da88fa59fd0545cc5"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "f22f837e6426b441efe6c344ce34a9e33d9e87ce97a66ed345cec2baec7d27ed",
+        "SKILL.md": "aaafd6b84c3e7693fb57312ab2e7b4ddc8b0f7e9131293b0246ba734b9df809f",
+        "SOURCE.json": "8af77410746852548fc5c64c2dbbb463d5775d110a2293b9f7085ff7e5ee754f"
+      }
+    },
+    "brain-roblox-server-data": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/core/roblox-server-data",
+      "sourceFiles": {
+        "references/full.md": "3c0b7f78a420d0f60ebbd9b046714ed7cda65821ce1ae2b41cc38676cbce6455",
+        "SKILL.md": "0ecd93fbc6759137601d0da82d295ab8a6e2c480cda6d8f8fc142bd309cb0450"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "03b7ea500f10d9a888786f92fe6552ce3e996a0f701931276306aec56684626d",
+        "SKILL.md": "be47edc5026ee92f3af59bfcb70c37b8eab70f23e2386f41bce96ac7e55317c0",
+        "SOURCE.json": "419785d5504c4ebf1b3e4dd5f49dfe5ddbb4a6cbd1ca17c6e394a892982a6885"
+      }
+    },
+    "brain-roblox-analytics": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/design/roblox-analytics",
+      "sourceFiles": {
+        "references/full.md": "e35a663c856e7792e5881e7f3ade366a89707f33295dbd14918527ab27a7e664",
+        "SKILL.md": "6eb095c8263728040a6315f79b90fb4c5772e059459b4921a2e9e72f2b7c94b0"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "f55066c10ccda29c548b7f43aa17072d7d2c11278fa098b168c4a163ba915f08",
+        "SKILL.md": "a7e6f52be3a3c57b181eb69813c707bf2e845f022519f939a7998c96ae8f8bf7",
+        "SOURCE.json": "ef619cde6ae987740c0e7538be0df1c1a621550b349191d2b5b66acfa45980fb"
+      }
+    },
+    "brain-roblox-game-design": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/design/roblox-game-design",
+      "sourceFiles": {
+        "references/full.md": "d65cc99b49464f79152765ee168b6aa29b81c1184b2d09780726d3f697b52e24",
+        "SKILL.md": "040dcb25272ba5c88a4b535fe9949923aa9dd7f24e0a7c4d5bc9387cdb254e05"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "90fb37bb6976fad2bfcc89b06fa9db74f158a7deaf1ab25408a701e7f31b2b54",
+        "SKILL.md": "f8ed7846ab10e44719b6d1d9f7c84d9fa2e9e4226be64ddb5861ca333c5837d9",
+        "SOURCE.json": "aa7fdbe789b92848c136a72d454bc25e9c36c97025cef2424dda1f592403f7cd"
+      }
+    },
+    "brain-roblox-growth-design": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/design/roblox-growth-design",
+      "sourceFiles": {
+        "references/full.md": "6e000e1a2eb307af54be6f91273efb5dcf2da21e66897c8bd470a64eb69dbaea",
+        "SKILL.md": "72ac5447ff0f0b8e5d4ac378d21c093bde3f68fa5b54a4c3404a0c57043f8996"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "2af452f577fe61eea2713d33a1856c96f5b0a576fa2526a3fa90c07291858d1d",
+        "SKILL.md": "5bd02bd8a974f9ac5a03b05ae79a0dd19f878d70bfde55dbdc5636f945decf2c",
+        "SOURCE.json": "e5d2427640f3d78a5aaa099de99233e42a51801cbddb1ae77c655929f7f50cc5"
+      }
+    },
+    "brain-roblox-monetization": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/design/roblox-monetization",
+      "sourceFiles": {
+        "references/full.md": "7e4a565897b95f299cafb4b0d449dd0edd8be6eadeb9e84bd52ac96e03dd7825",
+        "SKILL.md": "2903a7948562605cfea207ce12e6e6fbc3979513025de3c7fb6e6cb928f6f30f"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "b722c194989688aed7bd64bd5a06bf0eca989d43cdcda4758072c1e669d0559b",
+        "SKILL.md": "d7f8bd036ba4d007dc9035681959ec9425910df0c68ab83ed20b5a2999abcd83",
+        "SOURCE.json": "6aed96bb472d3a3430c2338ff05cb745e835b66c8d01428accb4e9e2e0493654"
+      }
+    },
+    "brain-roblox-player-psychology": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/design/roblox-player-psychology",
+      "sourceFiles": {
+        "references/full.md": "f4586aab8bfd0fe4f53f617fd06af27a22f8805469b109f6efd3a3de15e53fc4",
+        "SKILL.md": "644f2ba537d5531c53bc663b8afc2713e4ba17a1a3ea5884a063f2bdca722a89"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "40dbd374b996cd4145ce34d6ed93389a3a28c5236bd883c85f94ca26e4a844e4",
+        "SKILL.md": "dc1e0318cc134c49ee5f19c6711b96e659bc63d4003c6ddddbed78e29a6d48a8",
+        "SOURCE.json": "24adb59d39db6cb6043d455bede748aaf0c141346023963a947a97cd42e0dc3e"
+      }
+    },
+    "brain-roblox-animation-vfx": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-animation-vfx",
+      "sourceFiles": {
+        "references/full.md": "10b919884e79b6c11a7936c45f7289b3b5d44a55a5f74956499ab83549597eb2",
+        "SKILL.md": "f47e4589c15e19034eac058430d6c3c8b357cc5f600a46567d9b23837f331b16"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "40a4ed78ea3e594f4f153cce6a91af18a984c973c6e28414d2150f3dfce9390c",
+        "SKILL.md": "14caba91ac1fc832595b2afcb483a7e55286587d40466f33b923252835e623e8",
+        "SOURCE.json": "a5283462f3a1db56a526acfecd438a70ab471aa9d78c13957624c462a1f7bcc0"
+      }
+    },
+    "brain-roblox-audio": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-audio",
+      "sourceFiles": {
+        "references/full.md": "e68422fa83e784bcc38c8722fbf356268e160cdb0f1e8354afb0b24948b3e9f9",
+        "SKILL.md": "75fe748769f7d1b3cda1475c11b5569557e1b14348d16022f07ecacfc31c0548"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "e68422fa83e784bcc38c8722fbf356268e160cdb0f1e8354afb0b24948b3e9f9",
+        "SKILL.md": "28298a6490deee221686f8b0d487ed41e9a3f140cdd8ed14604ffc71db169ce5",
+        "SOURCE.json": "967e067dd2b684140b7985e4023803ac34cd5f99b05da41e4e4fe2faae730532"
+      }
+    },
+    "brain-roblox-building": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-building",
+      "sourceFiles": {
+        "references/full.md": "8388863cd81bfc5513e520cb90f3427ff5a207abe3589eb8a4c10dbb3cd8828f",
+        "SKILL.md": "038f15b8ace91d18453788b885a8eb5b44475aeec2c81e12aca21ba0b3f869a3"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "485cf97e865a2d4e4a34d35922aa1ac7e8fd3ed8f2a098da4b1600b7d9f7a8b2",
+        "SKILL.md": "615ecf6e4ae19db35799cbd6e5b2f786402e68acc0f8dcee88e9099546f78b60",
+        "SOURCE.json": "b156667650ecdce625b5c242fabf62bb3582f83935000a8788b1db7c66619d48"
+      }
+    },
+    "brain-roblox-camera": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-camera",
+      "sourceFiles": {
+        "references/full.md": "06e86a87e133b1c594a225788d832e92300c8f2f691402eefdf7ed0dddfe2a03",
+        "SKILL.md": "448f46d8411b94e8b0c04c9642f9576473ae5a5e5e4bf447284d1928b62f4a3f"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "06e86a87e133b1c594a225788d832e92300c8f2f691402eefdf7ed0dddfe2a03",
+        "SKILL.md": "ed926adb112ddf255d06bf392cd7ae7988e3aa6ea83cb38068f91df553ae872e",
+        "SOURCE.json": "362e02f446652b5fcf4c314922eea56c0787572d281cce4db37102014af4ad37"
+      }
+    },
+    "brain-roblox-gui": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-gui",
+      "sourceFiles": {
+        "references/full.md": "35b5b51189b212218e859675c64788d79cdd40ebeab6e142273eb2f1372976fc",
+        "SKILL.md": "93de28240d7b8f73b081985acda36f66d2ac86b938695c69822d25a9c0151999"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "17911fdf5dc01db0a0a0c204a937d86123088b9b01961ecd35a6280bca1cfbf8",
+        "SKILL.md": "7eb127e99cc330554208dea37ed34d0cc2d3d82a9d3efc74b1ad9a1e0eb15568",
+        "SOURCE.json": "3a33001ae84aabfa46f99da64b05e2ec718c1dd22a0b752312298c5ec94a6030"
+      }
+    },
+    "brain-roblox-input": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-input",
+      "sourceFiles": {
+        "references/full.md": "8bb7bd18ac9bb88910b00f040f26e834e76fdbc60080b783183e0f8e66cf0c13",
+        "SKILL.md": "302d27cb04658278da54beb541db62ae9842e1b068e91f4478528c3081d5b662"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "67c354dea77b8772e5082210e7a1ee50fdc0c455b8a5f2d59d10bcb7fdafeb45",
+        "SKILL.md": "9ab81684c25171c24d371f5dd19e3d5f6192f616237985004e724bbfc6633385",
+        "SOURCE.json": "8dde8ed40f64709151cd508d88253a90e1c2c813129db78ff36009f8f4ae651d"
+      }
+    },
+    "brain-roblox-lighting": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-lighting",
+      "sourceFiles": {
+        "references/full.md": "9700905a599a4bcdcaae3dbe8a6ac4b2b31eec3ff9e3c771dd31167e07831cc0",
+        "SKILL.md": "cc344f8183207a335305e2ce67cd55611baf8405d041260a097631db123afea3"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "9700905a599a4bcdcaae3dbe8a6ac4b2b31eec3ff9e3c771dd31167e07831cc0",
+        "SKILL.md": "8d452d814dba3c7f0f4a703d93fa1ef5e76615b06ac6898fb7175b41cf0e722a",
+        "SOURCE.json": "d25c1eeec8b4fa3082f51fabe9b812dab98cd9a6035ccdb452fdc07f6d0ddd0f"
+      }
+    },
+    "brain-roblox-localization": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-localization",
+      "sourceFiles": {
+        "references/full.md": "61fa226f34b93d506b7828df6d18d59ec79a05ae9317628ee462504122e6c6fc",
+        "SKILL.md": "ddfb3c510412e32d6540d02e2da5a9d7dbc4e1a0465df5dd029cd08c72374a6c"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "61fa226f34b93d506b7828df6d18d59ec79a05ae9317628ee462504122e6c6fc",
+        "SKILL.md": "e2d574480c985152c76283a7d20efe8d6a87aaa54c002f91cff70ad77b5268d2",
+        "SOURCE.json": "5f7ca39fd7bc2035cebea908160f655fdacb7ed58f0567707b45a0e1258cecc7"
+      }
+    },
+    "brain-roblox-npc-ai": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-npc-ai",
+      "sourceFiles": {
+        "references/full.md": "3b066fea85cf4399ce4b0aec562a87af695bf5ca13cf7dc0e4e94e212fb2a9a4",
+        "SKILL.md": "14ca58c685ccef25284e112ecd8510cd77d7091ff69f5a56c87a5b0ac00fde3c"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "3b066fea85cf4399ce4b0aec562a87af695bf5ca13cf7dc0e4e94e212fb2a9a4",
+        "SKILL.md": "ad94a0847f04abb82bc2778f8d4311e1180fc6c29c61c9f95989bc8131c8e823",
+        "SOURCE.json": "557d901319d3daae3e94722a5c7c16d3ed06db996d0bfe3ada73e5a06f1a14a7"
+      }
+    },
+    "brain-roblox-physics": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/gameplay/roblox-physics",
+      "sourceFiles": {
+        "references/full.md": "df964021f57d31aa2b866fde13749bb1bcd486f1e2e79a9677b06b8400863309",
+        "SKILL.md": "65b75fb0317dda0f4f5db985d27d742b53bb871ae15da2f49247dcebc8db0e6b"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "09a19d491c6eab795414159351c5d5f8ca2c6d81ee871a4fb1399d893f53c0a9",
+        "SKILL.md": "c5eed936b67a47acc4979f49f4ecd5da868e360eb2f6456b1cc494251c26d128",
+        "SOURCE.json": "de629a24b9a8e0bb68f21608cbe52a008cd083383a901621b470be89d885653a"
+      }
+    },
+    "brain-roblox-cloud": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/tools/roblox-cloud",
+      "sourceFiles": {
+        "references/full.md": "7820ab605c3647849b6f40a9a9d5a1e5ae1b1b8cfc52b5c5de14293ebef9644b",
+        "SKILL.md": "daf773cc2a02d55aa6c975d28f7986a71154ac98c07a20da47395e9c2ef779e8"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "b2dd26247de02df1e2001b2034971d0ac3692f9b88aa27a9b749238c5edb1e89",
+        "SKILL.md": "f0fffa49c2f5c644bed9bae6bddbc9f5dc59f9487676201a94fd2bcfe22477b6",
+        "SOURCE.json": "99ad7c4ee26c8af041642a5fcdd51f47c9329c950c34b21e1027b70e6871622d"
+      }
+    },
+    "brain-roblox-publish-checklist": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/tools/roblox-publish-checklist",
+      "sourceFiles": {
+        "references/full.md": "9630a26dce67e1c2f3f422c395011f7d6324cf05f7c668b04b47b797379ea320",
+        "SKILL.md": "7764037aae82a83b0aebb2b97ec6f1dd78a178bd13637e946042e7d51e938c78"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "422a4a045d2163034ef2e01baba17cd6176a929ea813e9bdbbf841953d39f37a",
+        "SKILL.md": "249e32c52c2806c9ef21e3c8fb1b6dc8186c2c48cc140c3aaa422a08b17ee1dd",
+        "SOURCE.json": "190d3fa25d2807bf7daecec3ce29665addc350ce27606e7c9603ce2a85eb0f45"
+      }
+    },
+    "brain-roblox-studio-mcp": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/tools/roblox-studio-mcp",
+      "sourceFiles": {
+        "references/full.md": "776471654113c727c179bec85e7c19e6543ec2f1a6f1bd576b06f0b3068a1169",
+        "SKILL.md": "9a05b642b13aa05a3294d78085a20b74669605cf3fc87326a3860a24cdaf18f5"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "776471654113c727c179bec85e7c19e6543ec2f1a6f1bd576b06f0b3068a1169",
+        "SKILL.md": "8f4076bbaa8a5ddef60200334087b2210f496fb2851aef32bcfb38d3a90a6f22",
+        "SOURCE.json": "2e3ae36ec7fcdf9da59b089077d094ea8df3b809f201d211368da99b9876a692"
+      }
+    },
+    "brain-roblox-tooling": {
+      "repo": "TabooHarmony/roblox-brain",
+      "commit": "ceee4aaa5004502e2a51d78b3c33bba44d84742b",
+      "sourcePath": "skills/tools/roblox-tooling",
+      "sourceFiles": {
+        "references/full.md": "c9a811960a89837588ddad26106418c577ead8d64ea9cbe779ecd7cddc451e76",
+        "SKILL.md": "ad090651ba4b12ae5cd10ff99890e4a31803079fc40a2b940baf7cd4ccb55313"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "a4f6adf7297343b8f3cd47ec3bb153f44673b375557993d3ec702e3289c4e519",
+        "references/full.md": "c9a811960a89837588ddad26106418c577ead8d64ea9cbe779ecd7cddc451e76",
+        "SKILL.md": "bf944dad9333de153e99727e7a0331203e56aa58732a439fdc9da6deababcfd4",
+        "SOURCE.json": "b25933dbc1bfaf8814fd90df2ab8b3881a349f954f2b4552a851772cba02159a"
+      }
+    },
+    "ccb-animation-quality-gate": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/animation-quality-gate",
+      "sourceFiles": {
+        "scripts/animation_contact_sheet.py": "91cadff576a9d1a9b009bf727c21d21268f9b7a3354eec6008c9977a90604e7c",
+        "SKILL.md": "4b846cfabec24a3163b40580f00bc2c1ac0c6b6e3654bb342662fde584d9bce8"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/animation_contact_sheet.py": "91cadff576a9d1a9b009bf727c21d21268f9b7a3354eec6008c9977a90604e7c",
+        "SKILL.md": "ec2ee6eb72f8272c2ea857fe12fcc636ab2fb0aeae28b5219005a8e233e4cec0",
+        "SOURCE.json": "a66e508666bc81c3937a52f7f19fe37c2061a5d42a5951f94d968e0efd9ac952"
+      }
+    },
+    "ccb-atlas-uv-fitting": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/atlas-uv-fitting",
+      "sourceFiles": {
+        "scripts/atlas_region_detector.py": "0076b17e0631eabca55ddf876c1fda743483235b3dc5f7b15927521e5ac3ee38",
+        "scripts/atlas_region_mapper.py": "e4c4b06b83ec1666f90e3e8198f110ad41a8029bcd829677c86f4485e6456da8",
+        "SKILL.md": "eaf9d600b069338754db4240eba6f9665cb0d9bf9891c19b6e354c2f34cd6517"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/atlas_region_detector.py": "0076b17e0631eabca55ddf876c1fda743483235b3dc5f7b15927521e5ac3ee38",
+        "scripts/atlas_region_mapper.py": "e4c4b06b83ec1666f90e3e8198f110ad41a8029bcd829677c86f4485e6456da8",
+        "SKILL.md": "007c5002fdb1d18c5c9421f510aaf7249d2e02dce1826c5fd87d9aa4d681bc13",
+        "SOURCE.json": "817ec4906cd6dab9b2223f877baa05d578a438de74fdd095508939be71f3c1c5"
+      }
+    },
+    "ccb-blender-animation": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-animation",
+      "sourceFiles": {
+        "evals/evals.json": "5b967f27fea172a4307f1288515c4f8eee5b98d4a9524aac4b1aa27da1bb2076",
+        "references/overview.md": "d6aee5c2702e05fcfa8a7bfb0c30b04b6832d00af696846697f751824cc3682e",
+        "SKILL.md": "85bc6979cc8e341f2b516189a1b1221a6ce1815245495311ceab26caf3537a6e"
+      },
+      "installedFiles": {
+        "evals/evals.json": "5b967f27fea172a4307f1288515c4f8eee5b98d4a9524aac4b1aa27da1bb2076",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "d6aee5c2702e05fcfa8a7bfb0c30b04b6832d00af696846697f751824cc3682e",
+        "SKILL.md": "2000baf008c02825310b3fce6a973eaa05cf5d1ddd2e5255b6608391298020cd",
+        "SOURCE.json": "b086b155e25fe7931d7182d894b1a9f915b6bca80d8b35cb385957d11a5f0066"
+      }
+    },
+    "ccb-blender-cameras": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-cameras",
+      "sourceFiles": {
+        "evals/evals.json": "2d1274fc2ca83d04406795e0954c5d7b16fdbffb6bd80bdc502eead97eb71508",
+        "references/overview.md": "87011e49f3bb0bca0249f54d2e4e837bd3d518eb712236fb60c305348056fce8",
+        "SKILL.md": "7625b22b4c7a3401c265d338ef02e7e8088cdc1ffe8fb10cfd6aae8fbaca2d42"
+      },
+      "installedFiles": {
+        "evals/evals.json": "2d1274fc2ca83d04406795e0954c5d7b16fdbffb6bd80bdc502eead97eb71508",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "87011e49f3bb0bca0249f54d2e4e837bd3d518eb712236fb60c305348056fce8",
+        "SKILL.md": "282d879b10a2ba183a88c0859f2b3e2830f2277e35dd32a5367b78d552426253",
+        "SOURCE.json": "1ecd9c375cce02b875b9be01e76f3bde4164aa1716226b364e0f67482cd24e7d"
+      }
+    },
+    "ccb-blender-export": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-export",
+      "sourceFiles": {
+        "evals/evals.json": "84f5c30456228cbb6e44478f9c277b50d1f70947969f5b8a8a2f49474d60fbf6",
+        "references/overview.md": "ad76e8965ff38a4c395468c9a2797eca397118a4645de91a4aeff175785acc35",
+        "references/unreal-export.md": "e1f0bc3d61eb229347eec7e1c6e48495f141bda27102b38f4244d1ddf8268626",
+        "scripts/collision_preflight.py": "a05488c6bd307a58ad88ff9a560bb835714c093836309a60503dfda2b00916b8",
+        "scripts/multires_bake_export.py": "def1454d5e8bed80a800257fca891534b48f3529b24ac1b20592ffd092eb0b0d",
+        "SKILL.md": "e081b6cbf4063ac3e68698160260b2dcc688c2fe6412ebdda9e87e572674a094"
+      },
+      "installedFiles": {
+        "evals/evals.json": "84f5c30456228cbb6e44478f9c277b50d1f70947969f5b8a8a2f49474d60fbf6",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "3e876ee99896cd4b9765c2d22681c1c03197aaae9a788933b30b03123234d8e5",
+        "references/unreal-export.md": "4a0a2419555f38908ad2d59590ddd278f77c37da513db9c4bd52fe0303f60b94",
+        "scripts/collision_preflight.py": "a05488c6bd307a58ad88ff9a560bb835714c093836309a60503dfda2b00916b8",
+        "scripts/multires_bake_export.py": "def1454d5e8bed80a800257fca891534b48f3529b24ac1b20592ffd092eb0b0d",
+        "SKILL.md": "563b6b9d61ca79e6af8999fb9ccdf1862c30970455fe4105b21417213fe32fab",
+        "SOURCE.json": "274bd43dde469c1cfafe2d19371da8b72307fa08437e6c1959862c4e9c5a3f4e"
+      }
+    },
+    "ccb-blender-lighting": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-lighting",
+      "sourceFiles": {
+        "evals/evals.json": "39fc022a48b29512549986eeb76717815ddb763ad1783ad2d1eba40a4d5531d8",
+        "references/overview.md": "a329cb82101dc7c7ab325b7529462bb97a11274b39ca54aeebe61a0558bf9223",
+        "SKILL.md": "66824cde91a16bf800fc6a069ce67d1215bb9526d8bc1a6a28cda2af747c179e"
+      },
+      "installedFiles": {
+        "evals/evals.json": "39fc022a48b29512549986eeb76717815ddb763ad1783ad2d1eba40a4d5531d8",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "a329cb82101dc7c7ab325b7529462bb97a11274b39ca54aeebe61a0558bf9223",
+        "SKILL.md": "7d3e40439f48a7ec02b8c02be02a1d0305a51619ade29623414d78f0c54817bd",
+        "SOURCE.json": "a72ebfdfc635952578411d0e55ddc176973eeba1028089931a4a7bd106e38e3b"
+      }
+    },
+    "ccb-blender-materials": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-materials",
+      "sourceFiles": {
+        "evals/evals.json": "f7a14a78da8c030834f9fa7923390a3d64ac900f5db66cc332609528d24c2230",
+        "references/overview.md": "7c905045d64f5bf0189ddccbb98f4c6125a0c6fee6bee16a970e387496f67ae4",
+        "SKILL.md": "120a071de55b2466b4934219f50259b928415087cf1b6d6dab885262444454d6"
+      },
+      "installedFiles": {
+        "evals/evals.json": "f7a14a78da8c030834f9fa7923390a3d64ac900f5db66cc332609528d24c2230",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "7c905045d64f5bf0189ddccbb98f4c6125a0c6fee6bee16a970e387496f67ae4",
+        "SKILL.md": "379daf83719cf9a5b641c7c2d839f3da2b86744d41be08352b0a889aed252f11",
+        "SOURCE.json": "b46a359fe6f28fd3404c3b9bee92ddff1175d8fa776bd5de8ef5e5826a16ed48"
+      }
+    },
+    "ccb-blender-modeling": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-modeling",
+      "sourceFiles": {
+        "evals/evals.json": "15569497c603179e39be0568f9fdc889749c88fb27022cc29ddf73ec2f107e6a",
+        "references/overview.md": "5812fab77ae21f9e9313bd4e5888f97298b8d3ff8178c5f6faaf2b3f7ad74843",
+        "SKILL.md": "160e2d6c98a1ca44a223581d0ace3abc6f9e3ef0a77527caad285da0d9e58cb3"
+      },
+      "installedFiles": {
+        "evals/evals.json": "15569497c603179e39be0568f9fdc889749c88fb27022cc29ddf73ec2f107e6a",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "5812fab77ae21f9e9313bd4e5888f97298b8d3ff8178c5f6faaf2b3f7ad74843",
+        "SKILL.md": "af3ae598f6ae5926baa666ea14a710b626057b601ec1f76d9f50f26d4c279451",
+        "SOURCE.json": "8f63e46d4f57e900785c080188a7126b8ba9a23a22802b6c8e089017d624e401"
+      }
+    },
+    "ccb-blender-pro-workflow": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-pro-workflow",
+      "sourceFiles": {
+        "evals/evals.json": "92d4fc7e590dacf8edfce9d12d460364c325099c92b71f8d55226e1f99a174ef",
+        "references/overview.md": "a0b951b89546d3fae5012afeb348a7631493ddbe437b3a5c408e72902d68f490",
+        "SKILL.md": "5f123461862e036b420d4b39ecf6d42500231090f4bd69107fee98df925ae3a5"
+      },
+      "installedFiles": {
+        "evals/evals.json": "92d4fc7e590dacf8edfce9d12d460364c325099c92b71f8d55226e1f99a174ef",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "a0b951b89546d3fae5012afeb348a7631493ddbe437b3a5c408e72902d68f490",
+        "SKILL.md": "9fc73b539d2a6c036498d9d4d3e3b6c90565476a1a2c864525c1da866364be8a",
+        "SOURCE.json": "8bee895056ab99dac11a9f019c9e89a32b593834da1f873e94106eda73909008"
+      }
+    },
+    "ccb-blender-rendering": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-rendering",
+      "sourceFiles": {
+        "evals/evals.json": "66cfd7dbded5f6f7e1272259c349176cbb784d37734c5612e35b6e1d6c2ca85f",
+        "references/overview.md": "6efa085798f8ff1c3d0f3b8fd311be5d2afb948e187906f12d2442caf672e9d3",
+        "SKILL.md": "cacfae886759334b458ce08f3ab42ec94e049e18b5788d99c4a4b347b4006dd0"
+      },
+      "installedFiles": {
+        "evals/evals.json": "66cfd7dbded5f6f7e1272259c349176cbb784d37734c5612e35b6e1d6c2ca85f",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "6efa085798f8ff1c3d0f3b8fd311be5d2afb948e187906f12d2442caf672e9d3",
+        "SKILL.md": "50ad1f0a9e9b890a1c86f5fe126e069f428dafb5abf4e77bb988fbc1212af409",
+        "SOURCE.json": "c2cd1a494d51a9bfb00ff2cf6eaae021ea5db548201c9ac6bf035763592699ce"
+      }
+    },
+    "ccb-blender-skill-harmonizer": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-skill-harmonizer",
+      "sourceFiles": {
+        "references/handoff-contracts.md": "96eeb1ec17c742a6df4a93024efa262aeb9576f728d304daca0c9bc4e37754dd",
+        "scripts/skill_graph_audit.py": "8dda05c2b23b2de87b4099f2c73bad53c87a0ce5736c95e2262a5bb82324f714",
+        "SKILL.md": "969d091906c7d74a7e33b14189ebfa59549fb9bcd6a338e8f1f72e10fa5ff406"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/handoff-contracts.md": "96eeb1ec17c742a6df4a93024efa262aeb9576f728d304daca0c9bc4e37754dd",
+        "scripts/skill_graph_audit.py": "8dda05c2b23b2de87b4099f2c73bad53c87a0ce5736c95e2262a5bb82324f714",
+        "SKILL.md": "5ddb0782a7a04cb7b48db6bf5441676faeccbeae7cde9b74758188c43fa43a04",
+        "SOURCE.json": "fd6b918ec15241b49ac60c07e7e58ca400466088edb47233648657cbb73c692d"
+      }
+    },
+    "ccb-blender-uv-texturing": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/blender-uv-texturing",
+      "sourceFiles": {
+        "evals/evals.json": "d6cb501b24337635fdfd9d23fc38f4e29e5710610b08b710f09413f9a3f3df05",
+        "references/overview.md": "afc8e0342ca26c782b8adeb629a3f430937ef5943714e6ae8e4e7ec595efa860",
+        "SKILL.md": "83812220c2245eb0466e1ef641751eaf6d568cf375b8bb7d1ed22ad2fff1aeec"
+      },
+      "installedFiles": {
+        "evals/evals.json": "d6cb501b24337635fdfd9d23fc38f4e29e5710610b08b710f09413f9a3f3df05",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "afc8e0342ca26c782b8adeb629a3f430937ef5943714e6ae8e4e7ec595efa860",
+        "SKILL.md": "cca88b63f64a4f8a2f66c362f974e22d16fed47666e39d76b88eaa70b5982c88",
+        "SOURCE.json": "efa315d68944d73959f25b933fff1f8b5a6d0d3ceb8a9520441337bb2b9a18d4"
+      }
+    },
+    "ccb-closed-surface-uv-coverage": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/closed-surface-uv-coverage",
+      "sourceFiles": {
+        "scripts/surface_texture_coverage_audit.py": "2ad78b486d9b92eccd3600d8e21fbebe1ce32cd8c2adfdf3d66083d172da7fdf",
+        "SKILL.md": "30c365e66bfd8afd0066bcbacf89cd1175526a22c4763cc8ea91ecd39d866de3"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/surface_texture_coverage_audit.py": "2ad78b486d9b92eccd3600d8e21fbebe1ce32cd8c2adfdf3d66083d172da7fdf",
+        "SKILL.md": "ff4a850ac1587ea40be04964fc5161add08ed9706766650f0e2cd21b002d70c1",
+        "SOURCE.json": "4bf02ce654c838dec321d3693bbc50c2f5107af75af57a6a43e930d716ae8ef1"
+      }
+    },
+    "ccb-contour-to-mesh": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/contour-to-mesh",
+      "sourceFiles": {
+        "scripts/mask_to_mesh_recipe.py": "a38cc2cd7e7bf0d485336cfe4821a2afdf0dd12235356261f4e9f6a48fa410dd",
+        "scripts/source_locked_skin_recipe.py": "5ad4cd95394e2ac931df7d8dad6c5e20aff36574d728cf9b63e97abad8be18de",
+        "SKILL.md": "3d17eb4a755df4432ecc89e4da17632b24b2935b459131b905e66471a8948173"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/mask_to_mesh_recipe.py": "a38cc2cd7e7bf0d485336cfe4821a2afdf0dd12235356261f4e9f6a48fa410dd",
+        "scripts/source_locked_skin_recipe.py": "5ad4cd95394e2ac931df7d8dad6c5e20aff36574d728cf9b63e97abad8be18de",
+        "SKILL.md": "c3b0db72d6bc2c474778a3184ec6df310eaf23950c883fc4a9de27c94e7b36b3",
+        "SOURCE.json": "5344be86e5d9621ff564f2ae22f25d0d6b1d44635ba067d946329bb3ff3e5dd7"
+      }
+    },
+    "ccb-fit-repair-optimizer": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/fit-repair-optimizer",
+      "sourceFiles": {
+        "scripts/fit_repair_queue.py": "4dc623dee36deafbf13a2051ca6e26fe93dd8f7e6984566ea90be60dd8368a27",
+        "SKILL.md": "2738ff217b7671836e01c2bcf2f27e3f7c81699dd1c00dde32be666c28703463"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/fit_repair_queue.py": "4dc623dee36deafbf13a2051ca6e26fe93dd8f7e6984566ea90be60dd8368a27",
+        "SKILL.md": "2ae2e40e677e4c470aa6c51be81dcc7f9f6876c8ef27300a11106243c2f2c7d9",
+        "SOURCE.json": "ee2e4b8730592e1915bc65c4a9c95bf42fa47909f6a405c4589ce3ec6631dcaf"
+      }
+    },
+    "ccb-landmark-fit-repair": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/landmark-fit-repair",
+      "sourceFiles": {
+        "scripts/landmark_fit_report.py": "8d8a59ed3ef8648ba12476c7c14176bcc9de25a149f1ce675880c5ae24bf12e3",
+        "SKILL.md": "f61c04dff247ff8d64e41651f3144d8e4a22e36d2401508738775648b9e4b90c"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/landmark_fit_report.py": "8d8a59ed3ef8648ba12476c7c14176bcc9de25a149f1ce675880c5ae24bf12e3",
+        "SKILL.md": "e3364fa3b1e963e2e75edb7d78083a186b74abaaa30a1a74c84f3105dda8ce99",
+        "SOURCE.json": "acd7fad5d2ccb09ca94816cd9449d3b4fd30417af99e15020eacb69d21c96026"
+      }
+    },
+    "ccb-mascot-logo-reconstruction": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/mascot-logo-reconstruction",
+      "sourceFiles": {
+        "SKILL.md": "6590723ce9dcaf2755a4926d738fe93035f64c47d7a4346e88340a9e33a52762"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "SKILL.md": "f4050e442f5c38a39e39e63773c379a9ae51718ff8e2818641b6fd753dade98d",
+        "SOURCE.json": "38ad9a4152c4c00f8dd2e86be97a80225c67c10856d8568036c5454aaa89f142"
+      }
+    },
+    "ccb-multiview-constraint-solver": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/multiview-constraint-solver",
+      "sourceFiles": {
+        "scripts/view_constraint_report.py": "f3ea81fe6f4adfb71ac155d7135757fe0b1136b8ca58888be25c8ec5328863b5",
+        "SKILL.md": "6252cb93d5cade04f8b67cd5f93a8cfd236ddd9aa0f913a1db5ded9cf483b163"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/view_constraint_report.py": "f3ea81fe6f4adfb71ac155d7135757fe0b1136b8ca58888be25c8ec5328863b5",
+        "SKILL.md": "aa4d357a4538a3135815558384ea6e30d9c2a4ad3fe94970d65c648410eb1057",
+        "SOURCE.json": "3367ae160f19cabe037d9cf6b4ebd1990ea837e51ebad61b259478efd88f923e"
+      }
+    },
+    "ccb-multiview-fit-loop": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/multiview-fit-loop",
+      "sourceFiles": {
+        "scripts/multiview_fit_report.py": "a0991137073ec1c24d17f1f6f7c24399c0daa720554fc418d9ead5460faf396f",
+        "SKILL.md": "a64479c0ef905be693fa77c447c63390d26da7b55d4c40ea129053c920d39250"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/multiview_fit_report.py": "a0991137073ec1c24d17f1f6f7c24399c0daa720554fc418d9ead5460faf396f",
+        "SKILL.md": "f7f1c8dfd092108c8008beecaf8a5782fa552f204aae79f4edafefef8af74d1f",
+        "SOURCE.json": "bceda61adf20fccf59c950c6022ca63ecb48ce5290488c97bf3cb1f252921a44"
+      }
+    },
+    "ccb-orbital-hud-motion": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/orbital-hud-motion",
+      "sourceFiles": {
+        "scripts/orbit_layout_manifest.py": "1202862bc7573c6b6fd8f2471b4c578e9e7792acd589f012e13a278d1f986715",
+        "SKILL.md": "a34ce78c1771401312beb376d0fe73de088d484e3fed0cecd96f62a22fd0eecf"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/orbit_layout_manifest.py": "1202862bc7573c6b6fd8f2471b4c578e9e7792acd589f012e13a278d1f986715",
+        "SKILL.md": "08e138091ced8e8e660f322913cd44084ff969ed1f7da999879c78e1de45df22",
+        "SOURCE.json": "6afaf563854185e9b4cdc7ee4e09705caa0c12cbecae2080475c619f83cafc5f"
+      }
+    },
+    "ccb-orthographic-registration": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/orthographic-registration",
+      "sourceFiles": {
+        "scripts/register_views.py": "5d9fca39f9a6994a269410eadeb88a85b6e02335db4bff22dbb2cb541ebecfec",
+        "SKILL.md": "9ce2bcbe8ae6672dca3917e87f76f56ed99ff991568c890754371ffeeb9d1139"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/register_views.py": "5d9fca39f9a6994a269410eadeb88a85b6e02335db4bff22dbb2cb541ebecfec",
+        "SKILL.md": "055d12fedd2d9ea6f2ed2309add48e51be0637225d150865f161b600481d517f",
+        "SOURCE.json": "996128c5ae2e1b2037b7ce4b43a398f75d535bad5e63a09fffdf496f7cb3d761"
+      }
+    },
+    "ccb-quality-refinement-autoloop": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/quality-refinement-autoloop",
+      "sourceFiles": {
+        "scripts/ralph_autoloop_plan.py": "6a6333322a0e358a33b3ad6ab3d8d0965d24a48ab93114197789408de072c4d2",
+        "scripts/release_readiness_check.py": "ce7f9db9c925fc30931a59fd6c7a4acd573af15ad4b8aff8d08e439657e2b32f",
+        "scripts/sanitize_skill_contributions.py": "5c3c936efd5e94a8093fd24d4a3ae069c1a9bf7a5eba696b37bbfc70a4d01e5c",
+        "SKILL.md": "946fdff1238fb23c0442a614fe5052fbffce011177655d8e950081be251cacbf"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/ralph_autoloop_plan.py": "6a6333322a0e358a33b3ad6ab3d8d0965d24a48ab93114197789408de072c4d2",
+        "scripts/release_readiness_check.py": "ce7f9db9c925fc30931a59fd6c7a4acd573af15ad4b8aff8d08e439657e2b32f",
+        "scripts/sanitize_skill_contributions.py": "5c3c936efd5e94a8093fd24d4a3ae069c1a9bf7a5eba696b37bbfc70a4d01e5c",
+        "SKILL.md": "9428117af9161391b86a9e05941009a53540dbaee98c9116f40ba40a0755e0ac",
+        "SOURCE.json": "4a0f182bb34ec12b514e88159f7b441c1f1a9245803784d631b78cfb9fcbbea3"
+      }
+    },
+    "ccb-reference-analysis-validator": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/reference-analysis-validator",
+      "sourceFiles": {
+        "references/metrics-and-thresholds.md": "749c7f767ac6d0e878fadf611cde4262f599ce2c3285d76db464cea2101fa9aa",
+        "scripts/reference_manifest_compiler.py": "028305cd71a8e8472112600c65a522e1817530bfb32cb2f770376754e495f136",
+        "scripts/render_overlay_validator.py": "4fa4756b1a49334799b98d85dfba4358e6bbf2601a35924a2581507cfd08820f",
+        "SKILL.md": "6efeb0f9fa30caa14a8d8d9ecb50581205eb63d16e34e123af26a120221865ce"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/metrics-and-thresholds.md": "749c7f767ac6d0e878fadf611cde4262f599ce2c3285d76db464cea2101fa9aa",
+        "scripts/reference_manifest_compiler.py": "028305cd71a8e8472112600c65a522e1817530bfb32cb2f770376754e495f136",
+        "scripts/render_overlay_validator.py": "4fa4756b1a49334799b98d85dfba4358e6bbf2601a35924a2581507cfd08820f",
+        "SKILL.md": "f8c59856e7727d936c65fd6a3b545822bef86a1b1daedef4956d235f0931787d",
+        "SOURCE.json": "2b7d249246ef1b4b2993567030a4389cf66611b2979037609e62500a353fa4a8"
+      }
+    },
+    "ccb-reference-look-calibration": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/reference-look-calibration",
+      "sourceFiles": {
+        "scripts/look_fit_report.py": "b6b2c9b2248b50477552485e88a450389dd40f279268f046d168a3cb579cf028",
+        "SKILL.md": "c9c29e0ee3490a0b158174063a998dfd29bb8947c4b7bdec06964a8043051ff2"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/look_fit_report.py": "b6b2c9b2248b50477552485e88a450389dd40f279268f046d168a3cb579cf028",
+        "SKILL.md": "553279a16fca495cc957f9688a13744278375256697b61ce38da8ac82f2d9898",
+        "SOURCE.json": "dc89f50c7b91122d43b3e92123539e2f78ace35974ee866eb6afbce4aebb0ecf"
+      }
+    },
+    "ccb-reference-to-3d": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/reference-to-3d",
+      "sourceFiles": {
+        "evals/evals.json": "72d30a91d2fd741b6b851fd72afe91265308fb2f85224f2b6f551795f9c26113",
+        "references/overview.md": "15bd4874c4e7cc8a1fdc30edc4dbc9dff459a933320a5a650cefcb5c1381dddc",
+        "scripts/silhouette_validator.py": "d963abba777195bbfefd267c338c01f894add518f4f282bc1f1c0f37396ed28b",
+        "scripts/template_analyzer.py": "ddac024f8abe13e54e957b33a37507fe19db1c18d4457f314f12ca415dc7f011",
+        "SKILL.md": "d7f4c5ccd2de9e0c6631f02e407e4bb3594ea1cb5f368b98774d5860ed8a4ab3"
+      },
+      "installedFiles": {
+        "evals/evals.json": "72d30a91d2fd741b6b851fd72afe91265308fb2f85224f2b6f551795f9c26113",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/overview.md": "15bd4874c4e7cc8a1fdc30edc4dbc9dff459a933320a5a650cefcb5c1381dddc",
+        "scripts/silhouette_validator.py": "d963abba777195bbfefd267c338c01f894add518f4f282bc1f1c0f37396ed28b",
+        "scripts/template_analyzer.py": "ddac024f8abe13e54e957b33a37507fe19db1c18d4457f314f12ca415dc7f011",
+        "SKILL.md": "1c21400ef6a193393d446f72c099eb75e90efa82d277643d78c0493ea035a06a",
+        "SOURCE.json": "e52dd0d9e26c47d3a79b840caeffbb36fe29d5d05e7ab3f7effce0c6da2ec2ff"
+      }
+    },
+    "ccb-source-part-segmentation": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/source-part-segmentation",
+      "sourceFiles": {
+        "scripts/seeded_part_masks.py": "8d35a5369626f28335f9d7d05ed11912de1f0c6e8cb6154eb24ff6701a43d8c1",
+        "scripts/segment_source_parts.py": "d275a2c35f4bcf03847bc6b02138354ae054c23b5b25d195ce3e948a3d29bf25",
+        "SKILL.md": "49a9e627075c721774b31471faa6ef20d66a4e3de0fb46bec4f511f9e38a29f1"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/seeded_part_masks.py": "8d35a5369626f28335f9d7d05ed11912de1f0c6e8cb6154eb24ff6701a43d8c1",
+        "scripts/segment_source_parts.py": "d275a2c35f4bcf03847bc6b02138354ae054c23b5b25d195ce3e948a3d29bf25",
+        "SKILL.md": "cb6b07bbd0f1bd4e2d12ea236d6a97be2055f5fb468209b9fab2e49cb83224e2",
+        "SOURCE.json": "1733c279f9b2973125974bf66b2a80603287498b1f3990e1d952659aef5fb1df"
+      }
+    },
+    "ccb-text-to-blender": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/text-to-blender",
+      "sourceFiles": {
+        "assets/v0.4.0-validation/README.md": "1049205aa9afda5bb2f3a15efce6db32a6191633c8e8766ac009f339d1f4efa6",
+        "assets/v0.4.0-validation/test1-modeling-materials-lighting-render.webp": "bce8bfaa3f3a9fcab6b090d1452c8dbe984aec37025ce692cec0acc859a83bd9",
+        "assets/v0.4.0-validation/test2-glass-cycles.webp": "0c58a0481fa4ff4f46ad54c7c3b8468c1165abdf8f0dc6ea49e7b0cb682063fa",
+        "assets/v0.4.0-validation/test3-anim-frame001.webp": "53a382d27c44f65786964422eafda94aa1e255b11c8d95014ff78e9078e374a0",
+        "assets/v0.4.0-validation/test3-anim-frame048.webp": "f8a688f3f02351cc14bfc140a8cbcd64c787a52f94eda0347e53a2926936f332",
+        "assets/v0.4.0-validation/test3-anim-frame096.webp": "53a382d27c44f65786964422eafda94aa1e255b11c8d95014ff78e9078e374a0",
+        "assets/v0.6.0-round2-validation/M_sword_attempt1_broken_world.webp": "93035d36d18a83daff3925e8c049950f0b0f9468e2f695b019611454fb8bcfc4",
+        "assets/v0.6.0-round2-validation/M_sword_attempt2_clean_world.webp": "c198045d25c05cae3c8779b66dcce66d4f1cf326aae183502428eefa3e9afc0d",
+        "assets/v0.6.0-round2-validation/M_sword_attempt3_aimed_lights.webp": "4a766bfd5e93ce4b3970e7ae1cb36715cf2b656f228229402ad2282c1eb8508c",
+        "assets/v0.6.0-round2-validation/M_sword_attempt4_correct_dimensions_wrong_orientation.webp": "d450d9d7f7b7907663ea5a9e45870fd9298275b84667e112f18662bb1e4d754c",
+        "assets/v0.6.0-round2-validation/M_sword_attempt5_rotated_no_taper.webp": "4c5f9845ab2e36e60f15a8b088d56e17c607ceec84403d84c3c29ed2b06b0b23",
+        "assets/v0.6.0-round2-validation/M_sword_attempt6_with_pointed_tip.webp": "7b36bb2386e52dc05ba28dac9f3ed5a037e58ca3f94653cca4958e1ac3fa1373",
+        "assets/v0.6.0-round2-validation/M_sword_FINAL_v0.6.0.webp": "e1d55102c167480f8ea5b85a948b601c95977f6295cd26e54f83da243391147c",
+        "assets/v0.6.0-round2-validation/README.md": "b0bde05ac9c0fe601789c726b0a48f2f9971a79f0166caf5783d7725234f2368",
+        "assets/v0.7.0-bottle-validation/bottle_FINAL_v0.7.0.webp": "27d06900c50fa0d9137bfe4fa671cd7352c0aa3ca272114405235aff857511af",
+        "assets/v0.7.0-bottle-validation/bottle_first_try.webp": "0fbef295182cddd844d4d2c8a1b8d4029bf048cd741d8561991c303922d0b586",
+        "assets/v0.7.0-bottle-validation/README.md": "0e50891d0cd1d69d688ea08ef9b2429a95cf4111fb600624a6dedac58049d1ba",
+        "assets/v0.8.0-chair-validation/chair_attempt1_simple_rectangles.webp": "4e09d75e517e83f68823e801c744f1f58ebe22b36c30f670026c0432901a0862",
+        "assets/v0.8.0-chair-validation/chair_attempt2_overcooked_wood.webp": "eeccca965522f7fecfdb9a928fffd8ff6d239080513a6944c101304030c0361c",
+        "assets/v0.8.0-chair-validation/chair_attempt3_balanced_wood.webp": "3c558486aceafbe60a0b96912da860414e114b37a9590076abe193b8019de17c",
+        "assets/v0.8.0-chair-validation/chair_FINAL_v0.8.0.webp": "8ba448342ae6ad955441e2ee2f0a5e2d3259d9204ef48ee1a8d0ca48fcb72d28",
+        "assets/v0.8.0-chair-validation/README.md": "5a36b0493d6ca9d674517c37f5449bb602b34da6239655946cbccbc775bd87fe",
+        "assets/v0.9.0-validation/01_bottle_glass_class_lighting.webp": "3894dd419ad80f450548fb64562e76599b3bcdeb76afa806b19af23bd7a5fd74",
+        "assets/v0.9.0-validation/02_bottle_proper_wine_density.webp": "8370d11533a753c7c768f9b2d8c9cbc185b9dfd05eee9cdc5e12c5893e1f3605",
+        "assets/v0.9.0-validation/03_aviator_wireframe_to_3d.webp": "f33e19094983fb7a9f26b303b3923007c94ef860fc4c62930a87350c7b98c344",
+        "assets/v0.9.0-validation/04_aviator_chained_upgrade.webp": "fa167fa3e3046d80d5acfe6fcddf23274f45b61700cd6f3e559a38d240d707e4",
+        "assets/v0.9.0-validation/05_aviator_proper_rayban_dimensions.webp": "c24ff08ee632594bb46fe90cf5cb3ff838c21de85298f0a57fbb071ca286ee22",
+        "assets/v1.1.0-validation/desk_lamp_emission.webp": "d3c161827e69a9cc377c4a0b59dd7a5786fbf8fb3533676941ee71e4ef945b1e",
+        "assets/v1.2.0-validation/01_broadcaster_too_bright.webp": "e32fba7cb43b5f12edc6e889401ab5c4439bdaf2684412b877d1dcba15b9f487",
+        "assets/v1.2.0-validation/02_broadcaster_neutral_dominates.webp": "ea972e224e40415d50903aebcb0713f2da2698d15ff06001a29b3e7e53fb0f0e",
+        "assets/v1.2.0-validation/03_broadcaster_synthwave_FINAL.webp": "d976b0429c025b39ad14cfcd43537366c1f1c5922d997cb6fb2a488f68e54861",
+        "assets/v1.2.0-validation/04_broadcaster_with_features_still_not_human.webp": "690515f65371d435931df7dfd66508a3121b129597540961dd98d02d02d424d3",
+        "assets/v1.4.0-validation/aviator.png": "12ca26a2433eae8595af95d6e3d4d1d70b04f8f1ba989be192c5b2fb1675f25a",
+        "assets/v1.4.0-validation/bottle.png": "667bdf15b90b6b88e645711f870593ee5caf2ba18432010c13ab343d7a0513ea",
+        "assets/v1.4.0-validation/broadcaster_avatar.png": "a6c4a7a605d693a92df54ace6375c890b26daa940b5cb6c31028fc13cbd7fd7d",
+        "assets/v1.4.0-validation/chair.png": "3d45cd5ca66973765aa8fa5f61601fcf578a3e0e2b4cb82b5eca4c2b04b495a0",
+        "assets/v1.4.0-validation/desk_lamp.png": "bced19c60fa9af5fc292b823a8462b86b6dc874e4a4fbcf09f79f569ff1c9c20",
+        "assets/v1.4.0-validation/README.md": "1e3cf49cdcbfecfdb34ddef3bb2de0cf6054e4104870c4fc8932aa3fb5aecb8d",
+        "assets/v1.4.0-validation/sword.png": "de79d5566b920d80cdeb0c534c1f5b6629c0ef5ea6683bcb2784d6285fcf41a2",
+        "evals/backend-scenarios.json": "6bb8e8dec2f18ef34ace2cf5fee839607f7ec60a73f83d1eabbcb6ef11bcdd9b",
+        "evals/evals.json": "c3b3aea06c135da852bfaf5de134448268c2b916f185ed947f7a742866edd58c",
+        "references/agent-hosts.md": "24740a525522cbd5e00e4912c13de10abed0276cf9428f5299513e82c0831493",
+        "references/assembly-order.md": "77e6ff37b0680911acc6c74c189a1a27b59794be1ff5eb2558340e86ad529fbf",
+        "references/blender-version-compat.md": "0e0a4c69cc505e33fe76b0573846b758c5735214c46f0df1ec96d9e021767156",
+        "references/common-object-dimensions.md": "c12a93b578feef051b626b30ca3616d61f0f5dfbf42467c1e4788b3a9b6c5055",
+        "references/mcp-backends.md": "d41c7a2770c2399ce38eea5bc7b934a1223473b6dd6c2f7448c62d2aeca3e454",
+        "SKILL.md": "987430c05ba40b5007a8ddac10225b24f57f9058ba1c819697a259bdf32dabad"
+      },
+      "installedFiles": {
+        "assets/v0.4.0-validation/README.md": "3bf122160ab0d1a163e1cb5c98169712e5097e7d2e08afb2f30971dfaa95dc6c",
+        "assets/v0.4.0-validation/test1-modeling-materials-lighting-render.webp": "bce8bfaa3f3a9fcab6b090d1452c8dbe984aec37025ce692cec0acc859a83bd9",
+        "assets/v0.4.0-validation/test2-glass-cycles.webp": "0c58a0481fa4ff4f46ad54c7c3b8468c1165abdf8f0dc6ea49e7b0cb682063fa",
+        "assets/v0.4.0-validation/test3-anim-frame001.webp": "53a382d27c44f65786964422eafda94aa1e255b11c8d95014ff78e9078e374a0",
+        "assets/v0.4.0-validation/test3-anim-frame048.webp": "f8a688f3f02351cc14bfc140a8cbcd64c787a52f94eda0347e53a2926936f332",
+        "assets/v0.4.0-validation/test3-anim-frame096.webp": "53a382d27c44f65786964422eafda94aa1e255b11c8d95014ff78e9078e374a0",
+        "assets/v0.6.0-round2-validation/M_sword_attempt1_broken_world.webp": "93035d36d18a83daff3925e8c049950f0b0f9468e2f695b019611454fb8bcfc4",
+        "assets/v0.6.0-round2-validation/M_sword_attempt2_clean_world.webp": "c198045d25c05cae3c8779b66dcce66d4f1cf326aae183502428eefa3e9afc0d",
+        "assets/v0.6.0-round2-validation/M_sword_attempt3_aimed_lights.webp": "4a766bfd5e93ce4b3970e7ae1cb36715cf2b656f228229402ad2282c1eb8508c",
+        "assets/v0.6.0-round2-validation/M_sword_attempt4_correct_dimensions_wrong_orientation.webp": "d450d9d7f7b7907663ea5a9e45870fd9298275b84667e112f18662bb1e4d754c",
+        "assets/v0.6.0-round2-validation/M_sword_attempt5_rotated_no_taper.webp": "4c5f9845ab2e36e60f15a8b088d56e17c607ceec84403d84c3c29ed2b06b0b23",
+        "assets/v0.6.0-round2-validation/M_sword_attempt6_with_pointed_tip.webp": "7b36bb2386e52dc05ba28dac9f3ed5a037e58ca3f94653cca4958e1ac3fa1373",
+        "assets/v0.6.0-round2-validation/M_sword_FINAL_v0.6.0.webp": "e1d55102c167480f8ea5b85a948b601c95977f6295cd26e54f83da243391147c",
+        "assets/v0.6.0-round2-validation/README.md": "8d604d578c58cd1989637e7e65392fcf7f2f0eba2cfd907609e9a5c4a96b1981",
+        "assets/v0.7.0-bottle-validation/bottle_FINAL_v0.7.0.webp": "27d06900c50fa0d9137bfe4fa671cd7352c0aa3ca272114405235aff857511af",
+        "assets/v0.7.0-bottle-validation/bottle_first_try.webp": "0fbef295182cddd844d4d2c8a1b8d4029bf048cd741d8561991c303922d0b586",
+        "assets/v0.7.0-bottle-validation/README.md": "737c3739d8100c877182dce70fb1f7a2040848415e0195434fa5e204911c279f",
+        "assets/v0.8.0-chair-validation/chair_attempt1_simple_rectangles.webp": "4e09d75e517e83f68823e801c744f1f58ebe22b36c30f670026c0432901a0862",
+        "assets/v0.8.0-chair-validation/chair_attempt2_overcooked_wood.webp": "eeccca965522f7fecfdb9a928fffd8ff6d239080513a6944c101304030c0361c",
+        "assets/v0.8.0-chair-validation/chair_attempt3_balanced_wood.webp": "3c558486aceafbe60a0b96912da860414e114b37a9590076abe193b8019de17c",
+        "assets/v0.8.0-chair-validation/chair_FINAL_v0.8.0.webp": "8ba448342ae6ad955441e2ee2f0a5e2d3259d9204ef48ee1a8d0ca48fcb72d28",
+        "assets/v0.8.0-chair-validation/README.md": "5a36b0493d6ca9d674517c37f5449bb602b34da6239655946cbccbc775bd87fe",
+        "assets/v0.9.0-validation/01_bottle_glass_class_lighting.webp": "3894dd419ad80f450548fb64562e76599b3bcdeb76afa806b19af23bd7a5fd74",
+        "assets/v0.9.0-validation/02_bottle_proper_wine_density.webp": "8370d11533a753c7c768f9b2d8c9cbc185b9dfd05eee9cdc5e12c5893e1f3605",
+        "assets/v0.9.0-validation/03_aviator_wireframe_to_3d.webp": "f33e19094983fb7a9f26b303b3923007c94ef860fc4c62930a87350c7b98c344",
+        "assets/v0.9.0-validation/04_aviator_chained_upgrade.webp": "fa167fa3e3046d80d5acfe6fcddf23274f45b61700cd6f3e559a38d240d707e4",
+        "assets/v0.9.0-validation/05_aviator_proper_rayban_dimensions.webp": "c24ff08ee632594bb46fe90cf5cb3ff838c21de85298f0a57fbb071ca286ee22",
+        "assets/v1.1.0-validation/desk_lamp_emission.webp": "d3c161827e69a9cc377c4a0b59dd7a5786fbf8fb3533676941ee71e4ef945b1e",
+        "assets/v1.2.0-validation/01_broadcaster_too_bright.webp": "e32fba7cb43b5f12edc6e889401ab5c4439bdaf2684412b877d1dcba15b9f487",
+        "assets/v1.2.0-validation/02_broadcaster_neutral_dominates.webp": "ea972e224e40415d50903aebcb0713f2da2698d15ff06001a29b3e7e53fb0f0e",
+        "assets/v1.2.0-validation/03_broadcaster_synthwave_FINAL.webp": "d976b0429c025b39ad14cfcd43537366c1f1c5922d997cb6fb2a488f68e54861",
+        "assets/v1.2.0-validation/04_broadcaster_with_features_still_not_human.webp": "690515f65371d435931df7dfd66508a3121b129597540961dd98d02d02d424d3",
+        "assets/v1.4.0-validation/aviator.png": "12ca26a2433eae8595af95d6e3d4d1d70b04f8f1ba989be192c5b2fb1675f25a",
+        "assets/v1.4.0-validation/bottle.png": "667bdf15b90b6b88e645711f870593ee5caf2ba18432010c13ab343d7a0513ea",
+        "assets/v1.4.0-validation/broadcaster_avatar.png": "a6c4a7a605d693a92df54ace6375c890b26daa940b5cb6c31028fc13cbd7fd7d",
+        "assets/v1.4.0-validation/chair.png": "3d45cd5ca66973765aa8fa5f61601fcf578a3e0e2b4cb82b5eca4c2b04b495a0",
+        "assets/v1.4.0-validation/desk_lamp.png": "bced19c60fa9af5fc292b823a8462b86b6dc874e4a4fbcf09f79f569ff1c9c20",
+        "assets/v1.4.0-validation/README.md": "1e3cf49cdcbfecfdb34ddef3bb2de0cf6054e4104870c4fc8932aa3fb5aecb8d",
+        "assets/v1.4.0-validation/sword.png": "de79d5566b920d80cdeb0c534c1f5b6629c0ef5ea6683bcb2784d6285fcf41a2",
+        "evals/backend-scenarios.json": "6bb8e8dec2f18ef34ace2cf5fee839607f7ec60a73f83d1eabbcb6ef11bcdd9b",
+        "evals/evals.json": "c3b3aea06c135da852bfaf5de134448268c2b916f185ed947f7a742866edd58c",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/agent-hosts.md": "65cceb34f1cfaa4894ef329e2099c4f906728aeee46f8e392e30175e4f9c6859",
+        "references/assembly-order.md": "77e6ff37b0680911acc6c74c189a1a27b59794be1ff5eb2558340e86ad529fbf",
+        "references/blender-version-compat.md": "09220a52b790ece1fe45b05cff954192a660ffd46419b3c315a1990953e74ff7",
+        "references/code-execution-rules.md": "4b33d32fe690e2f2017cb8c4a60980f645a10acd56ba6b5de87e3a7245c46561",
+        "references/common-object-dimensions.md": "900f8856a77c83ac6c8ad49671d098f820cbfb4863b4664d5069a37295a35f0e",
+        "references/intent-routing.md": "f9fdc2a64c21185173d1c8f3e3799f3bb1c1e1f8911a5d69776485c013d72da9",
+        "references/mcp-backends.md": "90293444c47dd5ec43a1d83f27407824b991cf4ee33ad9ab4a9fec35f5e1fcbb",
+        "SKILL.md": "07eeb8c5c439eb38bb73af5b9a415535aa1f8c6abed2dbf85021de29cf878279",
+        "SOURCE.json": "3ec72b946220a0a5cd2d2e9d05d4ace09de85118d8c6cda7cdc77ff245df0c45"
+      }
+    },
+    "ccb-texture-driven-mesh-fitting": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/texture-driven-mesh-fitting",
+      "sourceFiles": {
+        "scripts/contour_correspondence_report.py": "6f06ba7948521e5d9cf26dab12939dbe5c2948772571345b71a1cb49128fbd74",
+        "SKILL.md": "93b62df6cdd9d85227b5023906c05cd770a49779e59d2d49f7077f3714ddb656"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/contour_correspondence_report.py": "6f06ba7948521e5d9cf26dab12939dbe5c2948772571345b71a1cb49128fbd74",
+        "SKILL.md": "38843fba307b0cb541de145409e097c208327717972b5945bd38413764e0052f",
+        "SOURCE.json": "b652ad1051a71c803291dbd196a2f2edd5aab4645ff6ff4bac38df55f20b085f"
+      }
+    },
+    "ccb-texture-state-animation": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/texture-state-animation",
+      "sourceFiles": {
+        "scripts/texture_transition_plan.py": "0b937147e5e5cb128e30441a6a116d4527279d004a2bd4e02c2b64000ab4db2b",
+        "SKILL.md": "beda8d0413568127d9e67ce48417812d85b54616938366ad8e134a7e72164020"
+      },
+      "installedFiles": {
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "scripts/texture_transition_plan.py": "0b937147e5e5cb128e30441a6a116d4527279d004a2bd4e02c2b64000ab4db2b",
+        "SKILL.md": "63ba10a4107dec2cb23ae7eef96a8fd1931ecb081f6cfc2ef14654df8f19620d",
+        "SOURCE.json": "eb1d053c4a00a657bab1b8edbf5bc711541cbaedb8cb7453367872098a0134e3"
+      }
+    },
+    "ccb-wireframe-to-3d": {
+      "repo": "RobLe3/cc-blender-skill",
+      "commit": "a2634b588e80265e796aa53f8ab178d75105c2af",
+      "sourcePath": "plugin/skills/wireframe-to-3d",
+      "sourceFiles": {
+        "evals/evals.json": "1ddd8408dbe89298e336c940bdfcf4912634c726625088468ee7330ab7adf7b6",
+        "references/algorithms.md": "3ebce8680412d86a696dce43aa30d356da5861fcad2f39e99517173ca2c9ea01",
+        "references/best-practices.md": "b71217e41005346d9ab7d4146262c83093bbb5e375bae4e9bc2189e84f9c4a68",
+        "references/blender-patterns.md": "73fa3295e368011f3c8feba12cea803ad1c7055d3cc07799499100d0e6dbe5c5",
+        "scripts/wireframe_analyzer.py": "2acf0d61ad52b7081325bc52876bf9156e05bc58a1896f07b2de754fe185969d",
+        "SKILL.md": "215dfcf71c7c49933c45d1e8a10b4b4ec541ac76ddf4da7b00ec044d95dd3925"
+      },
+      "installedFiles": {
+        "evals/evals.json": "1ddd8408dbe89298e336c940bdfcf4912634c726625088468ee7330ab7adf7b6",
+        "LICENSE.upstream": "8be4e2777ce93cd8007c83d209e96016cbe7d9dba8b46cffb99e0d514774404e",
+        "references/algorithms.md": "3ebce8680412d86a696dce43aa30d356da5861fcad2f39e99517173ca2c9ea01",
+        "references/best-practices.md": "b71217e41005346d9ab7d4146262c83093bbb5e375bae4e9bc2189e84f9c4a68",
+        "references/blender-patterns.md": "73fa3295e368011f3c8feba12cea803ad1c7055d3cc07799499100d0e6dbe5c5",
+        "scripts/wireframe_analyzer.py": "2acf0d61ad52b7081325bc52876bf9156e05bc58a1896f07b2de754fe185969d",
+        "SKILL.md": "350a7a49ff2479347e09ddd6e1632b80a0869296f1ef69b2f46dffd8e7449a45",
+        "SOURCE.json": "8d85aa9dd63d59960add598aa8adc312329db46b43580f32550b1ff0993eef80"
+      }
+    }
+  }
+}

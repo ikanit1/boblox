@@ -1,0 +1,55 @@
+{
+  "checkedAtUtc": "2026-10-24T06:56:15.767437+00:00",
+  "status": "PASS",
+  "obsidian": {
+    "appVersion": "1.12.7",
+    "installerVersion": "1.12.7",
+    "executable": "D:/obsidian/Obsidian.exe",
+    "nativeCli": "D:/obsidian/Obsidian.com"
+  },
+  "projectVault": "docs/obsidian-vault",
+  "registration": "GUI project vault opened; General Command line interface enabled and Register used by root operator",
+  "nativeCli": {
+    "passed": true,
+    "method": "native CLI",
+    "vault": "C:\\Users\\admin\\Documents\\Codex\\2026-10-23\\new-chat\\outputs\\RuleRoomRelease\\docs\\obsidian-vault",
+    "dashboardRead": true,
+    "createReadRoundTrip": true,
+    "temporaryNoteRemoved": true,
+    "scope": "Explicit project vault ID, no personal notes or global settings modified."
+  },
+  "nativeUnresolvedLinks": 0,
+  "nativeUnresolvedResponse": "No unresolved links found.",
+  "fileValidation": {
+    "vault": "C:\\Users\\admin\\Documents\\Codex\\2026-10-23\\new-chat\\outputs\\RuleRoomRelease\\docs\\obsidian-vault",
+    "notes": 20,
+    "requiredFolders": 11,
+    "wikilinks": 91,
+    "localMarkdownLinks": 0,
+    "orphans": [],
+    "errors": [],
+    "passed": true,
+    "scope": "Local file existence and unambiguous note targets; no web/heading or UI claim.",
+    "readWrite": {
+      "method": "filesystem",
+      "passed": true,
+      "temporaryNoteRemoved": true
+    }
+  },
+  "temporaryProbeFilesRemaining": 0,
+  "personalVaultNotesRead": false,
+  "globalSettingsEditedDirectly": false,
+  "supportingChecks": [
+    "Python compile",
+    "Open-Vault.ps1 PowerShell AST",
+    "Missing/ambiguous/escaping link detection",
+    "Fenced example ignored",
+    "Scoped UTF-8 round trip cleanup"
+  ],
+  "limits": [
+    "Link validator checks targets, not web availability or heading anchors",
+    "CLI access is not visual usability acceptance",
+    "GitHub source links identify pinned baseline afdbc08, not uncommitted local code",
+    "No Roblox publication or cloud data verification in this setup"
+  ]
+}

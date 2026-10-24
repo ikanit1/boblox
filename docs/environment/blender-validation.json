@@ -1,0 +1,135 @@
+{
+  "checkedDate": "2026-10-24",
+  "blender": {
+    "version": "5.2.2 LTS",
+    "build": "d13f752e3b9c",
+    "existingSteamInstallation": true
+  },
+  "backend": {
+    "name": "Official Blender Lab MCP",
+    "upstream": "https://projects.blender.org/lab/blender_mcp",
+    "sourceCommit": "dbbf836ad4b1025f14a2b3b504c43903f39e0b04",
+    "packageVersion": "1.0.2",
+    "mcpSdkVersion": "1.30.0",
+    "addonManifestVersion": "1.0.0",
+    "license": "GPL-3.0-or-later"
+  },
+  "mcp": {
+    "handshakePassed": true,
+    "readOnlyQuery": {
+      "version": "5.2.2 LTS",
+      "file": "C:\\Users\\admin\\Documents\\Codex\\2026-10-23\\new-chat\\outputs\\RuleRoomRelease\\assets\\source\\reactor_beacon\\reactor_beacon.blend",
+      "background": true,
+      "objects": 27,
+      "bridgeOwner": "official-v1"
+    },
+    "toolCount": 26,
+    "coldStartStableWrapperPassed": true,
+    "coldStartOwnedProcessCleanedUp": true,
+    "reuseKeptExistingOwnedPid": true,
+    "launcherSha256": {
+      "run_mcp.py": "659b5b23ab82c30ac54c525a9310642b913e225f92e51590bb04af76f6c46d9b",
+      "start_bridge.py": "40adee6cb0d1cbcbf61fce1068cfef71cf439d371a7554c5a8b4f96fe11a9008"
+    },
+    "codexRegistration": "Root verifies separately; this file reports direct MCP client tests"
+  },
+  "asset": {
+    "id": "ruleroom-reactor-beacon-v1",
+    "meshObjects": 19,
+    "triangles": 1616,
+    "materials": 4,
+    "dimensionsMetres": [
+      1.1200000047683716,
+      1.1200000047683716,
+      1.6800000667572021
+    ],
+    "files": {
+      "reactor_beacon-preview.png": {
+        "bytes": 439275,
+        "sha256": "a126a1087c13deed42dc75b7031569b6b19373f94e00d0100289e20b330269f8"
+      },
+      "reactor_beacon.blend": {
+        "bytes": 120435,
+        "sha256": "48032093303c67b6b6bf739e1f1fe722104f34ba64ab51ee927be13907cd41e0"
+      },
+      "reactor_beacon.fbx": {
+        "bytes": 86220,
+        "sha256": "c3680322ebf144a5bc186029c6b24ae4a013976d940d1a7a5615df8bee97e3b0"
+      },
+      "reactor_beacon.glb": {
+        "bytes": 110932,
+        "sha256": "6715be64e02d44df4d5a482b7139d918bdc955f48770188299ae072cfaf33aee"
+      }
+    },
+    "roundTrip": {
+      "blender": "5.2.2 LTS",
+      "results": [
+        {
+          "format": ".fbx",
+          "meshes": 19,
+          "triangles": 1616,
+          "dimensionsMetres": [
+            1.1200000047683716,
+            1.1200000047683716,
+            1.6800001579927866
+          ],
+          "uvPresent": true,
+          "passed": true
+        },
+        {
+          "format": ".glb",
+          "meshes": 19,
+          "triangles": 1616,
+          "dimensionsMetres": [
+            1.1200000047683716,
+            1.1200000047683716,
+            1.6800000667572021
+          ],
+          "uvPresent": true,
+          "passed": true
+        }
+      ],
+      "scope": "Blender importer round-trip only; not Roblox importer"
+    },
+    "visualRenderInspected": true,
+    "RobloxImportValidated": false
+  },
+  "imageHelpers": {
+    "passed": true,
+    "scope": "Real render decoding, image-array operations, Sobel edges and identity SSIM; not subjective asset quality",
+    "versions": {
+      "opencv": "5.0.0",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "Pillow": "13.0.0",
+      "skimage": "0.26.0"
+    },
+    "imageShape": [
+      640,
+      640,
+      3
+    ],
+    "identitySSIM": 1,
+    "maxSobel": 750.0
+  },
+  "dependencyConsistency": {
+    "mcpPipCheck": "PASS",
+    "imagePipCheck": "PASS",
+    "bootstrapIdempotence": "PASS"
+  },
+  "sourceSyntax": {
+    "PythonCompile": "PASS",
+    "PowerShellParser": "PASS"
+  },
+  "scope": "Local Blender/MCP and asset pipeline proof; game sources and mapping unchanged",
+  "limits": [
+    "GUI capture and controls not tested; background bridge uses renders",
+    "Actual Roblox importer/materials/collisions/scale and mobile benchmark remain open",
+    "Not all third-party skill helper scenarios were executed"
+  ],
+  "correctedDuringSetup": [
+    "In-memory add-on activation needed default_set=True without saving preferences",
+    "Closed Windows loopback port times out; wrapper now probes binding before starting",
+    "GLB initially included another scene default cube; active-scene-only export and round-trip now pass"
+  ]
+}
