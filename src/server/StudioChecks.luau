@@ -50,7 +50,10 @@ function StudioChecks.AssertIdleRestoration()
 	local laser = arena:FindFirstChild("Laser")
 	assert(laser and laser:IsA("BasePart"), "Laser exists")
 	assert(laser.Transparency == 1 and not laser.CanCollide, "Laser is hidden and non-collidable")
-	assert(laser.Size == Vector3.new(60, 1, 1), "Spinner must restore the authored beam size")
+	assert(
+		laser.Size == Vector3.new(Config.ArenaHalfSize * 2, 1, 1),
+		"Spinner must restore the authored beam size"
+	)
 	local effects = arena:FindFirstChild("RuleEffects")
 	assert(not effects or #effects:GetChildren() == 0, "Temporary hazards, platforms and pickups are removed")
 	for _, player in Players:GetPlayers() do

@@ -1,0 +1,560 @@
+{
+  "date": "2026-10-24",
+  "candidate": "feat/laboratory-expansion",
+  "level": "native_two_client_rules_and_station_plus_clean_solo_production_UI",
+  "buildSha256": "B00DBE5AE27467872E4C61A9F498231457A33FD9B9EDC945EDAB3D6712193DC0",
+  "publishedToRoblox": false,
+  "placeId": 0,
+  "arena": {
+    "before": [
+      60,
+      60
+    ],
+    "after": [
+      84,
+      84
+    ],
+    "tiles": 36,
+    "tileSize": [
+      14,
+      2,
+      14
+    ]
+  },
+  "hub": {
+    "before": [
+      52,
+      30
+    ],
+    "after": [
+      180,
+      144
+    ],
+    "courseCheckpoints": 7,
+    "landingSize": [
+      12,
+      12
+    ],
+    "ruleTerminals": 10
+  },
+  "acceptedRuleCases": [
+    {
+      "rule": "SafeColor",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "LaserSweep",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player1",
+          "health": 47.197574615478516,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "LowGravity",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 5,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 4,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "RedLight",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 2,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 3,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "LavaRise",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "MeteorRain",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "DisappearingTiles",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "SafeZone",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "Spinner",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player2",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "ReactorRush",
+      "behavior": "solve",
+      "completed": true,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": null,
+      "charge": 11,
+      "goal": 5,
+      "finale": true,
+      "players": [
+        {
+          "name": "Player2",
+          "health": 88.16413879394531,
+          "survived": 1,
+          "stars": 6,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player1",
+          "health": 100,
+          "survived": 1,
+          "stars": 5,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    }
+  ],
+  "negativeCases": [
+    {
+      "rule": "SafeColor",
+      "behavior": "mistake",
+      "completed": false,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": "achieved",
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player2",
+          "health": 0,
+          "survived": 0,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player1",
+          "health": 0,
+          "survived": 0,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "DisappearingTiles",
+      "behavior": "mistake",
+      "completed": false,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": "achieved",
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player2",
+          "health": 0,
+          "survived": 0,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player1",
+          "health": 0,
+          "survived": 0,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "SafeZone",
+      "behavior": "mistake",
+      "completed": false,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": "achieved",
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player2",
+          "health": 0,
+          "survived": 0,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player1",
+          "health": 0,
+          "survived": 0,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    },
+    {
+      "rule": "LavaRise",
+      "behavior": "mistake",
+      "completed": false,
+      "fixtureOk": true,
+      "cleanupOk": true,
+      "negativeOutcome": "achieved",
+      "charge": 0,
+      "goal": 0,
+      "finale": false,
+      "players": [
+        {
+          "name": "Player2",
+          "health": 0,
+          "survived": 0,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        },
+        {
+          "name": "Player1",
+          "health": 0,
+          "survived": 0,
+          "stars": 0,
+          "survivalAwardOnce": true,
+          "completionAwardOnce": true
+        }
+      ]
+    }
+  ],
+  "stationMixed": {
+    "ok": true,
+    "checkpoints": 7,
+    "explorerEndRoundDisplacement": 0,
+    "maxRelativeHeight": 8.607253909111023,
+    "practiceFinished": true,
+    "onlyQueuedAdmitted": true,
+    "explorerAwards": 0,
+    "gravitySamples": 280,
+    "ruleCompleted": true,
+    "practiceCanceledOnJoin": true,
+    "practiceBest": 9.61,
+    "level": "two_native_clients_production_rules_roster_station_mock_awards",
+    "stayedOut": true,
+    "joinedAtNextAdmission": true
+  },
+  "fallRecovery": {
+    "state": "Running",
+    "sameTimer": true,
+    "after": 2,
+    "level": "injected_fall_fault_after_native_movement",
+    "before": 2,
+    "nearCheckpoint": true
+  },
+  "inputChecks": {
+    "level": "native_Studio_VirtualInput_experience_UI_not_physical_touch",
+    "desktopExplore": {
+      "activated": 1,
+      "lobbyOnly": true
+    },
+    "phoneLandscape": {
+      "device": "iphone_14",
+      "nominalResolution": [
+        844,
+        390
+      ],
+      "viewport": [
+        749,
+        389
+      ],
+      "join": {
+        "activated": 1,
+        "lobbyOnly": false
+      },
+      "exploreDuringVoting": {
+        "activated": 1,
+        "lobbyOnly": true
+      },
+      "guidePromptOpened": true,
+      "guideFooterClosed": true,
+      "menuHiddenWhileGuideOpen": true,
+      "wardrobePromptOpened": true,
+      "wardrobeClosed": true
+    },
+    "malformedIntents": {
+      "cases": 6,
+      "observedEconomicChange": false,
+      "scope": "original solo server intent validation; no schema/economy change afterward"
+    }
+  },
+  "network": {
+    "baseline": {
+      "inboundMs": 0,
+      "outboundMs": 0,
+      "jitterMs": 0,
+      "lossPercent": 0
+    },
+    "stressBeforeTimingFix": {
+      "inboundMs": 500,
+      "outboundMs": 500,
+      "lossPercentEachDirection": 0.5,
+      "result": "not_all_survived; raw pre-fix report retained; final timing not reaccepted under this extreme profile"
+    },
+    "finalStudioProfile": "normal local network, no artificial delay/loss"
+  },
+  "validation": {
+    "build": true,
+    "styLua": true,
+    "selene": true,
+    "compile": true,
+    "worldSafety": true,
+    "pureTests": {
+      "practice": 17,
+      "profileData": 59,
+      "ruleDeck": 22519,
+      "ruleMath": 69
+    },
+    "profileServiceLocalAdapters": 27,
+    "cloudDataStore": false,
+    "vault": {
+      "notes": 20,
+      "brokenTargets": 0
+    }
+  },
+  "limits": [
+    "Peak two native clients, not 12",
+    "No cloud publication or real DataStore rejoin",
+    "No physical phone/gamepad or human playtest",
+    "No long performance acceptance",
+    "Known asset type warning 203785492 remains; no matching project Sound found"
+  ],
+  "rawFiles": [
+    "laboratory/baseline-before-timing-fix.json",
+    "laboratory/delayed-before-timing-fix.json",
+    "laboratory/final-timing-and-faults.json",
+    "laboratory/final-lunar-participants.json",
+    "laboratory/initial-narrow-course-mixed.json",
+    "laboratory/gravity-transition-before-fix.json",
+    "laboratory/final-mixed-roles.json"
+  ]
+}

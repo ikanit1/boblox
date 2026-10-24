@@ -4,39 +4,95 @@
   "tree": {
     "$className": "DataModel",
     "Workspace": {
-      "$properties": { "FilteringEnabled": true, "Gravity": 196.2 },
-      "Arena": { "$path": "assets/Arena.rbxmx" }
+      "$properties": {
+        "FilteringEnabled": true,
+        "Gravity": 196.2
+      },
+      "Arena": {
+        "$path": "assets/Arena.rbxmx"
+      }
     },
     "Lighting": {
       "$properties": {
-        "Ambient": [0.18, 0.20, 0.30],
-        "OutdoorAmbient": [0.35, 0.38, 0.48],
+        "Ambient": [
+          0.26,
+          0.31,
+          0.4
+        ],
+        "OutdoorAmbient": [
+          0.4,
+          0.45,
+          0.53
+        ],
         "Brightness": 2,
-        "ClockTime": 14,
-        "GlobalShadows": true
+        "ClockTime": 15.5,
+        "GlobalShadows": true,
+        "ExposureCompensation": 0.1
+      },
+      "StationBloom": {
+        "$className": "BloomEffect",
+        "$properties": {
+          "Intensity": 0.12,
+          "Size": 20,
+          "Threshold": 1.5
+        }
+      },
+      "StationColor": {
+        "$className": "ColorCorrectionEffect",
+        "$properties": {
+          "Brightness": 0.015,
+          "Contrast": 0.06,
+          "Saturation": 0.05
+        }
       }
     },
     "ReplicatedStorage": {
-      "RuleRoomShared": { "$path": "src/shared" },
-      "RuleRoomState": { "$className": "Folder" },
+      "RuleRoomShared": {
+        "$path": "src/shared"
+      },
+      "RuleRoomState": {
+        "$className": "Folder"
+      },
       "RuleRoomRemotes": {
         "$className": "Folder",
-        "Vote": { "$className": "RemoteEvent" },
-        "ProfileAction": { "$className": "RemoteEvent" }
+        "Vote": {
+          "$className": "RemoteEvent"
+        },
+        "ProfileAction": {
+          "$className": "RemoteEvent"
+        },
+        "StationAction": {
+          "$className": "RemoteEvent"
+        }
       }
     },
     "ServerScriptService": {
-      "RuleRoomServer": { "$path": "src/server" }
+      "RuleRoomServer": {
+        "$path": "src/server"
+      }
     },
     "StarterPlayer": {
-      "$properties": { "CameraMaxZoomDistance": 60 },
+      "$properties": {
+        "CameraMaxZoomDistance": 90
+      },
       "StarterPlayerScripts": {
-        "RuleRoomClient": { "$path": "src/client" }
+        "RuleRoomClient": {
+          "$path": "src/client"
+        }
       }
     },
     "StarterGui": {
-      "RuleRoomHUD": { "$path": "assets/RuleRoomHUD.rbxmx" }
+      "RuleRoomHUD": {
+        "$path": "assets/RuleRoomHUD.rbxmx"
+      },
+      "StationHUD": {
+        "$path": "assets/StationHUD.rbxmx"
+      }
     },
-    "SoundService": { "$properties": { "RespectFilteringEnabled": true } }
+    "SoundService": {
+      "$properties": {
+        "RespectFilteringEnabled": true
+      }
+    }
   }
 }

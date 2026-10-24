@@ -11,6 +11,7 @@ import itertools
 from pathlib import Path
 import struct
 import xml.etree.ElementTree as ET
+import build_station
 
 ROOT = Path(__file__).resolve().parents[1]
 NAVY = (18, 30, 50)
@@ -175,10 +176,10 @@ def arena():
     world = item(root, "Model", "Arena")
     attrs(world, {"Source": "tools/build_assets.py", "Design": "RuleRoom original primitives; no external assets"})
     tiles = item(world, "Folder", "Tiles")
-    for row, z in enumerate(range(-25, 26, 10)):
-        for col, x in enumerate(range(-25, 26, 10)):
+    for row, z in enumerate(range(-35, 36, 14)):
+        for col, x in enumerate(range(-35, 36, 14)):
             color_name, russian, symbol, color = COLORS[(row * 6 + col) % 4]
-            tile = part(tiles, f"Tile_{row + 1:02d}_{col + 1:02d}", (10, 2, 10), (x, 0, z), color)
+            tile = part(tiles, f"Tile_{row + 1:02d}_{col + 1:02d}", (14, 2, 14), (x, 0, z), color)
             attrs(tile, {"ColorName": color_name})
             face = surface(tile, "TileLabel", face=1, canvas=(320, 320))
             label(face, "Symbol", symbol, (1, -32, 0.62, 0), (0, 16, 0, 22), color=NAVY, text_size=126, bold=True, align=2)
@@ -191,68 +192,10 @@ def arena():
             prop(stroke, "float", "Transparency", 0.25)
 
     part(world, "ArenaSpawn", (1, 1, 1), (0, 5, 0), transparency=1, collide=False)
-    laser = part(world, "Laser", (60, 1, 1), (0, 2.1, -29), COLORS[1][3], transparency=1, collide=False, material=288)
+    laser = part(world, "Laser", (84, 1, 1), (0, 2.1, -41.5), COLORS[1][3], transparency=1, collide=False, material=288)
     attrs(laser, {"Purpose": "Server-controlled jump hazard; hidden outside LaserSweep"})
 
-    architecture = item(world, "Folder", "Architecture")
-    # The arena has no supporting slab: unsafe tiles reveal the elimination void.
-    for x in (-31, 31):
-        part(architecture, f"SideWall_{x}", (2, 20, 64), (x, 9, 0))
-        part(architecture, f"SideTrim_{x}", (0.2, 0.25, 60), (x - (1.05 if x > 0 else -1.05), 3, 0), COLORS[0][3], collide=False, material=288)
-    part(architecture, "BackWall", (64, 20, 2), (0, 9, -31))
-    part(architecture, "ViewingWall", (64, 10, 1), (0, 4, 31), (122, 169, 190), transparency=0.75, material=1568)
-    part(architecture, "ViewingRail", (64, 0.3, 0.6), (0, 9.15, 31), COLORS[2][3], material=288)
-    for x in (-30, 30):
-        for z in (-30, 30):
-            part(architecture, f"Pillar_{x}_{z}", (2, 22, 2), (x, 10, z), (39, 57, 78))
-    part(architecture, "TopGantry", (64, 1.5, 3), (0, 19, -30), (39, 57, 78))
-    sign = part(architecture, "MainSign", (42, 8, 0.5), (0, 12, -29.8), PANEL, collide=False)
-    sign_face = surface(sign, "MainSignFace", face=2, canvas=(1260, 240))
-    label(sign_face, "Title", "ПРАВИЛА МЕНЯЮТСЯ", (1, -32, 0.58, 0), (0, 16, 0, 12), color=COLORS[2][3], text_size=80, bold=True, align=2, scaled=True)
-    label(sign_face, "Subtitle", "6 ИСПЫТАНИЙ  /  ОДНА КОМАНДА", (1, -32, 0.28, 0), (0, 16, 0.65, 0), color=WHITE, text_size=38, align=2, scaled=True)
-    for x in (-25, 25):
-        luminaire = part(architecture, f"LightPanel_{x}", (7, 1, 3), (x, 17, -28), (204, 237, 255), material=288)
-        light = item(luminaire, "PointLight", "SoftArenaLight")
-        prop(light, "Color3", "Color", (198, 226, 255))
-        prop(light, "float", "Brightness", 1)
-        prop(light, "float", "Range", 42)
-
-    # Research-room facade: decoration stays on walls, outside the playable grid.
-    for side in (-1, 1):
-        for index, z in enumerate((-22, -10, 2, 14, 26)):
-            part(architecture, f"WallRib_{side}_{index}", (0.35, 10, 0.65), (side * 29.85, 10, z), (46, 66, 89), collide=False)
-            part(architecture, f"WallSignal_{side}_{index}", (0.12, 3, 0.3), (side * 29.6, 12, z), COLORS[0 if side < 0 else 1][3], collide=False, material=288)
-        part(architecture, f"CeilingRail_{side}", (0.6, 0.5, 64), (side * 26, 20, 0), (45, 64, 83), collide=False)
-    for x in (-22, 22):
-        part(architecture, f"BackSignal_{x}", (1, 7, 0.2), (x, 12, -29.8), COLORS[3][3], collide=False, material=288)
-
-    lobby = item(world, "Folder", "Lobby")
-    part(lobby, "LobbyPlatform", (52, 2, 30), (0, 0, 52), (39, 52, 73))
-    spawn = part(world, "LobbySpawn", (8, 1, 8), (0, 3, 52), COLORS[0][3], cls="SpawnLocation", transparency=1, collide=False)
-    prop(spawn, "bool", "Neutral", True)
-    prop(spawn, "float", "Duration", 0)
-    prop(spawn, "bool", "Enabled", True)
-    part(lobby, "WelcomePad", (10, 0.15, 10), (0, 1.08, 52), COLORS[0][3], collide=False)
-    for x in (-26, 26):
-        part(lobby, f"LobbyRail_{x}", (0.5, 3.2, 30), (x, 2.5, 52), (73, 95, 120))
-    part(lobby, "LobbyBackRail", (52, 3.2, 0.5), (0, 2.5, 67), (73, 95, 120))
-    part(lobby, "ViewingEdge", (52, 0.3, 0.5), (0, 1.15, 37), COLORS[2][3], material=288)
-    # All lobby signs face the spawn and use ordinary editable SurfaceGui text.
-    lobby_sign = part(lobby, "HowToPlayBoard", (22, 8, 0.7), (0, 6, 65.5), PANEL)
-    howto = surface(lobby_sign, "Instructions", face=5, canvas=(990, 360))
-    label(howto, "Heading", "КОМНАТА ПРАВИЛ", (1, -40, 0.23, 0), (0, 20, 0.06, 0), color=COLORS[2][3], text_size=46, bold=True, align=2, scaled=True)
-    label(howto, "Steps", "6 ИСПЫТАНИЙ В КАЖДОМ ЗАБЕГЕ\nВЫБЫЛ? ВЕРНЁШЬСЯ В СЛЕДУЮЩЕМ\nВ ФИНАЛЕ ЗАРЯДИМ РЕАКТОР ВМЕСТЕ", (1, -48, 0.58, 0), (0, 24, 0.31, 0), text_size=35, align=2, scaled=True)
-    for side in (-1, 1):
-        part(lobby, f"LobbyAccent_{side}", (0.4, 0.15, 25), (side * 24, 1.1, 52), COLORS[0 if side < 0 else 1][3], collide=False, material=288)
-        pedestal = part(lobby, f"ResearchConsole_{side}", (4, 3, 4), (side * 19, 2.5, 57), (32, 46, 67))
-        part(lobby, f"ConsoleScreen_{side}", (3.5, 0.2, 3.5), (side * 19, 4.1, 57), COLORS[0 if side < 0 else 3][3], collide=False, material=288)
-        attrs(pedestal, {"Purpose": "Original visual research console; no gameplay reward"})
-    # Four sculptural markers form a clear original color/symbol legend.
-    legend = item(lobby, "Folder", "ColorLegend")
-    for index, (name, russian, symbol, color) in enumerate(COLORS):
-        block = part(legend, f"Marker_{name}", (7, 3.5, 1), ((index - 1.5) * 9, 2.75, 39), color)
-        face = surface(block, "LegendFace", face=2, canvas=(350, 175))
-        label(face, "SymbolAndName", f"{symbol}\n{russian}", (1, -16, 1, -16), (0, 8, 0, 8), color=NAVY, text_size=56, bold=True, align=2, scaled=True)
+    build_station.build(world, globals())
     return root
 
 
@@ -372,6 +315,38 @@ def hud():
     label(shop, "Message", "Зарабатывай монеты в испытаниях. Следы меняют только внешний вид.", (1, -24, 0, 38), (0, 12, 1, -43), color=MUTED, text_size=12, align=2, scaled=True)
     return root
 
+def station_hud():
+    root = model_root()
+    gui = item(root, "ScreenGui", "StationHUD")
+    prop(gui, "bool", "ResetOnSpawn", False)
+    prop(gui, "token", "ScreenInsets", 2)
+    prop(gui, "bool", "ClipToDeviceSafeArea", True)
+    prop(gui, "int", "DisplayOrder", 9)
+    prop(gui, "token", "ZIndexBehavior", 1)
+    bar = centered(frame(gui, "StationBar", (1, -24, 0, 104), (0.5, 0, 0, 32)))
+    prop(bar, "bool", "Visible", False)
+    width_bound(bar, 680, 120)
+    corner(bar, 10)
+    label(bar, "Status", "ЛАБОРАТОРИЯ / СВОБОДНЫЙ РЕЖИМ", (1, -24, 0, 25), (0, 12, 0, 6), color=COLORS[2][3], text_size=17, bold=True, align=2, scaled=True)
+    label(bar, "Detail", "Паркур слева · архив правил справа · галерея впереди", (1, -24, 0, 20), (0, 12, 0, 34), color=MUTED, text_size=13, align=2, scaled=True)
+    button(bar, "Join", "В ИСПЫТАНИЯ", (0.5, -18, 0, 44), (0, 12, 0, 59), color=COLORS[2][3], ink=NAVY)
+    button(bar, "Explore", "ИССЛЕДОВАТЬ", (0.5, -18, 0, 44), (0.5, 6, 0, 59), color=COLORS[0][3], ink=NAVY)
+    # An unobtrusive top-right opt-out remains available while queued in the lobby.
+    toggle = button(gui, "ExploreToggle", "ЛАБОРАТОРИЯ", (0, 155, 0, 44), (1, -168, 0, 178), text_size=13)
+    prop(toggle, "bool", "Visible", False)
+    guide = frame(gui, "Guide", (1, -24, 0, 300), (0.5, 0, 0.5, 0))
+    prop(guide, "Vector2", "AnchorPoint", (0.5, 0.5))
+    prop(guide, "bool", "Visible", False)
+    prop(guide, "bool", "Active", True)
+    width_bound(guide, 600, 360)
+    corner(guide, 12)
+    label(guide, "Heading", "АРХИВ ИСПЫТАНИЙ", (1, -40, 0, 45), (0, 20, 0, 8), color=COLORS[2][3], text_size=23, bold=True, scaled=True)
+    close = button(guide, "Close", "ЗАКРЫТЬ", (0, 144, 0, 44), (0.5, 0, 1, -52), color=COLORS[0][3], ink=NAVY)
+    prop(close, "Vector2", "AnchorPoint", (0.5, 0))
+    label(guide, "Body", "", (1, -40, 1, -125), (0, 20, 0, 60), text_size=20, scaled=True)
+    return root
+
+
 def write_model(path: Path, tree):
     ET.indent(tree, space="  ")
     ET.ElementTree(tree).write(path, encoding="utf-8", xml_declaration=True)
@@ -381,9 +356,13 @@ def write_model(path: Path, tree):
 
 
 def main():
+    global _ids
     assets = ROOT / "assets"
     assets.mkdir(parents=True, exist_ok=True)
-    for filename, tree in (("Arena.rbxmx", arena()), ("RuleRoomHUD.rbxmx", hud())):
+    for filename, factory in (("Arena.rbxmx", arena), ("RuleRoomHUD.rbxmx", hud), ("StationHUD.rbxmx", station_hud)):
+        # Referents are local to each XML document. World edits must not renumber every HUD node.
+        _ids = itertools.count(1)
+        tree = factory()
         path = assets / filename
         count = write_model(path, tree)
         print(f"Built {path.name}: {count} editable instances")

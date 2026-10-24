@@ -261,6 +261,9 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 	selectTab("Cosmetics")
 
 	return {
+		Open = function()
+			setVisible(true)
+		end,
 		SetPhase = function(newPhase: string)
 			phase = newPhase
 			openButton.Visible = phase ~= "Rule"

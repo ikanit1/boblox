@@ -44,7 +44,8 @@ child(child(root, 'RulePanel'), 'Timer')
 remotes = child(child(tree, 'ReplicatedStorage'), 'RuleRoomRemotes', 'Folder')
 child(remotes, 'Vote', 'RemoteEvent')
 child(remotes, 'ProfileAction', 'RemoteEvent')
-assert len([item for item in tree.iter('Item') if item.attrib['class'] == 'RemoteEvent']) == 2
+child(remotes, 'StationAction', 'RemoteEvent')
+assert len([item for item in tree.iter('Item') if item.attrib['class'] == 'RemoteEvent']) == 3
 assert not any(item.attrib['class'] == 'RemoteFunction' for item in tree.iter('Item'))
 report = {
     'verification_level': 'static_place_structure',

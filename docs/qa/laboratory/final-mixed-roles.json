@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "checkpoints": 7,
+  "explorerEndRoundDisplacement": 0,
+  "maxRelativeHeight": 8.607253909111023,
+  "practiceFinished": true,
+  "onlyQueuedAdmitted": true,
+  "explorerAwards": 0,
+  "gravitySamples": 280,
+  "ruleCompleted": true,
+  "practiceCanceledOnJoin": true,
+  "practiceBest": 9.61,
+  "level": "two_native_clients_production_rules_roster_station_mock_awards",
+  "stayedOut": true,
+  "joinedAtNextAdmission": true
+}

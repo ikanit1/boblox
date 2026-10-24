@@ -1,0 +1,11 @@
+{
+  "ok": false,
+  "explorerEndRoundDisplacement": 0,
+  "maxRelativeHeight": 8.807878971099854,
+  "onlyQueuedAdmitted": true,
+  "gravitySamples": 282,
+  "error": "ServerScriptService.QAStationMixedFixture:44: Mixed-role test deadline\nServerScriptService.QAStationMixedFixture:44 function await\nServerScriptService.QAStationMixedFixture:116\nServerScriptService.QAStationMixedFixture:46\n",
+  "level": "two_native_clients_production_rules_roster_station_mock_awards",
+  "stayedOut": true,
+  "ruleCompleted": true
+}

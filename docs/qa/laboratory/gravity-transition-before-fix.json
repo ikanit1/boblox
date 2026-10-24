@@ -1,0 +1,11 @@
+{
+  "ok": false,
+  "explorerEndRoundDisplacement": 0,
+  "maxRelativeHeight": 11.39904260635376,
+  "onlyQueuedAdmitted": true,
+  "gravitySamples": 282,
+  "error": "ServerScriptService.QAStationMixedFixture:112: Lobby gravity/isolation failed\nServerScriptService.QAStationMixedFixture:112\nServerScriptService.QAStationMixedFixture:46\n",
+  "level": "two_native_clients_production_rules_roster_station_mock_awards",
+  "stayedOut": true,
+  "ruleCompleted": true
+}
