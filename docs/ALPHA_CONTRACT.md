@@ -3,7 +3,7 @@
 Canonical repository: https://github.com/ikanit1/boblox, branch main. This supersedes CONTRACT.md (historical prototype). Rojo files are authoritative. User explicitly expanded the prototype into a full playable mode; GitHub pushes are authorized. Cloud game publication and paid products are separate.
 
 ## Gameplay
-One room, 1–12 intended players, six trials per run. Voting 8s -> five distinct drawn trials -> ReactorRush cooperative finale -> Results 7s. Trials target 14–22s including warnings; breaks 3s. Death eliminates for this trial only; next trial restores health and admits respawned players and late joins. Never spawn mid-hazard. No paid revival. Solo works; runs last about 2–3 minutes.
+One laboratory complex, 1–12 intended players, six trials per run. Voting 8s -> five distinct drawn trials -> ReactorRush cooperative finale -> Results 7s. Trials last roughly 14–27s including warnings; breaks 3s. Death eliminates for this trial only; next trial restores health and admits respawned players and late joins. Never spawn mid-hazard. No paid revival. Solo works; runs last about 2–4 minutes.
 
 Rule catalog: SafeColor, LaserSweep, LowGravity (existing), RedLight (stop on red, grace before movement checks), LavaRise (safe platforms), MeteorRain (marked impacts), DisappearingTiles (warned waves), SafeZone (marked safe zone), Spinner (jump a rotating beam), ReactorRush (collect energy together while dodging a sweep). Every hazard warns, validates on server, and cleans up unconditionally.
 
@@ -17,7 +17,9 @@ Modes Balanced / Reflex / Cosmic alter deck weights, not movement stats or rewar
 Agents are not alone; don't revert others' edits. Only root controls Studio.
 
 ## World
-Preserve Workspace.Arena, Tiles (36 anchored 10x2x10 Parts at x/z -25,-15,-5,5,15,25, y=0), ColorName Blue/Pink/Yellow/Green; ArenaSpawn, LobbySpawn, hidden noncollidable Laser. Dynamic hazards under RuleEffects, destroyed on reset. Decor must not create safety floors or obstruct jump arcs. Cosmetic trails have no collision. Lobby outside arena. Bounded effects.
+Preserve Workspace.Arena, Tiles (36 anchored 14x2x14 Parts at x/z -35,-21,-7,7,21,35, y=0), ColorName Blue/Pink/Yellow/Green; ArenaSpawn (0,5,0), LobbySpawn (0,4,158), hidden noncollidable Laser. The arena spans 84x84. Lobby platform spans 180x144, X -90..90 / Z 48..192; a narrow viewing bridge stops at the arena boundary. Dynamic hazards under RuleEffects, destroyed on reset. No permanent collision inside the trial grid; no supporting slab or jump obstruction. World safety tests enforce this boundary. Native original scenery, no uploaded meshes or paid assets.
+
+Optional station: seven ordered parkour checkpoints, ten rule-guide terminals, wardrobe terminal, viewing gallery and live server score board. Explore keeps the player out of admissions and voting until Join. Default remains queued. StartPractice is a proximity-only server action, permitted outside a trial; it switches to Explore. Falling restores the last checkpoint. A valid ordered finish records session-only PracticeBestSeconds, explicitly labeled as temporary. No currency, XP or run-win reward for practice/exploration. Join cancels practice and admits only at a normal trial boundary. Lunar gravity is applied only to admitted trial characters with temporary mass-scaled VectorForces; global scene gravity stays 196.2. Restore destroys every force/attachment. Source: tools/build_station.py and Station.server/client scripts.
 
 ## Protocol
 ReplicatedStorage.RuleRoomState attributes:
@@ -26,7 +28,9 @@ ReplicatedStorage.RuleRoomState attributes:
 - ModeId: Balanced / Reflex / Cosmic; VotesBalanced, VotesReflex, VotesCosmic integers.
 - TeamCharge, TeamGoal numbers; FinaleSuccess boolean; ResultsText string; AliveCount number.
 
-ReplicatedStorage.RuleRoomRemotes contains authored Vote and ProfileAction RemoteEvents. Vote: FireServer(modeId), server allowlist, Voting phase only, replace previous vote, remove on leave, rate limit. ProfileAction: FireServer(action, id), action Purchase/Equip/ClaimQuest; server allowlisted id, price, ownership, eligibility and balance, rate limit. Never client-supplied money/scores/positions/prices.
+ReplicatedStorage.RuleRoomRemotes contains authored Vote, ProfileAction and StationAction RemoteEvents. Vote: FireServer(modeId), server allowlist, Voting phase only, replace previous vote, remove on leave/Explore, rate limit. ProfileAction: FireServer(action, id), action Purchase/Equip/ClaimQuest; server allowlisted id, price, ownership, eligibility and balance, rate limit. StationAction: FireServer("Explore" | "Join"), living character within the station, outside active participation, 0.4s server rate limit. StartPractice uses the authored ProximityPrompt only, checks exact ownership in the lobby, <=13 studs, living character, phase membership and rate. Guide/wardrobe prompts display local information; purchases still use ProfileAction. Never client-supplied money/scores/positions/prices/checkpoint/time.
+
+Station player attributes: LobbyOnly boolean; PracticeState Idle/Running/Finished; PracticeCheckpoint 0..7; PracticeStartedAt server time or 0; PracticeLastSeconds and PracticeBestSeconds session-only positive times. Main ignores LobbyOnly in queued counts, voting and trial admission. EndRound does not teleport an explorer. Session profile persistence schema is unchanged.
 
 Player attributes: InRound, Eliminated, RunScore, RunSurvived, Coins, XP, Level, Wins, EquippedTrail, Owned_<id> booleans, DataStatus (Session/Loading/Saved/Unavailable/Busy), Quest_survive/stars/runs counts, Claimed_survive/stars/runs booleans, ActionMessage. leaderstats Score and Best remain session scores. RunScore and RunSurvived reset only at BeginRun, not per-trial StartRound.
 

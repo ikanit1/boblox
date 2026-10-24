@@ -6,6 +6,8 @@ $rojo = Find-RuleRoomTool 'rojo'
 $python = (Get-Command python -ErrorAction Stop).Source
 & $python tools/build_assets.py
 if ($LASTEXITCODE -ne 0) { throw 'Asset generation failed.' }
+& $python tools/verify_world.py
+if ($LASTEXITCODE -ne 0) { throw 'World geometry verification failed.' }
 if (-not $SkipChecks) {
     & $python tools/check_sources.py
     if ($LASTEXITCODE -ne 0) { throw 'Source checks failed.' }

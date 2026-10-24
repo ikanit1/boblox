@@ -78,6 +78,8 @@ function ArenaRules.new(arena: Model)
 	local laser = requiredPart(arena, "Laser")
 	local laserCFrame, laserColor, laserSize = laser.CFrame, laser.Color, laser.Size
 	local originalGravity = Workspace.Gravity
+	local lunarForces: { { root: BasePart, humanoid: Humanoid, attachment: Attachment, force: VectorForce } } =
+		{}
 	local previousEffects = arena:FindFirstChild("RuleEffects")
 	if previousEffects then
 		previousEffects:Destroy()
@@ -114,6 +116,11 @@ function ArenaRules.new(arena: Model)
 		end
 	end
 	local function restore()
+		for _, binding in lunarForces do
+			binding.force:Destroy()
+			binding.attachment:Destroy()
+		end
+		table.clear(lunarForces)
 		Workspace.Gravity = originalGravity
 		restoreTiles()
 		laser.CFrame = laserCFrame
@@ -205,13 +212,22 @@ function ArenaRules.new(arena: Model)
 		damage: number
 	): (number, number) -> ()
 		local hit = damageGate(1.2)
-		local previousZ = -29.5
+		local edge = Config.ArenaHalfSize - 0.5
+		local previousZ = -edge
 		return function(elapsed)
-			local z = RuleMath.pingPong(elapsed, sweepSeconds, 29.5)
+			local z = RuleMath.pingPong(elapsed, sweepSeconds, edge)
 			laser.CFrame = CFrame.new(0, 1.9, z)
 			context.roster.ForEachAlive(function(player, humanoid, root)
 				if
-					RuleMath.sweptBeamIntersects(bodyBounds(humanoid, root), previousZ, z, 1.9, 0.5, 0.5, 30)
+					RuleMath.sweptBeamIntersects(
+						bodyBounds(humanoid, root),
+						previousZ,
+						z,
+						1.9,
+						0.5,
+						0.5,
+						Config.ArenaHalfSize
+					)
 				then
 					hit(player, humanoid, damage)
 				end
@@ -220,7 +236,7 @@ function ArenaRules.new(arena: Model)
 		end
 	end
 	local function showBeam(warning: boolean)
-		laser.CFrame = CFrame.new(0, 1.9, -29.5)
+		laser.CFrame = CFrame.new(0, 1.9, -Config.ArenaHalfSize + 0.5)
 		laser.Transparency = if warning then 0.45 else 0.05
 		laser.Color = if warning then Color3.fromRGB(255, 210, 88) else Config.Rules.LaserSweep.Accent
 	end
@@ -280,7 +296,7 @@ function ArenaRules.new(arena: Model)
 		showBeam(false)
 		instruction(
 			context,
-			"Прыгай через красный луч! Три касания — поражение."
+			"Прыгай через красный луч! Каждое касание отнимает здоровье."
 		)
 		return context.waitFor(
 			Config.LaserSweep.ActiveSeconds,
@@ -296,10 +312,28 @@ function ArenaRules.new(arena: Model)
 		if not context.waitFor(Config.LowGravity.WarningSeconds, nil) then
 			return false
 		end
-		Workspace.Gravity = originalGravity * Config.LowGravityMultiplier
+		-- Lunar physics belongs only to admitted participants. Changing Workspace.Gravity
+		-- would also change every explorer's jump launch/trajectory in the separate station.
+		context.roster.ForEachAlive(function(_, humanoid, root)
+			local attachment = Instance.new("Attachment")
+			attachment.Name = "RuleRoomLunarAttachment"
+			attachment.Parent = root
+			local force = Instance.new("VectorForce")
+			force.Name = "RuleRoomLunarForce"
+			force.Attachment0 = attachment
+			force.RelativeTo = Enum.ActuatorRelativeTo.World
+			force.ApplyAtCenterOfMass = true
+			force.Force =
+				Vector3.new(0, originalGravity * (1 - Config.LowGravityMultiplier) * root.AssemblyMass, 0)
+			force.Parent = root
+			table.insert(
+				lunarForces,
+				{ root = root, humanoid = humanoid, attachment = attachment, force = force }
+			)
+		end)
 		local stars: { BasePart } = {}
-		for x = -20, 20, 20 do
-			for z = -20, 20, 20 do
+		for x = -Config.TileSize * 2, Config.TileSize * 2, Config.TileSize * 2 do
+			for z = -Config.TileSize * 2, Config.TileSize * 2, Config.TileSize * 2 do
 				table.insert(stars, orb(#stars + 1, Vector3.new(x, 10, z)))
 			end
 		end
@@ -308,6 +342,17 @@ function ArenaRules.new(arena: Model)
 			"Выше прыжок — больше звёзд! ★ дают очки, монеты и опыт."
 		)
 		return context.waitFor(Config.LowGravity.ActiveSeconds, function()
+			for _, binding in lunarForces do
+				binding.force.Force = if binding.root.Parent
+						and not binding.root.Anchored
+						and binding.humanoid.Health > 0
+					then Vector3.new(
+						0,
+						originalGravity * (1 - Config.LowGravityMultiplier) * binding.root.AssemblyMass,
+						0
+					)
+					else Vector3.zero
+			end
 			collect(context, stars, nil)
 		end)
 	end
@@ -372,19 +417,23 @@ function ArenaRules.new(arena: Model)
 	end
 
 	local function lavaRise(context: RuleContext): boolean
-		for x = -20, 20, 20 do
-			for z = -20, 20, 20 do
+		for x = -Config.TileSize * 2, Config.TileSize * 2, Config.TileSize * 2 do
+			for z = -Config.TileSize * 2, Config.TileSize * 2, Config.TileSize * 2 do
 				part(
 					"SafePlatform",
-					Vector3.new(8, 4, 8),
+					Vector3.new(Config.TileSize * 0.8, 4, Config.TileSize * 0.8),
 					Vector3.new(x, 3, z),
 					Color3.fromRGB(70, 180, 230),
 					true
 				)
 			end
 		end
-		local lava =
-			part("Lava", Vector3.new(60, 0.25, 60), Vector3.new(0, 1.15, 0), Config.Rules.LavaRise.Accent)
+		local lava = part(
+			"Lava",
+			Vector3.new(Config.ArenaHalfSize * 2, 0.25, Config.ArenaHalfSize * 2),
+			Vector3.new(0, 1.15, 0),
+			Config.Rules.LavaRise.Accent
+		)
 		lava.Transparency = 0.6
 		instruction(
 			context,
@@ -418,9 +467,17 @@ function ArenaRules.new(arena: Model)
 					table.insert(
 						positions,
 						Vector3.new(
-							math.clamp(root.Position.X, -24, 24),
+							math.clamp(
+								root.Position.X,
+								-Config.ArenaHalfSize + 5.5,
+								Config.ArenaHalfSize - 5.5
+							),
 							0,
-							math.clamp(root.Position.Z, -24, 24)
+							math.clamp(
+								root.Position.Z,
+								-Config.ArenaHalfSize + 5.5,
+								Config.ArenaHalfSize - 5.5
+							)
 						)
 					)
 				end
@@ -493,8 +550,12 @@ function ArenaRules.new(arena: Model)
 			restoreTiles()
 			local doomed: { TileSnapshot } = {}
 			for _, tile in tiles do
-				local x = math.floor((tile.part.Position.X + 25) / 10)
-				local z = math.floor((tile.part.Position.Z + 25) / 10)
+				local x = math.floor(
+					(tile.part.Position.X + Config.ArenaHalfSize - Config.TileSize / 2) / Config.TileSize
+				)
+				local z = math.floor(
+					(tile.part.Position.Z + Config.ArenaHalfSize - Config.TileSize / 2) / Config.TileSize
+				)
 				if (x + z + wave) % 3 == 0 then
 					table.insert(doomed, tile)
 					tile.part.Color = Color3.fromRGB(255, 160, 65)
@@ -531,17 +592,22 @@ function ArenaRules.new(arena: Model)
 
 	local function safeZone(context: RuleContext): boolean
 		local corners = {
-			Vector3.new(-15, 1.15, -15),
-			Vector3.new(15, 1.15, -15),
-			Vector3.new(15, 1.15, 15),
-			Vector3.new(-15, 1.15, 15),
+			Vector3.new(-Config.ArenaHalfSize / 2, 1.15, -Config.ArenaHalfSize / 2),
+			Vector3.new(Config.ArenaHalfSize / 2, 1.15, -Config.ArenaHalfSize / 2),
+			Vector3.new(Config.ArenaHalfSize / 2, 1.15, Config.ArenaHalfSize / 2),
+			Vector3.new(-Config.ArenaHalfSize / 2, 1.15, Config.ArenaHalfSize / 2),
 		}
 		local previous = 0
 		for wave = 1, 3 do
 			local index = (previous + rng:NextInteger(1, 3) - 1) % 4 + 1
 			previous = index
 			local center = corners[index]
-			local zone = part("SafeZone", Vector3.new(18, 0.2, 18), center, Color3.fromRGB(66, 255, 169))
+			local zone = part(
+				"SafeZone",
+				Vector3.new(Config.ArenaHalfSize * 0.6, 0.2, Config.ArenaHalfSize * 0.6),
+				center,
+				Color3.fromRGB(66, 255, 169)
+			)
 			zone.Transparency = 0.25
 			for _, tile in tiles do
 				tile.part.Color = Color3.fromRGB(70, 81, 110)
@@ -550,7 +616,7 @@ function ArenaRules.new(arena: Model)
 				context,
 				"■ БЕГИ В ЗЕЛЁНЫЙ КВАДРАТ! Убежище " .. wave .. "/3."
 			)
-			if not context.waitFor(4.5, nil) then
+			if not context.waitFor(5.5, nil) then
 				return false
 			end
 			local hit = damageGate(0.65)
@@ -562,7 +628,13 @@ function ArenaRules.new(arena: Model)
 				not context.waitFor(1.5, function()
 					context.roster.ForEachAlive(function(player, humanoid, root)
 						if
-							not RuleMath.insideZone(root.Position.X, root.Position.Z, center.X, center.Z, 9)
+							not RuleMath.insideZone(
+								root.Position.X,
+								root.Position.Z,
+								center.X,
+								center.Z,
+								Config.ArenaHalfSize * 0.3
+							)
 						then
 							hit(player, humanoid, 40)
 						end
@@ -577,7 +649,8 @@ function ArenaRules.new(arena: Model)
 	end
 
 	local function spinner(context: RuleContext): boolean
-		laser.Size = Vector3.new(56, 1, 1)
+		local halfLength = RuleMath.spinnerHalfLength(Config.ArenaHalfSize)
+		laser.Size = Vector3.new(halfLength * 2, 1, 1)
 		laser.CFrame = CFrame.new(0, 1.9, 0)
 		laser.Color = Color3.fromRGB(255, 210, 88)
 		laser.Transparency = 0.4
@@ -604,7 +677,7 @@ function ArenaRules.new(arena: Model)
 						RuleMath.spinnerIntersects(
 							bounds,
 							previousAngle + (angle - previousAngle) * step / steps,
-							28,
+							halfLength,
 							0.5
 						)
 					then
@@ -647,14 +720,13 @@ function ArenaRules.new(arena: Model)
 			"Заряды общие для команды! ⚡ собирай бегом, красный луч перепрыгивай."
 		)
 		local charge = 0
-		local sweep = beamUpdate(context, 7, 30)
-		return context.waitFor(19, function(elapsed, delta)
+		local sweep = beamUpdate(context, Config.ReactorRush.SweepSeconds, 30)
+		local completed = context.waitFor(Config.ReactorRush.ActiveSeconds, function(elapsed, delta)
 			sweep(elapsed, delta)
 			collect(context, pickups, function()
 				charge += 1
 				context.state:SetAttribute("TeamCharge", charge)
 				if charge >= goal then
-					context.state:SetAttribute("FinaleSuccess", true)
 					instruction(
 						context,
 						"⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
@@ -662,6 +734,11 @@ function ArenaRules.new(arena: Model)
 				end
 			end)
 		end)
+		context.state:SetAttribute(
+			"FinaleSuccess",
+			RuleMath.finaleSucceeded(charge, goal, completed, context.roster.AliveCount())
+		)
+		return completed
 	end
 
 	local handlers: { [string]: (RuleContext) -> boolean } = {

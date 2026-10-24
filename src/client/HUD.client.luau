@@ -8,6 +8,7 @@ local GuiService = game:GetService("GuiService")
 local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 local StarterGui = game:GetService("StarterGui")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 
 local CollectionPanel = require(script.Parent:WaitForChild("CollectionPanel"))
 local CharacterPresentation = require(script.Parent:WaitForChild("CharacterPresentation"))
@@ -30,6 +31,7 @@ local state = ReplicatedStorage:WaitForChild("RuleRoomState")
 local remotes = ReplicatedStorage:WaitForChild("RuleRoomRemotes")
 local voteRemote = remotes:WaitForChild("Vote") :: RemoteEvent
 local profileRemote = remotes:WaitForChild("ProfileAction") :: RemoteEvent
+local config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
 local economy = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("EconomyConfig"))
 local collection = CollectionPanel.new(root, player, profileRemote, economy)
 local characters = CharacterPresentation.new(player, economy, root.SpectateNext)
@@ -62,7 +64,7 @@ local phase = "Waiting"
 local deadline = 0
 local shownSecond = -1
 local selectedVote: string? = nil
-local lastVoteAt = 0
+local lastVoteAt = -math.huge
 local short = false
 local lastInput = UserInputService:GetLastInputType()
 local reducedMotion = GuiService.ReducedMotionEnabled
@@ -153,7 +155,7 @@ end
 
 local function renderStatus()
 	local points = num(player, "RunScore")
-	status.Visible = phase ~= "Voting" and phase ~= "Results"
+	status.Visible = phase ~= "Voting" and phase ~= "Results" and player:GetAttribute("LobbyOnly") ~= true
 	if player:GetAttribute("InRound") == true and phase == "Rule" then
 		status.Text = string.format(
 			"В ИГРЕ  •  ЗДОРОВЬЕ %d  •  ОЧКИ %d",
@@ -236,9 +238,14 @@ local function renderClock()
 end
 
 local function renderVotes()
+	local acknowledged = player:GetAttribute("VotedMode")
+	selectedVote = nil
 	for _, mode in modes do
 		local button = votePanel.Cards[mode.Id] :: TextButton
-		local selected = selectedVote == mode.Id
+		local selected = acknowledged == mode.Id
+		if selected then
+			selectedVote = mode.Id
+		end
 		button.Text = string.format(
 			"%s%s\n%s\n%d ГОЛОСОВ",
 			if selected then "✓ " else "",
@@ -254,14 +261,12 @@ end
 local applyComposition: () -> ()
 
 local function renderState()
+	local exploring = player:GetAttribute("LobbyOnly") == true
 	local previousPhase = phase
 	phase = str(state, "Phase", "Waiting")
 	deadline = num(state, "PhaseEndsAt")
 	local index = num(state, "RuleIndex")
 	local round = num(state, "Round")
-	if phase == "Voting" and previousPhase ~= "Voting" then
-		selectedVote = nil
-	end
 	local ruleKey = tostring(round) .. ":" .. tostring(index)
 	if phase == "Rule" and ruleKey ~= lastRuleKey then
 		lastRuleKey = ruleKey
@@ -284,14 +289,16 @@ local function renderState()
 			elseif step == index then accent
 			else Color3.fromRGB(54, 70, 91)
 	end
-	teamPanel.Visible = phase == "Rule" and str(state, "RuleId", "") == "ReactorRush"
+	panel.Visible = not exploring
+	root.TrialProgress.Visible = not exploring
+	teamPanel.Visible = not exploring and phase == "Rule" and str(state, "RuleId", "") == "ReactorRush"
 	local charge = num(state, "TeamCharge")
 	local goal = num(state, "TeamGoal", 1)
 	teamPanel.ChargeLabel.Text =
 		string.format("ОБЩАЯ ЭНЕРГИЯ  %d / %d  •  СОБИРАЕМ ВМЕСТЕ", charge, goal)
 	fillBar(teamPanel.Meter.Fill, charge / math.max(1, goal))
-	votePanel.Visible = phase == "Voting"
-	resultsPanel.Visible = phase == "Results"
+	votePanel.Visible = not exploring and phase == "Voting"
+	resultsPanel.Visible = not exploring and phase == "Results"
 	resultsPanel.Heading.Text = if state:GetAttribute("FinaleSuccess") == true
 		then "РЕАКТОР ЗАРЯЖЕН!"
 		else "ЭКСПЕРИМЕНТ ЗАВЕРШЁН"
@@ -300,8 +307,8 @@ local function renderState()
 		"ResultsText",
 		"Каждая попытка помогает лучше узнать комнату."
 	)
-	collection.SetPhase(phase)
-	characters.SetPhase(phase)
+	collection.SetPhase(if exploring then "Lobby" else phase)
+	characters.SetPhase(if exploring then "Lobby" else phase)
 	renderVotes()
 	renderPlayer()
 	renderControls()
@@ -312,6 +319,7 @@ local function renderState()
 	end
 	if
 		phase == "Voting"
+		and not exploring
 		and previousPhase ~= phase
 		and not collection.IsOpen()
 		and not GuiService.MenuIsOpen
@@ -469,6 +477,7 @@ end
 
 local function setMotion(value: boolean)
 	reducedMotion = value
+	gui:SetAttribute("ReducedMotion", value)
 	actions.Motion.Text = if value then "ЭФФЕКТЫ: МИН" else "ЭФФЕКТЫ: ВКЛ"
 	characters.SetReducedMotion(value)
 end
@@ -479,11 +488,13 @@ for index, mode in modes do
 	button.NextSelectionRight = votePanel.Cards[modes[index % #modes + 1].Id]
 	button.NextSelectionDown = actions.Collection
 	connect(button.Activated, function()
-		if phase == "Voting" and not collection.IsOpen() and os.clock() - lastVoteAt >= 0.3 then
+		if
+			phase == "Voting"
+			and not collection.IsOpen()
+			and os.clock() - lastVoteAt >= config.VoteCooldown
+		then
 			lastVoteAt = os.clock()
-			selectedVote = mode.Id
 			voteRemote:FireServer(mode.Id)
-			renderVotes()
 		end
 	end)
 end
@@ -503,6 +514,7 @@ connect(UserInputService.LastInputTypeChanged, function(input)
 	renderControls()
 	if
 		phase == "Voting"
+		and player:GetAttribute("LobbyOnly") ~= true
 		and not collection.IsOpen()
 		and not GuiService.MenuIsOpen
 		and string.find(input.Name, "Gamepad")
@@ -514,9 +526,32 @@ end)
 connect(root:GetPropertyChangedSignal("AbsoluteSize"), applyComposition)
 connect(root.SpectateNext:GetPropertyChangedSignal("Visible"), applyComposition)
 connect(player.AttributeChanged, function(name)
+	if name == "LobbyOnly" then
+		renderState()
+	end
 	renderPlayer()
+	if name == "VotedMode" then
+		renderVotes()
+	end
 	if name == "InRound" or name == "Eliminated" then
 		renderControls()
+	end
+end)
+connect(ProximityPromptService.PromptTriggered, function(prompt, who)
+	if who and who ~= player then
+		return
+	end
+	if player:GetAttribute("InRound") == true then
+		return
+	end
+	local parent = prompt.Parent
+	if
+		parent
+		and parent:IsDescendantOf(Workspace:WaitForChild("Arena"))
+		and parent:GetAttribute("StationAction") == "Collection"
+	then
+		collection.SetPhase("Lobby")
+		collection.Open()
 	end
 end)
 local pending = false
