@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "status": "PASS",
+  "observedAt": "2026-10-24T07:00:26.042669+00:00",
+  "scope": "Real LSP initialize, document open/change and pull diagnostics on isolated pure Luau; not VS Code UI, Roblox definitions/sourcemap, or whole-game type acceptance",
+  "serverInfo": {
+    "name": "Luau",
+    "version": "1.70.1"
+  },
+  "method": "textDocument/diagnostic",
+  "diagnosticProvider": {
+    "identifier": "luau",
+    "interFileDependencies": true,
+    "workspaceDiagnostics": true
+  },
+  "unsavedDidChangeVerified": true,
+  "typeMismatchDiagnostics": [
+    {
+      "code": 1000,
+      "codeDescription": {
+        "href": "https://luau.org/types"
+      },
+      "message": "TypeError: Expected this to be 'number', but got 'string'",
+      "range": {
+        "end": {
+          "character": 27,
+          "line": 1
+        },
+        "start": {
+          "character": 0,
+          "line": 1
+        }
+      },
+      "relatedInformation": [],
+      "severity": 1,
+      "source": "Luau",
+      "tags": []
+    }
+  ],
+  "correctedDiagnostics": [],
+  "exitCode": 0,
+  "elapsedSeconds": 0.09012910000001284
+}

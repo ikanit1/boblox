@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "RuleRoom: build and verify",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/Build.ps1"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "RuleRoom: validate knowledge vault",
+      "type": "shell",
+      "command": "python",
+      "args": ["tools/obsidian/verify_vault.py"],
+      "problemMatcher": []
+    },
+    {
+      "label": "RuleRoom: serve Rojo",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/Serve.ps1"],
+      "problemMatcher": []
+    }
+  ]
+}

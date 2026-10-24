@@ -1,0 +1,56 @@
+{
+  "platform": "Windows x64",
+  "assets": [
+    {
+      "tool": "rokit.exe",
+      "repository": "rojo-rbx/rokit",
+      "version": "rokit 1.2.0",
+      "tag": "v1.2.0",
+      "url": "https://github.com/rojo-rbx/rokit/releases/download/v1.2.0/rokit-1.2.0-windows-x86_64.zip",
+      "sha256": "f9ba1704014ff67d51e8005f605955c7c26d2429a5312a9419dc477fc310e96d",
+      "publisherDigest": "f9ba1704014ff67d51e8005f605955c7c26d2429a5312a9419dc477fc310e96d",
+      "integrity": "publisher SHA256 matched",
+      "path": "C:\\Users\\admin\\AppData\\Local\\RobloxDev\\bin\\rokit.exe"
+    },
+    {
+      "tool": "wally.exe",
+      "repository": "UpliftGames/wally",
+      "version": "wally 0.3.2",
+      "tag": "v0.3.2",
+      "url": "https://github.com/UpliftGames/wally/releases/download/v0.3.2/wally-v0.3.2-win64.zip",
+      "sha256": "957dd85c1f0626007018a252cf099b75e1e23d9a181c4830b66cf298707d8fb7",
+      "publisherDigest": null,
+      "integrity": "observed SHA256 pinned; publisher supplies no digest",
+      "path": "C:\\Users\\admin\\AppData\\Local\\RobloxDev\\bin\\wally.exe"
+    },
+    {
+      "tool": "luau-lsp.exe",
+      "repository": "JohnnyMorganz/luau-lsp",
+      "version": "1.70.1",
+      "tag": "1.70.1",
+      "url": "https://github.com/JohnnyMorganz/luau-lsp/releases/download/1.70.1/luau-lsp-win64.zip",
+      "sha256": "64225b9738102a30de6ee09fb28e5a3827edc402ecf2a6364af570312468159f",
+      "publisherDigest": "64225b9738102a30de6ee09fb28e5a3827edc402ecf2a6364af570312468159f",
+      "integrity": "publisher SHA256 matched",
+      "path": "C:\\Users\\admin\\AppData\\Local\\RobloxDev\\bin\\luau-lsp.exe"
+    },
+    {
+      "tool": "Node.js",
+      "version": "v24.22.1",
+      "path": "C:\\Users\\admin\\AppData\\Local\\RobloxDev\\node\\v24.22.1\\node-v24.22.1-win-x64\\node.exe",
+      "url": "https://nodejs.org/dist/v24.22.1/node-v24.22.1-win-x64.zip",
+      "sha256": "d2046d28c2c3dcd211ac5145c0bf30e2047ef9dfb306693c8c6e2eccd8b95fa5",
+      "publisherDigest": "d2046d28c2c3dcd211ac5145c0bf30e2047ef9dfb306693c8c6e2eccd8b95fa5",
+      "integrity": "official SHASUMS256 matched; existing system Node unchanged"
+    },
+    {
+      "tool": "Visual Studio Code",
+      "version": "1.143.1",
+      "path": "C:\\Users\\admin\\AppData\\Local\\RobloxDev\\vscode\\1.143.1\\Code.exe",
+      "url": "https://vscode.download.prss.microsoft.com/dbazure/download/stable/e646868227c3e3a9e3f24277c8c7220be42c0be7/VSCode-win32-x64-1.143.1.zip",
+      "sha256": "b4f9643b8a549ca2c85a1bbc9063fc76f1e08fc0036a7f6a1a181cdc05235eca",
+      "publisherDigest": "b4f9643b8a549ca2c85a1bbc9063fc76f1e08fc0036a7f6a1a181cdc05235eca",
+      "integrity": "Microsoft update API SHA256 matched; separate portable profile"
+    }
+  ]
+}

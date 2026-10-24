@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-24T06:50:15.211486+00:00",
+  "canonicalSkills": 82,
+  "frontmatterPassed": 82,
+  "resourceWarningSkills": [],
+  "relativeMarkdownPathLinksChecked": 76,
+  "sourceFilesPreserved": 237,
+  "nonMarkdownFilesByteIdentical": 75,
+  "pythonAstFiles": 28,
+  "bundledScenarioDataValidated": 225,
+  "installerUnitTests": {
+    "command": "python tools/skills/test_install_libraries.py -v",
+    "tests": 9,
+    "exitCode": 0
+  },
+  "codexDiscovery": {
+    "file": "skills-discovery.json",
+    "expected": 84,
+    "observed": 84,
+    "passed": true
+  },
+  "npxAudit": {
+    "version": "1.7.4",
+    "node": "24.22.1",
+    "mode": "add <pinned-local-source> --list --full-depth",
+    "counts": {
+      "EL4CTEO/roblox-skills": 23,
+      "TabooHarmony/roblox-brain": 29,
+      "RobLe3/cc-blender-skill/plugin/skills": 30
+    },
+    "installModeUsed": false,
+    "reason": "Original names collide; CLI has no rename/prefix option."
+  },
+  "externalURLs": "NOT_FETCHED_IN_BULK",
+  "markdownAnchors": "NOT_VALIDATED",
+  "naturalLanguageRouting": "NOT_RUN",
+  "bundledScripts": "AST_ONLY_NOT_EXECUTED",
+  "blenderStudioRecipes": "NOT_RUN_BY_SKILL_INSTALLATION",
+  "sourceRepairs": [
+    "Two absent text-to-blender references replaced by labeled local redirect files to existing upstream sections; no invented guidance",
+    "Historical asset README's missing IMPLEMENTATION_LOG link labeled unavailable; no substituted evidence"
+  ]
+}
