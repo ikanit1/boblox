@@ -576,12 +576,6 @@ local suiteOK, suiteError = xpcall(function()
 	state:SetAttribute("RuleCount", 6)
 	state:SetAttribute("ModeId", "Balanced")
 	state:SetAttribute("ResultsText", "")
-	for _, p in Players:GetPlayers() do
-		p:SetAttribute("DataStatus", "QA local fixture")
-		p:SetAttribute("Coins", 0)
-		p:SetAttribute("XP", 0)
-		p:SetAttribute("Level", 1)
-	end
 	local scenarios = requestedScenarios
 	if not scenarios then
 		scenarios = {}
@@ -596,6 +590,16 @@ local suiteOK, suiteError = xpcall(function()
 		task.wait(0.1)
 	until report:GetAttribute("Start") == true or os.clock() >= startDeadline
 	assert(report:GetAttribute("Start") == true, "Operator did not start the prepared suite")
+	-- Native clients connect after this server script starts. Prepare admission only
+	-- after the operator has observed the expected connected clients and starts QA.
+	for _, p in Players:GetPlayers() do
+		p:SetAttribute("EntryChoiceMade", true)
+		p:SetAttribute("LobbyOnly", false)
+		p:SetAttribute("DataStatus", "QA local fixture")
+		p:SetAttribute("Coins", 0)
+		p:SetAttribute("XP", 0)
+		p:SetAttribute("Level", 1)
+	end
 	for index, scenario in scenarios do
 		run(scenario, index)
 	end

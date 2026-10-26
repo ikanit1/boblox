@@ -21,23 +21,32 @@ The small `Sound`/`SoundGroup` route is intentional for a few non-spatial UI cue
 
 | Cue | Trigger | Gain before master | Limit |
 |---|---|---:|---|
-| Rule | New run/trial identity while phase is Rule | -18 dB | 0.8 s cooldown |
-| Countdown | Last 3, 2, 1 seconds while the local player is active | -22 dB | 0.45 s cooldown; each timer value is intentionally limited to once per trial |
+| Rule | New run/trial identity while the local player participates | -18 dB | 0.8 s cooldown |
+| Warning | A later warning wave starts during the current trial | -22 dB | 0.7 s cooldown |
+| Danger | HazardStage changes to Active for a participant | -20 dB | 0.8 s cooldown |
+| Countdown | Last 3, 2, 1 seconds of each Warning wave while the local player participates | -22 dB | 0.45 s cooldown; each timer value once per run/trial/HazardCycle |
 | Damage | Local character health decreases during an active trial | -18 dB | 0.4 s cooldown |
 | Reward | Confirmed replicated coin balance increases | -23 dB | 0.55 s cooldown; no cue for spending |
-| Finale | Successful shared finale reaches Results | -17 dB | Three rising notes, 0.18 s apart; once per Results transition |
-| RunEnd | Other Results transition | -23 dB | One soft closing cue |
-| UI | Authored and dynamically cloned `GuiButton.Activated` | -29 dB | 0.1 s cooldown |
+| Passed | Personal LastTrialOutcome changes to Survived | -21 dB | Two rising notes, 0.12 s apart; 1 s cooldown |
+| Eliminated | Personal LastTrialOutcome changes to Eliminated | -24 dB | Two falling notes, 0.14 s apart; 1 s cooldown |
+| TeamReady | Reactor charge first reaches its goal during the participant's finale | -21 dB | Two rising notes, 0.14 s apart; once per trial, 2 s cooldown |
+| Finale | Results and ResultReady are present, personal RunResult is Won | -17 dB | Three rising notes, 0.18 s apart; once per run |
+| RunEnd | Other confirmed personal result | -23 dB | One soft closing cue; once per run |
+| UI | Authored and dynamically cloned game `GuiButton.Activated`, including StationHUD | -29 dB | 0.1 s cooldown |
 
 The master gain is -2 dB. The damage cue has higher priority than optional UI/reward feedback. Full pools drop lower-priority cues. There are no reverb, pitch-shifter, or acoustic simulation effects.
 
-The countdown's deduplication key is the run/trial identity and timer value, not each internal deadline. SafeColor and other staged rules therefore do not replay 3–2–1 for every substage. This is intentional noise reduction; the on-screen instruction and timer still update for every stage.
+As of the playable-loop iteration on 2026-10-26, the countdown key includes the run/trial identity, HazardCycle and timer value. SafeColor and other staged rules can therefore warn again before each new danger wave. Countdown is restricted to HazardStage=Warning; it does not tick through every Active/Recovery deadline. The server publishes these stage attributes, and the client uses them only for presentation.
+
+Personal outcome sounds follow changes of LastTrialOutcome rather than the global RuleIndex, so resetting the index at voting does not replay the previous result. Result audio waits for both Results and ResultReady and consumes the run identity once, accommodating either attribute replication order. Explore cancels pending voices; unrelated global trials do not play rule/stage cues for an explorer. These guards do not change gameplay or reward eligibility.
 
 Audio initialization asynchronously preloads the four pool instances (two unique sources); the HUD does not wait. Source loading and playback are protected so an unavailable optional sound cannot stop gameplay. Character health listeners are replaced on respawn, dynamic button listeners are removed with their buttons, and destroy cancels pending notes/fades and removes the pool.
 
 ## Player control and integration
 
 The authored `Root.Actions.Audio` button uses `Activated`, making it usable by touch, mouse, and controller. Its text is `ЗВУК: ВКЛ` / `ЗВУК: ВЫКЛ`. Muting immediately silences the mix, stops every voice, and invalidates delayed finale notes. Unmuting permits future cues without replaying old ones.
+
+On compact gameplay screens, the action row is hidden during Rule/Break to keep the arena and Roblox touch controls clear. Audio keeps the selected preference; the mute control is available again outside that compact gameplay state. The compact command and timer retain visual timing information even when audio is muted.
 
 The local player attribute `RuleRoomAudioMuted` stores the preference across character respawns for the current server session. It is local presentation state, is not a gameplay remote or a cloud-saved preference, and does not change Roblox's global volume or other experiences' audio. Reduced motion and audio mute are separate controls.
 
@@ -53,6 +62,12 @@ audio.Destroy()
 ## Verification and evidence limits
 
 Static checks cover formatting, lint, compilation and the configuration. They do not establish audibility, subjective loudness or sound quality.
+
+### Playable-loop candidate — 2026-10-26
+
+The expanded cue set and stage/outcome guards are implemented on `feat/playable-game-loop`; the complete local build checks pass (29 Luau sources and 82 math checks). Two native clients completed two runs using unmodified Main and actual Session profiles; actual rewards, wins and personal ledgers were consistent. Raw evidence in `docs/qa/production-loop-observation.json` preserves the original false Movement/Airborne elimination during an ordinary LaserSweep jump. After the bounded movement correction, `docs/qa/playable-rule-regression.json` records 12 native two-client scenarios covering all ten distinct rules, including three laser passes in total. Both clients survived every scenario with no MovementViolation; all 12 production-restoration checks and duplicate-award guards passed. This is a bounded gameplay regression, not complete audio, device or release acceptance.
+
+The compact 48 px command/timer/health display was visually checked with native TouchGui enabled in iPhone 17 Pro (750×381), Galaxy A06 (705×338) and iPhone 7 (666×374) Studio previews. `docs/media/phone-gameplay.png` shows the revised layout; `docs/media/phone-eliminated.png` records death/spectator presentation with the default TouchGui enabled. The completed movement driver released input ownership and re-enabled default controls. These are visual/emulator observations, not physical touch-device or listening acceptance. No OS-level input was sent while the PC was being used by another game; the test sessions are now ended. The consolidated report and source/build identity are recorded in `docs/PLAYABILITY.md` and `docs/qa/playable-loop.json`. The dated 0.3 audio observations below remain historical and do not automatically certify the added cues. Physical-phone playback and listening remain open gates.
 
 ### Observed in Studio 0.744 on 2026-10-23
 

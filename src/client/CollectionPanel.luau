@@ -42,8 +42,22 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 		local value = player:GetAttribute(name)
 		return if typeof(value) == "number" then value else 0
 	end
+	local function rewardReady(): boolean
+		for id, quest in economy.Quests do
+			if
+				numberAttribute("Quest_" .. id) >= quest.Target
+				and player:GetAttribute("Claimed_" .. id) ~= true
+			then
+				return true
+			end
+		end
+		return false
+	end
 
 	local function refresh()
+		local ready = rewardReady()
+		openButton.Text = if ready then "ЦЕЛИ: НАГРАДА!" else "КОСМЕТИКА / ЦЕЛИ"
+		questsTab.Text = if ready then "ЗАДАНИЯ · НАГРАДА" else "ЗАДАНИЯ"
 		local coins = numberAttribute("Coins")
 		local loading = player:GetAttribute("DataStatus") == "Loading"
 		for _, entry in rows do
@@ -237,6 +251,9 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 	end
 
 	connect(openButton.Activated, function()
+		if not panel.Visible and rewardReady() then
+			selectTab("Quests")
+		end
 		setVisible(not panel.Visible)
 	end)
 	connect(closeButton.Activated, function()
@@ -262,6 +279,9 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 
 	return {
 		Open = function()
+			if rewardReady() then
+				selectTab("Quests")
+			end
 			setVisible(true)
 		end,
 		SetPhase = function(newPhase: string)

@@ -5,7 +5,7 @@ local GameConfig = {
 	VotingSeconds = 8,
 	IntermissionSeconds = 8,
 	BreakSeconds = 3,
-	ResultsSeconds = 7,
+	ResultsSeconds = 12,
 	RuleCount = 6,
 	MaxPlayers = 12,
 	StepSeconds = 0.05,
@@ -26,6 +26,7 @@ local GameConfig = {
 		DamageCooldown = 1.2,
 	},
 	LowGravity = { WarningSeconds = 3, ActiveSeconds = 17, CollectionRadius = 3.4 },
+	LavaRise = { WarningSeconds = 4, ActiveSeconds = 8 },
 	ReactorRush = { WarningSeconds = 3, ActiveSeconds = 24, SweepSeconds = 9 },
 	ColorOrder = { "Blue", "Pink", "Yellow", "Green" },
 	Colors = {

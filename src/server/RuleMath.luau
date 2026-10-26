@@ -114,4 +114,53 @@ function RuleMath.airbornePlausible(seconds: number, gravity: number): boolean
 	return seconds <= (if gravity < 100 then 7 else 4)
 end
 
+-- A server position sample can skip the brief contact between two native jumps.
+-- Only a descent-to-ascent reversal close to the same supporting floor can be
+-- consistent with a missed landing. This does not accept a midair jump/hover.
+function RuleMath.missedLanding(
+	previousFeetHeight: number,
+	feetHeight: number,
+	previousVelocity: number,
+	velocity: number,
+	elapsed: number,
+	gravity: number,
+	jumpSpeed: number
+): boolean
+	for _, value in
+		{ previousFeetHeight, feetHeight, previousVelocity, velocity, elapsed, gravity, jumpSpeed }
+	do
+		if not RuleMath.isFinite(value) then
+			return false
+		end
+	end
+	if
+		elapsed <= 0
+		or elapsed > 0.25
+		or gravity <= 0
+		or jumpSpeed <= 0
+		or previousFeetHeight < -0.25
+		or feetHeight < -0.25
+		or previousVelocity >= -1
+		or velocity <= 1
+		or velocity > jumpSpeed * 1.1
+	then
+		return false
+	end
+	-- A single replicated frame may differ from the server sample by ~100ms.
+	-- Bound that uncertainty by one stud of positional error, and never infer a
+	-- landing from an impulse above the maximum height of this character's jump.
+	local maximumHeight = jumpSpeed * jumpSpeed / (2 * gravity)
+	if previousFeetHeight > maximumHeight + 1 or feetHeight > maximumHeight + 1 then
+		return false
+	end
+	local fallTime = (
+		previousVelocity + math.sqrt(previousVelocity ^ 2 + 2 * gravity * math.max(0, previousFeetHeight))
+	) / gravity
+	local riseTime = math.max(0, (jumpSpeed - velocity) / gravity)
+	local expectedHeight = jumpSpeed * riseTime - gravity * riseTime * riseTime / 2
+	return fallTime <= elapsed + 0.1
+		and math.abs(fallTime + riseTime - elapsed) <= 0.1
+		and math.abs(feetHeight - expectedHeight) <= 1
+end
+
 return RuleMath

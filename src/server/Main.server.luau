@@ -51,7 +51,7 @@ Players.RespawnTime = 2
 local function queuedCount(): number
 	local count = 0
 	for _, player in Players:GetPlayers() do
-		if player:GetAttribute("LobbyOnly") ~= true then
+		if player:GetAttribute("LobbyOnly") ~= true and player:GetAttribute("EntryChoiceMade") == true then
 			count += 1
 		end
 	end
@@ -64,6 +64,7 @@ local function counts(): { [string]: number }
 		if
 			player.Parent == Players
 			and player:GetAttribute("LobbyOnly") ~= true
+			and player:GetAttribute("EntryChoiceMade") == true
 			and player:GetAttribute("VotedMode") == mode
 		then
 			totals[mode] += 1
@@ -87,6 +88,7 @@ local voteConnection = vote.OnServerEvent:Connect(function(player, mode)
 		or not RuleDeck.isMode(mode)
 		or not profiles.IsReady(player)
 		or player:GetAttribute("LobbyOnly") == true
+		or player:GetAttribute("EntryChoiceMade") ~= true
 	then
 		return
 	end
@@ -226,8 +228,8 @@ while running do
 	state:SetAttribute("ModeId", mode)
 	runNumber += 1
 	state:SetAttribute("Round", runNumber)
-	roster.BeginRun()
 	local deck = RuleDeck.draw(seed, mode)
+	roster.BeginRun(deck)
 	local completedRun = false
 	local success, failure = xpcall(function()
 		for index, ruleId in deck do
@@ -235,7 +237,7 @@ while running do
 				return
 			end
 			world.Restore()
-			local entered = roster.StartRound(world.ArenaSpawn)
+			local entered = roster.StartRound(world.ArenaSpawn, index, ruleId)
 			-- Joining/loading clients are never dropped into an already running hazard.
 			while entered == 0 and running and queuedCount() > 0 do
 				publish(
@@ -244,7 +246,7 @@ while running do
 					"Загрузка игрока. Испытание начнётся вместе со всеми."
 				)
 				task.wait(0.5)
-				entered = roster.StartRound(world.ArenaSpawn)
+				entered = roster.StartRound(world.ArenaSpawn, index, ruleId)
 			end
 			if not running or entered == 0 then
 				return
@@ -268,7 +270,7 @@ while running do
 				)
 			end
 			world.Restore()
-			roster.EndRound()
+			roster.EndRound(index < #deck)
 			if index < #deck then
 				local nextName = Config.Rules[deck[index + 1]].Name
 				publish(
@@ -290,9 +292,11 @@ while running do
 	end
 	local teamSuccess = success and completedRun and state:GetAttribute("FinaleSuccess") == true
 	state:SetAttribute("FinaleSuccess", teamSuccess)
-	local winners = if success and completedRun then roster.CompleteRun(teamSuccess) else 0
-	if not success then
-		warn("[RuleRoom] Run aborted and restored:\n" .. tostring(failure))
+	local winners = roster.CompleteRun(teamSuccess, not success or not completedRun)
+	if not success or not completedRun then
+		if not success then
+			warn("[RuleRoom] Run aborted and restored:\n" .. tostring(failure))
+		end
 		state:SetAttribute(
 			"ResultsText",
 			"Испытание остановлено. Все эффекты сброшены; начинаем новую игру."

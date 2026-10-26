@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-26",
+  "branch": "feat/playable-game-loop",
+  "status": "local-candidate-verified",
+  "production": {
+    "nativeClients": 2,
+    "runs": 2,
+    "profiles": "real ProfileService Session mode; no cloud",
+    "breakSamples": 39,
+    "ledgerMatches": true,
+    "report": "production-loop-observation.json",
+    "originalDefect": "LaserSweep Airborne false elimination before bounded observation fix; retained in raw evidence"
+  },
+  "regression": {
+    "nativeClients": 2,
+    "distinctRules": 10,
+    "scenarios": 12,
+    "laserPasses": 3,
+    "all24PlayerCasesSurvived": true,
+    "movementViolations": 0,
+    "duplicateRewards": false,
+    "restoredAllCases": true,
+    "reactorCharge": 11,
+    "reactorGoal": 5,
+    "report": "playable-rule-regression.json",
+    "scope": "production rules/roster; mock profiles; normal MoveTo/Jump driver; no human playtest"
+  },
+  "movementGuard": {
+    "airborneSeconds": 4.030486099999962,
+    "passed": true,
+    "source": "Injected anchored hover + grounded control; production roster, mock rewards",
+    "awards": {
+      "-1": 1
+    },
+    "violation": "Airborne",
+    "sampleSeconds": 0.06613599999991493,
+    "userId": -2,
+    "eliminated": true
+  },
+  "mobile": {
+    "report": "mobile-layout.json",
+    "deathScreenshot": "../media/phone-eliminated.png",
+    "deathLayout": {
+      "panel": "520, 48",
+      "touch": true,
+      "driver": {
+        "Source": "Driver LocalScript control instance; client physics only; server trace remains independent",
+        "ControlsAfterJSON": "{\"controlsEnabled\":true,\"driverOwnsControls\":false,\"activeControllerEnabled\":true}",
+        "DriverOK": true,
+        "EntryIndex": 12,
+        "Complete": true
+      },
+      "command": "ВЫБЫЛ · следующий этап скоро",
+      "energy": false,
+      "actions": false,
+      "spectate": true
+    },
+    "resize": {
+      "phase": "Rule",
+      "phoneProgress": false,
+      "desktopProgress": true,
+      "desktopRootHeight": 577
+    }
+  },
+  "build": {
+    "sources": 29,
+    "instances": 1025,
+    "seleneErrors": 0,
+    "seleneWarnings": 0,
+    "tests": {
+      "PracticeMath": 17,
+      "ProfileData": 59,
+      "RuleDeck": 22519,
+      "RuleMath": 82,
+      "RunPresentation": 15,
+      "ProfileService": 27
+    },
+    "profileServiceScenarios": 9
+  },
+  "cleanup": {
+    "multiplayerEnded": true,
+    "qaRemovedFromEdit": true,
+    "productionMainEnabled": true,
+    "stationEnabled": true
+  },
+  "notAccepted": [
+    "Physical phone multi-touch",
+    "Physical gamepad",
+    "Human listening quality",
+    "4/8/12 native clients",
+    "Cloud DataStore",
+    "External playtest and retention",
+    "Roblox publication"
+  ],
+  "knownExternalWarning": "rbxassetid://203785492: Asset type does not match requested type"
+}

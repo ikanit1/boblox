@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-26",
+  "scope": "Studio Device Simulator visual/geometry acceptance, default PlayerModule and TouchGui enabled; no movement driver",
+  "profiles": [
+    {
+      "device": "iphone_17_pro",
+      "viewport": [
+        750,
+        381
+      ],
+      "panel": [
+        520,
+        48
+      ],
+      "observed": [
+        "SafeZone active",
+        "welcome Play Activated=1"
+      ],
+      "controlsEnabled": true
+    },
+    {
+      "device": "samsung_galaxy_a06",
+      "viewport": [
+        705,
+        338
+      ],
+      "content": [
+        705,
+        280
+      ],
+      "panel": [
+        520,
+        48
+      ],
+      "observed": [
+        "RedLight active"
+      ],
+      "jumpButton": {
+        "x": 610,
+        "y": 190,
+        "w": 70,
+        "h": 70
+      },
+      "controlsEnabled": true
+    },
+    {
+      "device": "iphone_7",
+      "viewport": [
+        666,
+        374
+      ],
+      "panel": [
+        520,
+        48
+      ],
+      "observed": [
+        "ReactorRush active charge 0/5",
+        "SafeColor warning pink diamond",
+        "Results FinaleFailed with 4/6 survived +63 coins +105 XP"
+      ],
+      "controlsEnabled": true
+    }
+  ],
+  "screenshots": [
+    "../media/phone-gameplay.png",
+    "../media/phone-finale.png",
+    "../media/phone-results.png"
+  ],
+  "limitations": [
+    "No physical phone or real multi-touch acceptance",
+    "OS input validation unavailable while another application occupied the visible desktop; no controls were sent to that application",
+    "Earlier crowded mobile composition rejected by user; TextFits alone is not usability acceptance",
+    "Injected death was followed by next-round reentry before capture; that screenshot is not accepted as death-screen evidence"
+  ]
+}

@@ -244,7 +244,7 @@ local function nearest(root, list, predicate)
 end
 local ok, message = xpcall(function()
 	while not stopped and qa.Parent and not qa:GetAttribute("Complete") do
-		local behavior = qa:GetAttribute("Behavior") or "manual"
+		local behavior = qa:GetAttribute("Behavior_" .. p.UserId) or qa:GetAttribute("Behavior") or "manual"
 		ownControls(behavior ~= "manual")
 		local index = qa:GetAttribute("EntryIndex")
 		if index ~= lastEntry then
