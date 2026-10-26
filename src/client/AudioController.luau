@@ -40,7 +40,10 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 	local sequenceEpoch = 0
 	local characterEpoch = 0
 	local lastRule = ""
-	local lastPhase = ""
+	local lastResultRun = -1
+	local lastStage = ""
+	local lastOutcome = ""
+	local teamReady = false
 	local countdownSeen: { [string]: boolean } = {}
 	local playbackCount = 0
 
@@ -193,19 +196,60 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 
 	local function renderState()
 		local phase = state:GetAttribute("Phase")
-		if phase == "Rule" then
+		local participating = player:GetAttribute("InRound") == true
+		if phase == "Rule" and participating then
 			local key = tostring(state:GetAttribute("Round"))
 				.. ":"
 				.. tostring(state:GetAttribute("RuleIndex"))
 			if key ~= lastRule then
 				lastRule = key
+				lastStage = ""
+				teamReady = false
 				table.clear(countdownSeen)
 				cue("Rule")
 			end
-		elseif phase == "Results" and lastPhase ~= "Results" then
-			cue(if state:GetAttribute("FinaleSuccess") == true then "Finale" else "RunEnd")
+			local stageName = tostring(state:GetAttribute("HazardStage"))
+			local stageKey = key .. ":" .. tostring(state:GetAttribute("HazardCycle")) .. ":" .. stageName
+			if stageKey ~= lastStage then
+				local previousStage = lastStage
+				lastStage = stageKey
+				if stageName == "Active" then
+					cue("Danger")
+				elseif stageName == "Warning" and previousStage ~= "" then
+					cue("Warning")
+				end
+			end
+			local goal = numberAttribute(state, "TeamGoal")
+			if
+				state:GetAttribute("RuleId") == "ReactorRush"
+				and goal > 0
+				and numberAttribute(state, "TeamCharge") >= goal
+				and not teamReady
+			then
+				teamReady = true
+				cue("TeamReady")
+			end
+		elseif
+			phase == "Results"
+			and player:GetAttribute("ResultReady") == true
+			and player:GetAttribute("LobbyOnly") ~= true
+			and lastResultRun ~= numberAttribute(state, "Round")
+		then
+			lastResultRun = numberAttribute(state, "Round")
+			cue(if player:GetAttribute("RunResult") == "Won" then "Finale" else "RunEnd")
 		end
-		lastPhase = tostring(phase)
+		local outcome = tostring(player:GetAttribute("LastTrialOutcome"))
+		-- Playing/Pending reset this edge. A global index reset at Voting must not replay a win.
+		if outcome ~= lastOutcome then
+			lastOutcome = outcome
+			if player:GetAttribute("LobbyOnly") ~= true then
+				if outcome == "Survived" then
+					cue("Passed")
+				elseif outcome == "Eliminated" then
+					cue("Eliminated")
+				end
+			end
+		end
 	end
 
 	local function bindCharacter(character: Model)
@@ -251,6 +295,13 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 	for _, instance in root:GetDescendants() do
 		bindButton(instance)
 	end
+	local stationGui = player.PlayerGui:FindFirstChild("StationHUD")
+	if stationGui then
+		for _, instance in stationGui:GetDescendants() do
+			bindButton(instance)
+		end
+		connect(stationGui.DescendantAdded, bindButton)
+	end
 	connect(root.DescendantAdded, bindButton)
 	connect(root.DescendantRemoving, function(instance)
 		if instance:IsA("GuiButton") and buttons[instance] then
@@ -280,6 +331,17 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 		previousCoins = value
 	end)
 	connect(player.CharacterAdded, bindCharacter)
+	connect(player.AttributeChanged, function(name)
+		if name == "InRound" or name == "LastTrialOutcome" or name == "ResultReady" then
+			task.defer(function()
+				if not destroyed then
+					renderState()
+				end
+			end)
+		elseif name == "LobbyOnly" and player:GetAttribute("LobbyOnly") == true then
+			stopAll()
+		end
+	end)
 	if player.Character then
 		bindCharacter(player.Character)
 	end
@@ -302,11 +364,19 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 			return
 		end
 		elapsed = 0
-		if state:GetAttribute("Phase") == "Rule" and player:GetAttribute("InRound") == true then
+		if
+			state:GetAttribute("Phase") == "Rule"
+			and state:GetAttribute("HazardStage") == "Warning"
+			and player:GetAttribute("InRound") == true
+		then
 			local deadline = numberAttribute(state, "PhaseEndsAt")
 			local remaining = math.ceil(deadline - Workspace:GetServerTimeNow())
 			if remaining >= 1 and remaining <= 3 then
-				local key = lastRule .. ":" .. tostring(remaining)
+				local key = lastRule
+					.. ":"
+					.. tostring(state:GetAttribute("HazardCycle"))
+					.. ":"
+					.. tostring(remaining)
 				if not countdownSeen[key] then
 					countdownSeen[key] = true
 					cue("Countdown")

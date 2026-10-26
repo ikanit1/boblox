@@ -102,4 +102,64 @@ expect(RuleMath.airbornePlausible(6, 196.2 * 0.28), "Lunar jumps have extended a
 expect(not RuleMath.airbornePlausible(7.1, 196.2 * 0.28), "Low gravity does not permit indefinite hover")
 expect(not RuleMath.airbornePlausible(math.huge, 196.2), "Invalid airborne duration fails closed")
 expect(not RuleMath.airbornePlausible(1, 0 / 0), "Invalid gravity fails closed")
+
+-- Ballistic oracle: sample shortly before ground contact, then after the next
+-- native jump. Neither sample is within the one-stud ground-ray margin.
+for _, gravity in { 196.2, 196.2 * 0.28 } do
+	local jumpSpeed, fallVelocity, timeUntilLanding, timeSinceJump = 50, -40, 0.04, 0.12
+	local beforeHeight = -fallVelocity * timeUntilLanding + gravity * timeUntilLanding ^ 2 / 2
+	local afterHeight = jumpSpeed * timeSinceJump - gravity * timeSinceJump ^ 2 / 2
+	local afterVelocity = jumpSpeed - gravity * timeSinceJump
+	expect(
+		RuleMath.missedLanding(
+			beforeHeight,
+			afterHeight,
+			fallVelocity,
+			afterVelocity,
+			timeUntilLanding + timeSinceJump,
+			gravity,
+			jumpSpeed
+		),
+		"A sampled descent and ascent around a real supporting-floor bounce is consistent"
+	)
+	expect(
+		not RuleMath.missedLanding(
+			beforeHeight + 30,
+			afterHeight + 30,
+			fallVelocity,
+			afterVelocity,
+			0.16,
+			gravity,
+			jumpSpeed
+		),
+		"The same reversal high above the supporting floor is not a landing"
+	)
+end
+expect(
+	not RuleMath.missedLanding(3, 3, 0, 0, 0.1, 196.2, 50),
+	"Stationary hover never resets airborne evidence"
+)
+expect(not RuleMath.missedLanding(4, 3, -10, -30, 0.1, 196.2, 50), "Continuing descent is not a bounce")
+expect(not RuleMath.missedLanding(3, 4, 30, 10, 0.1, 196.2, 50), "Continuing ascent is not a bounce")
+expect(not RuleMath.missedLanding(1.7, 4.6, -40, 90, 0.16, 196.2, 50), "Excessive upward impulse is rejected")
+expect(
+	not RuleMath.missedLanding(1.7, 4.6, -40, 26, 0.6, 196.2, 50),
+	"Unobserved long gaps do not prove a landing"
+)
+expect(
+	not RuleMath.missedLanding(6, 4.6, -2, 26, 0.05, 196.2, 50),
+	"There must be enough time to reach the floor"
+)
+expect(
+	not RuleMath.missedLanding(1.7, 7, -40, 49, 0.16, 196.2, 50),
+	"Observed rise height must fit the measured velocity"
+)
+expect(
+	not RuleMath.missedLanding(-3, 1, -40, 40, 0.1, 196.2, 50),
+	"An underground reversal cannot be a landing"
+)
+expect(
+	not RuleMath.missedLanding(0 / 0, 1, -40, 40, 0.1, 196.2, 50),
+	"Nonfinite landing evidence is rejected"
+)
 print("RuleMath: " .. checks .. " checks passed")

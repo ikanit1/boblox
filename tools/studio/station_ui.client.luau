@@ -20,6 +20,15 @@ script:GetAttributeChangedSignal("Command"):Connect(function()
 		local button = if cmd == "Explore"
 			then gui.ExploreToggle
 			elseif cmd == "Join" then gui.StationBar.Join
+			elseif cmd == "WelcomePlay" then gui.Welcome.Play
+			elseif cmd == "WelcomeExplore" then gui.Welcome.Explore
+			elseif cmd == "Collection" then p.PlayerGui.RuleRoomHUD.Root.Actions.Collection
+			elseif cmd == "CloseCollection" then p.PlayerGui.RuleRoomHUD.Root.CollectionPanel.Close
+			elseif cmd == "Quests" then p.PlayerGui.RuleRoomHUD.Root.CollectionPanel.QuestsTab
+			elseif
+				cmd == "ClaimSurvive"
+			then p.PlayerGui.RuleRoomHUD.Root.CollectionPanel.Items.Item_survive.Action
+			elseif cmd == "VoteBalanced" then p.PlayerGui.RuleRoomHUD.Root.VotePanel.Cards.Balanced
 			else gui.Guide.Close
 		assert(button.Visible, "Target button is hidden")
 		observed = button.Activated:Connect(function()
@@ -42,6 +51,11 @@ script:GetAttributeChangedSignal("Command"):Connect(function()
 		error = if ok then nil else tostring(err),
 		activated = count,
 		lobbyOnly = p:GetAttribute("LobbyOnly"),
+		choice = p:GetAttribute("EntryChoiceMade"),
+		welcome = gui:FindFirstChild("Welcome") and gui.Welcome.Visible,
+		modal = p.PlayerGui.RuleRoomHUD:GetAttribute("StationModal"),
+		mainVisible = p.PlayerGui.RuleRoomHUD.Root.Visible,
+		phase = game.ReplicatedStorage.RuleRoomState:GetAttribute("Phase"),
 		guide = gui.Guide.Visible,
 	})
 	busy = false

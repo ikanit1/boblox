@@ -4,6 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local PhysicsService = game:GetService("PhysicsService")
 local Config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
+local RunPresentation = require(ReplicatedStorage.RuleRoomShared:WaitForChild("RunPresentation"))
 local RuleMath = require(script.Parent.RuleMath)
 
 type Profiles = {
@@ -27,8 +28,19 @@ type Participant = {
 	travelStartedAt: number,
 	travelDistance: number,
 	airborneSeconds: number,
+	lastVerticalVelocity: number,
+	trialIndex: number,
+	ruleId: string,
 }
-type RunRecord = { points: number, survived: number, finale: boolean, completed: boolean }
+type RunRecord = {
+	points: number,
+	survived: number,
+	finale: boolean,
+	completed: boolean,
+	coins: number,
+	xp: number,
+	stars: number,
+}
 type PlayerScope = {
 	character: Model?,
 	generation: number,
@@ -41,11 +53,11 @@ type PlayerScope = {
 	best: IntValue,
 }
 export type Roster = {
-	BeginRun: () -> (),
-	StartRound: (CFrame) -> number,
-	EndRound: () -> (),
+	BeginRun: ({ string }?) -> (),
+	StartRound: (CFrame, number?, string?) -> number,
+	EndRound: (boolean?) -> (),
 	PrepareIntermission: () -> (),
-	CompleteRun: (boolean) -> number,
+	CompleteRun: (boolean, boolean?) -> number,
 	CheckBoundaries: () -> (),
 	AliveCount: () -> number,
 	ForEachAlive: ((Player, Humanoid, BasePart) -> ()) -> (),
@@ -79,6 +91,8 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	local records: { [Player]: RunRecord } = {}
 	local connections: { RBXScriptConnection } = {}
 	local destroyed = false
+	local currentTrial = 0
+	local runDeck: { string } = {}
 	local arena = Workspace:FindFirstChild("Arena")
 	assert(arena, "Arena must exist before the roster")
 	local characterGroup = "RuleRoomCharacters"
@@ -97,6 +111,46 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	groundQuery.RespectCanCollide = true
 	groundQuery.IgnoreWater = true
 
+	local function resetRunDisplay(player: Player)
+		player:SetAttribute("ResultReady", false)
+		player:SetAttribute("RunResult", "None")
+		player:SetAttribute("RunScore", 0)
+		player:SetAttribute("RunSurvived", 0)
+		player:SetAttribute("RunCoinsEarned", 0)
+		player:SetAttribute("RunXPEarned", 0)
+		player:SetAttribute("RunStars", 0)
+		player:SetAttribute("LastTrialOutcome", "Pending")
+		player:SetAttribute("LastTrialRule", "")
+		for index = 1, Config.RuleCount do
+			player:SetAttribute(
+				"TrialOutcome_" .. index,
+				if index <= currentTrial then "Skipped" else "Pending"
+			)
+			player:SetAttribute("TrialRule_" .. index, runDeck[index] or "")
+		end
+	end
+
+	local function publishOutcome(player: Player, entry: Participant, outcome: string)
+		player:SetAttribute("TrialOutcome_" .. entry.trialIndex, outcome)
+		player:SetAttribute("TrialRule_" .. entry.trialIndex, entry.ruleId)
+		player:SetAttribute("LastTrialRule", entry.ruleId)
+		player:SetAttribute("LastTrialOutcome", outcome)
+	end
+
+	local function captureReward(player: Player, grant: () -> ())
+		local coins, xp = player:GetAttribute("Coins"), player:GetAttribute("XP")
+		-- Production reward methods mutate and replicate synchronously; there is no yield
+		-- in this interval, so purchases and quest claims cannot enter this ledger.
+		grant()
+		local record = records[player]
+		if record then
+			record.coins += RunPresentation.rewardDelta(coins, player:GetAttribute("Coins"))
+			record.xp += RunPresentation.rewardDelta(xp, player:GetAttribute("XP"))
+			player:SetAttribute("RunCoinsEarned", record.coins)
+			player:SetAttribute("RunXPEarned", record.xp)
+		end
+	end
+
 	local function restoreMovement(participant: Participant)
 		local humanoid = participant.humanoid
 		if humanoid.Parent then
@@ -107,12 +161,20 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 	end
 
-	local function eliminate(player: Player, kill: boolean)
+	local function eliminate(player: Player, kill: boolean, reason: string?)
 		local entry = participants[player]
 		if not entry or not entry.alive then
 			return
 		end
 		entry.alive = false
+		local lastDamageAt = player:GetAttribute("LastDamageAt")
+		local lastDamageRule = player:GetAttribute("LastDamageRule")
+		local recentDamage = typeof(lastDamageAt) == "number"
+			and Workspace:GetServerTimeNow() - lastDamageAt <= 1
+			and typeof(lastDamageRule) == "string"
+			and lastDamageRule ~= ""
+		player:SetAttribute("EliminationReason", reason or (if recentDamage then lastDamageRule else "Reset"))
+		publishOutcome(player, entry, "Eliminated")
 		restoreMovement(entry)
 		player:SetAttribute("InRound", false)
 		player:SetAttribute("Eliminated", true)
@@ -206,27 +268,34 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		for _, descendant in character:GetDescendants() do
 			assignCollisionGroup(descendant)
 		end
-		local humanoid = character:WaitForChild("Humanoid", 10)
-		local root = character:WaitForChild("HumanoidRootPart", 10)
-		if
-			destroyed
-			or scopes[player] ~= scope
-			or generation ~= scope.generation
-			or player.Character ~= character
-		then
-			return
-		end
-		if not humanoid or not humanoid:IsA("Humanoid") or not root or not root:IsA("BasePart") then
-			return
-		end
-		scope.deathConnection = humanoid.Died:Connect(function()
-			local entry = participants[player]
-			if entry and entry.character == character then
-				eliminate(player, false)
+		local function tryReady()
+			if
+				destroyed
+				or scopes[player] ~= scope
+				or generation ~= scope.generation
+				or player.Character ~= character
+				or scope.ready
+			then
+				return
 			end
-		end)
-		teleport(character, root, lobbyCFrame + Vector3.new(((player.UserId % 5) - 2) * 3, 2, 0))
-		scope.ready = true
+			local humanoid = character:FindFirstChildOfClass("Humanoid")
+			local root = character:FindFirstChild("HumanoidRootPart")
+			if not humanoid or not root or not root:IsA("BasePart") then
+				return
+			end
+			scope.deathConnection = humanoid.Died:Connect(function()
+				local entry = participants[player]
+				if entry and entry.character == character then
+					eliminate(player, false)
+				end
+			end)
+			teleport(character, root, lobbyCFrame + Vector3.new(((player.UserId % 5) - 2) * 3, 2, 0))
+			scope.ready = true
+		end
+		-- A delayed avatar can become ready even after the old ten-second timeout.
+		-- The callback is generation-bound and is disconnected on replacement/removal.
+		table.insert(scope.collisionConnections, character.ChildAdded:Connect(tryReady))
+		tryReady()
 	end
 
 	local function addPlayer(player: Player)
@@ -255,8 +324,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		scopes[player] = scope
 		player:SetAttribute("InRound", false)
 		player:SetAttribute("Eliminated", false)
-		player:SetAttribute("RunScore", 0)
-		player:SetAttribute("RunSurvived", 0)
+		resetRunDisplay(player)
 		table.insert(
 			scope.connections,
 			player.CharacterAdded:Connect(function(character)
@@ -307,6 +375,13 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 
 	local function movementPlausible(player: Player, entry: Participant, position: Vector3): boolean
 		local now = os.clock()
+		local sampleSeconds = now - entry.lastSampleAt
+		local verticalVelocity = entry.root.AssemblyLinearVelocity.Y
+		local gravityScale = if entry.root:GetAttribute("TrialGravityScale")
+				== Config.LowGravityMultiplier
+			then Config.LowGravityMultiplier
+			else 1
+		local effectiveGravity = Workspace.Gravity * gravityScale
 		local delta = position - entry.lastPosition
 		entry.travelDistance += Vector2.new(delta.X, delta.Z).Magnitude
 		local elapsed = now - entry.travelStartedAt
@@ -321,17 +396,54 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		local legs = if entry.humanoid.RigType == Enum.HumanoidRigType.R6 then 2 else 0
 		local groundDistance = entry.root.Size.Y / 2 + entry.humanoid.HipHeight + legs + 1
 		local ground = Workspace:Raycast(position, Vector3.new(0, -groundDistance, 0), groundQuery)
-		if ground then
+		local landedBetweenSamples = false
+		if
+			not ground
+			and entry.lastVerticalVelocity < -1
+			and verticalVelocity > 1
+			and sampleSeconds <= 0.25
+		then
+			local jumpSpeed = if entry.humanoid.UseJumpPower
+				then entry.jumpPower
+				else math.sqrt(2 * Workspace.Gravity * entry.jumpHeight)
+			local distance = groundDistance + jumpSpeed * jumpSpeed / (2 * effectiveGravity) + 1
+			local support = Workspace:Raycast(position, Vector3.new(0, -distance, 0), groundQuery)
+			local previousSupport =
+				Workspace:Raycast(entry.lastPosition, Vector3.new(0, -distance, 0), groundQuery)
+			if
+				support
+				and previousSupport
+				and support.Normal.Y >= 0.7
+				and previousSupport.Normal.Y >= 0.7
+				and math.abs(support.Position.Y - previousSupport.Position.Y) <= 0.5
+			then
+				local feetOffset = groundDistance - 1
+				landedBetweenSamples = RuleMath.missedLanding(
+					entry.lastPosition.Y - feetOffset - previousSupport.Position.Y,
+					position.Y - feetOffset - support.Position.Y,
+					entry.lastVerticalVelocity,
+					verticalVelocity,
+					sampleSeconds,
+					effectiveGravity,
+					jumpSpeed
+				)
+			end
+		end
+		if ground or landedBetweenSamples or sampleSeconds > 0.25 then
 			entry.airborneSeconds = 0
 		else
-			-- A stalled server may miss a legitimate landing; don't charge the player
-			-- for a long interval during which there were no physics observations.
-			entry.airborneSeconds += math.clamp(now - entry.lastSampleAt, 0, 0.25)
+			-- A gap over 250ms invalidates continuous airborne evidence: it may hide
+			-- a landing. Otherwise preserve the existing 4s/7s maximum continuous flight.
+			entry.airborneSeconds += math.max(0, sampleSeconds)
 		end
 		entry.lastSampleAt = now
 		entry.lastPosition = position
-		if not RuleMath.airbornePlausible(entry.airborneSeconds, Workspace.Gravity) then
+		entry.lastVerticalVelocity = verticalVelocity
+		if not RuleMath.airbornePlausible(entry.airborneSeconds, effectiveGravity) then
 			player:SetAttribute("MovementViolation", "Airborne")
+			player:SetAttribute("MovementAirborneSeconds", entry.airborneSeconds)
+			player:SetAttribute("MovementSampleSeconds", sampleSeconds)
+			player:SetAttribute("MovementVerticalVelocity", verticalVelocity)
 			return false
 		end
 		return true
@@ -350,22 +462,33 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	end
 
 	local roster = {} :: Roster
-	function roster.BeginRun()
+	function roster.BeginRun(deck: { string }?)
 		table.clear(records)
+		currentTrial = 0
+		runDeck = if deck then table.clone(deck) else {}
 		for _, player in Players:GetPlayers() do
-			player:SetAttribute("RunScore", 0)
-			player:SetAttribute("RunSurvived", 0)
+			resetRunDisplay(player)
 			player:SetAttribute("Eliminated", false)
 		end
 	end
 
-	function roster.StartRound(arenaCFrame: CFrame): number
+	function roster.StartRound(arenaCFrame: CFrame, trialIndex: number?, ruleId: string?): number
 		-- Main ends the previous trial before this atomic admission pass (no yields).
 		assert(next(participants) == nil, "EndRound must precede StartRound")
+		currentTrial = math.clamp(math.floor(trialIndex or math.max(1, currentTrial)), 1, Config.RuleCount)
+		local currentRule = ruleId or runDeck[currentTrial] or ""
+		runDeck[currentTrial] = currentRule
 		local entered = 0
 		for _, player in Players:GetPlayers() do
 			player:SetAttribute("InRound", false)
 			player:SetAttribute("Eliminated", false)
+			for index = 1, currentTrial do
+				local outcome = player:GetAttribute("TrialOutcome_" .. index)
+				if outcome == nil or outcome == "Pending" then
+					player:SetAttribute("TrialOutcome_" .. index, "Skipped")
+				end
+				player:SetAttribute("TrialRule_" .. index, runDeck[index] or "")
+			end
 			local scope = scopes[player]
 			local character = player.Character
 			local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
@@ -374,6 +497,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 				entered < Config.MaxPlayers
 				and profiles.IsReady(player)
 				and player:GetAttribute("LobbyOnly") ~= true
+				and player:GetAttribute("EntryChoiceMade") == true
 				and scope
 				and scope.ready
 				and character
@@ -384,7 +508,15 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 				and root:IsA("BasePart")
 			then
 				records[player] = records[player]
-					or { points = 0, survived = 0, finale = false, completed = false }
+					or {
+						points = 0,
+						survived = 0,
+						finale = false,
+						completed = false,
+						coins = 0,
+						xp = 0,
+						stars = 0,
+					}
 				participants[player] = {
 					character = character,
 					humanoid = humanoid,
@@ -400,7 +532,15 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					travelStartedAt = os.clock(),
 					travelDistance = 0,
 					airborneSeconds = 0,
+					lastVerticalVelocity = 0,
+					trialIndex = currentTrial,
+					ruleId = currentRule,
 				}
+				root:SetAttribute("TrialGravityScale", nil)
+				player:SetAttribute("LastDamageRule", "")
+				player:SetAttribute("LastDamageAt", 0)
+				player:SetAttribute("EliminationReason", "")
+				publishOutcome(player, participants[player], "Playing")
 				for _, child in character:GetChildren() do
 					if child:IsA("ForceField") then
 						child:Destroy()
@@ -412,6 +552,9 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 				-- Only this server-authorized teleport resets the trial's movement anchor.
 				participants[player].lastPosition = root.Position
 				player:SetAttribute("MovementViolation", "")
+				player:SetAttribute("MovementAirborneSeconds", nil)
+				player:SetAttribute("MovementSampleSeconds", nil)
+				player:SetAttribute("MovementVerticalVelocity", nil)
 				player:SetAttribute("InRound", true)
 				entered += 1
 			end
@@ -419,9 +562,18 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		return entered
 	end
 
-	function roster.EndRound()
-		for _, entry in participants do
+	function roster.EndRound(keepInArena: boolean?)
+		local retained: { [Player]: boolean } = {}
+		for player, entry in participants do
+			if
+				not entry.rewarded
+				and player:GetAttribute("TrialOutcome_" .. entry.trialIndex) == "Playing"
+			then
+				publishOutcome(player, entry, "Eliminated")
+			end
+			retained[player] = keepInArena == true and isCurrent(player, entry) and entry.rewarded
 			restoreMovement(entry)
+			entry.root:SetAttribute("TrialGravityScale", nil)
 		end
 		table.clear(participants)
 		for _, player in Players:GetPlayers() do
@@ -431,6 +583,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 			local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
 			if
 				player:GetAttribute("LobbyOnly") ~= true
+				and not retained[player]
 				and character
 				and humanoid
 				and humanoid.Health > 0
@@ -455,17 +608,22 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					eliminate(player, false)
 				else
 					local p = entry.root.Position
-					if
-						not RuleMath.isFinite(p.X)
-						or not RuleMath.isFinite(p.Y)
-						or not RuleMath.isFinite(p.Z)
-						or p.Y < Config.EliminationY
-						or p.Y > 110
-						or math.abs(p.X) > Config.ArenaHalfSize + 3
-						or math.abs(p.Z) > Config.ArenaHalfSize + 3
-						or not movementPlausible(player, entry, p)
-					then
-						eliminate(player, true)
+					local reason: string? = "Movement"
+					if RuleMath.isFinite(p.X) and RuleMath.isFinite(p.Y) and RuleMath.isFinite(p.Z) then
+						if p.Y < Config.EliminationY then
+							reason = "Fall"
+						elseif
+							p.Y > 110
+							or math.abs(p.X) > Config.ArenaHalfSize + 3
+							or math.abs(p.Z) > Config.ArenaHalfSize + 3
+						then
+							reason = "Boundary"
+						elseif movementPlausible(player, entry, p) then
+							reason = nil
+						end
+					end
+					if reason then
+						eliminate(player, true, reason)
 					end
 				end
 			end
@@ -501,7 +659,10 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					record.finale = true
 				end
 				player:SetAttribute("RunSurvived", record.survived)
-				profiles.AwardSurvival(player)
+				captureReward(player, function()
+					profiles.AwardSurvival(player)
+				end)
+				publishOutcome(player, entry, "Survived")
 				awarded += 1
 			end
 		end
@@ -512,18 +673,33 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		if not award(player, Config.StarPoints) then
 			return false
 		end
-		profiles.AwardStar(player)
+		captureReward(player, function()
+			profiles.AwardStar(player)
+		end)
+		local record = records[player]
+		record.stars += 1
+		player:SetAttribute("RunStars", record.stars)
 		return true
 	end
 
-	function roster.CompleteRun(teamSuccess: boolean): number
+	function roster.CompleteRun(teamSuccess: boolean, aborted: boolean?): number
 		local winners = 0
 		for player, record in records do
 			local eligible, won = RuleMath.runOutcome(record.survived, record.finale, teamSuccess)
-			if eligible and not record.completed and player.Parent == Players then
+			if not record.completed and player.Parent == Players then
 				record.completed = true
-				profiles.CompleteRun(player, won)
-				if won then
+				if eligible and not aborted then
+					captureReward(player, function()
+						profiles.CompleteRun(player, won)
+					end)
+				end
+				player:SetAttribute(
+					"RunResult",
+					RunPresentation.resultCode(record.survived, record.finale, teamSuccess, aborted)
+				)
+				-- Last write is the publication barrier for clients rendering this summary.
+				player:SetAttribute("ResultReady", true)
+				if won and not aborted then
 					winners += 1
 				end
 			end

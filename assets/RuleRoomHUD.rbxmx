@@ -554,7 +554,7 @@
             <XS>1</XS>
             <XO>-28</XO>
             <YS>0</YS>
-            <YO>4</YO>
+            <YO>16</YO>
           </UDim2>
           <UDim2 name="Position">
             <XS>0.5</XS>
@@ -579,7 +579,7 @@
             <string name="Name">WidthBounds</string>
             <Vector2 name="MaxSize">
               <X>672</X>
-              <Y>6</Y>
+              <Y>20</Y>
             </Vector2>
           </Properties>
         </Item>
@@ -606,8 +606,45 @@
             <float name="BackgroundTransparency">0</float>
             <int name="BorderSizePixel">0</int>
           </Properties>
+          <Item class="TextLabel" referent="RBX000030">
+            <Properties>
+              <string name="Name">Status</string>
+              <UDim2 name="Size">
+                <XS>1</XS>
+                <XO>0</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0</XS>
+                <XO>0</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <float name="BackgroundTransparency">1</float>
+              <int name="BorderSizePixel">0</int>
+              <Color3 name="TextColor3">
+                <R>0.96470588</R>
+                <G>0.97254902</G>
+                <B>1.00000000</B>
+              </Color3>
+              <string name="Text">1</string>
+              <float name="TextSize">11</float>
+              <Font name="FontFace">
+                <Family>
+                  <url>rbxasset://fonts/families/BuilderSans.json</url>
+                </Family>
+                <Weight>700</Weight>
+                <Style>Normal</Style>
+              </Font>
+              <token name="TextXAlignment">2</token>
+              <bool name="TextWrapped">true</bool>
+              <bool name="TextScaled">false</bool>
+              <bool name="AutoLocalize">false</bool>
+            </Properties>
+          </Item>
         </Item>
-        <Item class="Frame" referent="RBX000030">
+        <Item class="Frame" referent="RBX000031">
           <Properties>
             <string name="Name">Step2</string>
             <UDim2 name="Size">
@@ -630,8 +667,45 @@
             <float name="BackgroundTransparency">0</float>
             <int name="BorderSizePixel">0</int>
           </Properties>
+          <Item class="TextLabel" referent="RBX000032">
+            <Properties>
+              <string name="Name">Status</string>
+              <UDim2 name="Size">
+                <XS>1</XS>
+                <XO>0</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0</XS>
+                <XO>0</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <float name="BackgroundTransparency">1</float>
+              <int name="BorderSizePixel">0</int>
+              <Color3 name="TextColor3">
+                <R>0.96470588</R>
+                <G>0.97254902</G>
+                <B>1.00000000</B>
+              </Color3>
+              <string name="Text">2</string>
+              <float name="TextSize">11</float>
+              <Font name="FontFace">
+                <Family>
+                  <url>rbxasset://fonts/families/BuilderSans.json</url>
+                </Family>
+                <Weight>700</Weight>
+                <Style>Normal</Style>
+              </Font>
+              <token name="TextXAlignment">2</token>
+              <bool name="TextWrapped">true</bool>
+              <bool name="TextScaled">false</bool>
+              <bool name="AutoLocalize">false</bool>
+            </Properties>
+          </Item>
         </Item>
-        <Item class="Frame" referent="RBX000031">
+        <Item class="Frame" referent="RBX000033">
           <Properties>
             <string name="Name">Step3</string>
             <UDim2 name="Size">
@@ -654,8 +728,45 @@
             <float name="BackgroundTransparency">0</float>
             <int name="BorderSizePixel">0</int>
           </Properties>
+          <Item class="TextLabel" referent="RBX000034">
+            <Properties>
+              <string name="Name">Status</string>
+              <UDim2 name="Size">
+                <XS>1</XS>
+                <XO>0</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0</XS>
+                <XO>0</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <float name="BackgroundTransparency">1</float>
+              <int name="BorderSizePixel">0</int>
+              <Color3 name="TextColor3">
+                <R>0.96470588</R>
+                <G>0.97254902</G>
+                <B>1.00000000</B>
+              </Color3>
+              <string name="Text">3</string>
+              <float name="TextSize">11</float>
+              <Font name="FontFace">
+                <Family>
+                  <url>rbxasset://fonts/families/BuilderSans.json</url>
+                </Family>
+                <Weight>700</Weight>
+                <Style>Normal</Style>
+              </Font>
+              <token name="TextXAlignment">2</token>
+              <bool name="TextWrapped">true</bool>
+              <bool name="TextScaled">false</bool>
+              <bool name="AutoLocalize">false</bool>
+            </Properties>
+          </Item>
         </Item>
-        <Item class="Frame" referent="RBX000032">
+        <Item class="Frame" referent="RBX000035">
           <Properties>
             <string name="Name">Step4</string>
             <UDim2 name="Size">
@@ -678,8 +789,45 @@
             <float name="BackgroundTransparency">0</float>
             <int name="BorderSizePixel">0</int>
           </Properties>
+          <Item class="TextLabel" referent="RBX000036">
+            <Properties>
+              <string name="Name">Status</string>
+              <UDim2 name="Size">
+                <XS>1</XS>
+                <XO>0</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0</XS>
+                <XO>0</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <float name="BackgroundTransparency">1</float>
+              <int name="BorderSizePixel">0</int>
+              <Color3 name="TextColor3">
+                <R>0.96470588</R>
+                <G>0.97254902</G>
+                <B>1.00000000</B>
+              </Color3>
+              <string name="Text">4</string>
+              <float name="TextSize">11</float>
+              <Font name="FontFace">
+                <Family>
+                  <url>rbxasset://fonts/families/BuilderSans.json</url>
+                </Family>
+                <Weight>700</Weight>
+                <Style>Normal</Style>
+              </Font>
+              <token name="TextXAlignment">2</token>
+              <bool name="TextWrapped">true</bool>
+              <bool name="TextScaled">false</bool>
+              <bool name="AutoLocalize">false</bool>
+            </Properties>
+          </Item>
         </Item>
-        <Item class="Frame" referent="RBX000033">
+        <Item class="Frame" referent="RBX000037">
           <Properties>
             <string name="Name">Step5</string>
             <UDim2 name="Size">
@@ -702,8 +850,45 @@
             <float name="BackgroundTransparency">0</float>
             <int name="BorderSizePixel">0</int>
           </Properties>
+          <Item class="TextLabel" referent="RBX000038">
+            <Properties>
+              <string name="Name">Status</string>
+              <UDim2 name="Size">
+                <XS>1</XS>
+                <XO>0</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0</XS>
+                <XO>0</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <float name="BackgroundTransparency">1</float>
+              <int name="BorderSizePixel">0</int>
+              <Color3 name="TextColor3">
+                <R>0.96470588</R>
+                <G>0.97254902</G>
+                <B>1.00000000</B>
+              </Color3>
+              <string name="Text">5</string>
+              <float name="TextSize">11</float>
+              <Font name="FontFace">
+                <Family>
+                  <url>rbxasset://fonts/families/BuilderSans.json</url>
+                </Family>
+                <Weight>700</Weight>
+                <Style>Normal</Style>
+              </Font>
+              <token name="TextXAlignment">2</token>
+              <bool name="TextWrapped">true</bool>
+              <bool name="TextScaled">false</bool>
+              <bool name="AutoLocalize">false</bool>
+            </Properties>
+          </Item>
         </Item>
-        <Item class="Frame" referent="RBX000034">
+        <Item class="Frame" referent="RBX000039">
           <Properties>
             <string name="Name">Step6</string>
             <UDim2 name="Size">
@@ -726,9 +911,46 @@
             <float name="BackgroundTransparency">0</float>
             <int name="BorderSizePixel">0</int>
           </Properties>
+          <Item class="TextLabel" referent="RBX000040">
+            <Properties>
+              <string name="Name">Status</string>
+              <UDim2 name="Size">
+                <XS>1</XS>
+                <XO>0</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0</XS>
+                <XO>0</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <float name="BackgroundTransparency">1</float>
+              <int name="BorderSizePixel">0</int>
+              <Color3 name="TextColor3">
+                <R>0.96470588</R>
+                <G>0.97254902</G>
+                <B>1.00000000</B>
+              </Color3>
+              <string name="Text">6</string>
+              <float name="TextSize">11</float>
+              <Font name="FontFace">
+                <Family>
+                  <url>rbxasset://fonts/families/BuilderSans.json</url>
+                </Family>
+                <Weight>700</Weight>
+                <Style>Normal</Style>
+              </Font>
+              <token name="TextXAlignment">2</token>
+              <bool name="TextWrapped">true</bool>
+              <bool name="TextScaled">false</bool>
+              <bool name="AutoLocalize">false</bool>
+            </Properties>
+          </Item>
         </Item>
       </Item>
-      <Item class="TextLabel" referent="RBX000035">
+      <Item class="TextLabel" referent="RBX000041">
         <Properties>
           <string name="Name">PlayerStatus</string>
           <UDim2 name="Size">
@@ -773,23 +995,23 @@
             <B>0.19607843</B>
           </Color3>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000036">
+        <Item class="UITextSizeConstraint" referent="RBX000042">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
             <int name="MaxTextSize">13</int>
           </Properties>
         </Item>
-        <Item class="UISizeConstraint" referent="RBX000037">
+        <Item class="UISizeConstraint" referent="RBX000043">
           <Properties>
             <string name="Name">WidthBounds</string>
             <Vector2 name="MaxSize">
               <X>680</X>
-              <Y>26</Y>
+              <Y>48</Y>
             </Vector2>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000038">
+        <Item class="UICorner" referent="RBX000044">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -799,7 +1021,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="Frame" referent="RBX000039">
+      <Item class="Frame" referent="RBX000045">
         <Properties>
           <string name="Name">HealthBar</string>
           <UDim2 name="Size">
@@ -826,7 +1048,7 @@
             <Y>0</Y>
           </Vector2>
         </Properties>
-        <Item class="Frame" referent="RBX000040">
+        <Item class="Frame" referent="RBX000046">
           <Properties>
             <string name="Name">Fill</string>
             <UDim2 name="Size">
@@ -851,7 +1073,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextLabel" referent="RBX000041">
+      <Item class="TextLabel" referent="RBX000047">
         <Properties>
           <string name="Name">ControlsTip</string>
           <UDim2 name="Size">
@@ -897,14 +1119,14 @@
           </Color3>
           <float name="TextStrokeTransparency">0.2</float>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000042">
+        <Item class="UITextSizeConstraint" referent="RBX000048">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
             <int name="MaxTextSize">12</int>
           </Properties>
         </Item>
-        <Item class="UISizeConstraint" referent="RBX000043">
+        <Item class="UISizeConstraint" referent="RBX000049">
           <Properties>
             <string name="Name">WidthBounds</string>
             <Vector2 name="MaxSize">
@@ -914,7 +1136,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="Frame" referent="RBX000044">
+      <Item class="Frame" referent="RBX000050">
         <Properties>
           <string name="Name">TeamPanel</string>
           <UDim2 name="Size">
@@ -942,7 +1164,7 @@
           </Vector2>
           <bool name="Visible">false</bool>
         </Properties>
-        <Item class="UISizeConstraint" referent="RBX000045">
+        <Item class="UISizeConstraint" referent="RBX000051">
           <Properties>
             <string name="Name">WidthBounds</string>
             <Vector2 name="MaxSize">
@@ -951,7 +1173,7 @@
             </Vector2>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000046">
+        <Item class="UICorner" referent="RBX000052">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -960,7 +1182,7 @@
             </UDim>
           </Properties>
         </Item>
-        <Item class="TextLabel" referent="RBX000047">
+        <Item class="TextLabel" referent="RBX000053">
           <Properties>
             <string name="Name">ChargeLabel</string>
             <UDim2 name="Size">
@@ -997,7 +1219,7 @@
             <bool name="AutoLocalize">false</bool>
           </Properties>
         </Item>
-        <Item class="Frame" referent="RBX000048">
+        <Item class="Frame" referent="RBX000054">
           <Properties>
             <string name="Name">Meter</string>
             <UDim2 name="Size">
@@ -1020,7 +1242,7 @@
             <float name="BackgroundTransparency">0</float>
             <int name="BorderSizePixel">0</int>
           </Properties>
-          <Item class="Frame" referent="RBX000049">
+          <Item class="Frame" referent="RBX000055">
             <Properties>
               <string name="Name">Fill</string>
               <UDim2 name="Size">
@@ -1046,7 +1268,7 @@
           </Item>
         </Item>
       </Item>
-      <Item class="Frame" referent="RBX000050">
+      <Item class="Frame" referent="RBX000056">
         <Properties>
           <string name="Name">VotePanel</string>
           <UDim2 name="Size">
@@ -1074,7 +1296,7 @@
           </Vector2>
           <bool name="Visible">false</bool>
         </Properties>
-        <Item class="UISizeConstraint" referent="RBX000051">
+        <Item class="UISizeConstraint" referent="RBX000057">
           <Properties>
             <string name="Name">WidthBounds</string>
             <Vector2 name="MaxSize">
@@ -1083,7 +1305,7 @@
             </Vector2>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000052">
+        <Item class="UICorner" referent="RBX000058">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -1092,7 +1314,7 @@
             </UDim>
           </Properties>
         </Item>
-        <Item class="TextLabel" referent="RBX000053">
+        <Item class="TextLabel" referent="RBX000059">
           <Properties>
             <string name="Name">Heading</string>
             <UDim2 name="Size">
@@ -1128,7 +1350,7 @@
             <bool name="TextScaled">true</bool>
             <bool name="AutoLocalize">false</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000054">
+          <Item class="UITextSizeConstraint" referent="RBX000060">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
@@ -1136,7 +1358,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="Frame" referent="RBX000055">
+        <Item class="Frame" referent="RBX000061">
           <Properties>
             <string name="Name">Cards</string>
             <UDim2 name="Size">
@@ -1159,7 +1381,7 @@
             <float name="BackgroundTransparency">1</float>
             <int name="BorderSizePixel">0</int>
           </Properties>
-          <Item class="TextButton" referent="RBX000056">
+          <Item class="TextButton" referent="RBX000062">
             <Properties>
               <string name="Name">Balanced</string>
               <UDim2 name="Size">
@@ -1202,14 +1424,14 @@
               <bool name="AutoButtonColor">true</bool>
               <bool name="Selectable">true</bool>
             </Properties>
-            <Item class="UITextSizeConstraint" referent="RBX000057">
+            <Item class="UITextSizeConstraint" referent="RBX000063">
               <Properties>
                 <string name="Name">TextBounds</string>
                 <int name="MinTextSize">12</int>
                 <int name="MaxTextSize">17</int>
               </Properties>
             </Item>
-            <Item class="UICorner" referent="RBX000058">
+            <Item class="UICorner" referent="RBX000064">
               <Properties>
                 <string name="Name">Corner</string>
                 <UDim name="CornerRadius">
@@ -1219,7 +1441,7 @@
               </Properties>
             </Item>
           </Item>
-          <Item class="TextButton" referent="RBX000059">
+          <Item class="TextButton" referent="RBX000065">
             <Properties>
               <string name="Name">Reflex</string>
               <UDim2 name="Size">
@@ -1262,14 +1484,14 @@
               <bool name="AutoButtonColor">true</bool>
               <bool name="Selectable">true</bool>
             </Properties>
-            <Item class="UITextSizeConstraint" referent="RBX000060">
+            <Item class="UITextSizeConstraint" referent="RBX000066">
               <Properties>
                 <string name="Name">TextBounds</string>
                 <int name="MinTextSize">12</int>
                 <int name="MaxTextSize">17</int>
               </Properties>
             </Item>
-            <Item class="UICorner" referent="RBX000061">
+            <Item class="UICorner" referent="RBX000067">
               <Properties>
                 <string name="Name">Corner</string>
                 <UDim name="CornerRadius">
@@ -1279,7 +1501,7 @@
               </Properties>
             </Item>
           </Item>
-          <Item class="TextButton" referent="RBX000062">
+          <Item class="TextButton" referent="RBX000068">
             <Properties>
               <string name="Name">Cosmic</string>
               <UDim2 name="Size">
@@ -1322,14 +1544,14 @@
               <bool name="AutoButtonColor">true</bool>
               <bool name="Selectable">true</bool>
             </Properties>
-            <Item class="UITextSizeConstraint" referent="RBX000063">
+            <Item class="UITextSizeConstraint" referent="RBX000069">
               <Properties>
                 <string name="Name">TextBounds</string>
                 <int name="MinTextSize">12</int>
                 <int name="MaxTextSize">17</int>
               </Properties>
             </Item>
-            <Item class="UICorner" referent="RBX000064">
+            <Item class="UICorner" referent="RBX000070">
               <Properties>
                 <string name="Name">Corner</string>
                 <UDim name="CornerRadius">
@@ -1340,7 +1562,7 @@
             </Item>
           </Item>
         </Item>
-        <Item class="TextLabel" referent="RBX000065">
+        <Item class="TextLabel" referent="RBX000071">
           <Properties>
             <string name="Name">Hint</string>
             <UDim2 name="Size">
@@ -1376,7 +1598,7 @@
             <bool name="TextScaled">true</bool>
             <bool name="AutoLocalize">false</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000066">
+          <Item class="UITextSizeConstraint" referent="RBX000072">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
@@ -1385,20 +1607,20 @@
           </Item>
         </Item>
       </Item>
-      <Item class="Frame" referent="RBX000067">
+      <Item class="Frame" referent="RBX000073">
         <Properties>
           <string name="Name">ResultsPanel</string>
           <UDim2 name="Size">
             <XS>1</XS>
             <XO>-36</XO>
             <YS>0</YS>
-            <YO>148</YO>
+            <YO>244</YO>
           </UDim2>
           <UDim2 name="Position">
             <XS>0.5</XS>
             <XO>0</XO>
-            <YS>0.48</YS>
-            <YO>0</YO>
+            <YS>0</YS>
+            <YO>46</YO>
           </UDim2>
           <Color3 name="BackgroundColor3">
             <R>0.09411765</R>
@@ -1413,16 +1635,16 @@
           </Vector2>
           <bool name="Visible">false</bool>
         </Properties>
-        <Item class="UISizeConstraint" referent="RBX000068">
+        <Item class="UISizeConstraint" referent="RBX000074">
           <Properties>
             <string name="Name">WidthBounds</string>
             <Vector2 name="MaxSize">
-              <X>570</X>
-              <Y>180</Y>
+              <X>620</X>
+              <Y>280</Y>
             </Vector2>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000069">
+        <Item class="UICorner" referent="RBX000075">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -1431,7 +1653,7 @@
             </UDim>
           </Properties>
         </Item>
-        <Item class="TextLabel" referent="RBX000070">
+        <Item class="TextLabel" referent="RBX000076">
           <Properties>
             <string name="Name">Heading</string>
             <UDim2 name="Size">
@@ -1467,7 +1689,7 @@
             <bool name="TextScaled">true</bool>
             <bool name="AutoLocalize">false</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000071">
+          <Item class="UITextSizeConstraint" referent="RBX000077">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
@@ -1475,7 +1697,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="TextLabel" referent="RBX000072">
+        <Item class="TextLabel" referent="RBX000078">
           <Properties>
             <string name="Name">Summary</string>
             <UDim2 name="Size">
@@ -1511,7 +1733,7 @@
             <bool name="TextScaled">true</bool>
             <bool name="AutoLocalize">false</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000073">
+          <Item class="UITextSizeConstraint" referent="RBX000079">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
@@ -1519,7 +1741,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="TextLabel" referent="RBX000074">
+        <Item class="TextLabel" referent="RBX000080">
           <Properties>
             <string name="Name">Personal</string>
             <UDim2 name="Size">
@@ -1555,7 +1777,7 @@
             <bool name="TextScaled">true</bool>
             <bool name="AutoLocalize">false</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000075">
+          <Item class="UITextSizeConstraint" referent="RBX000081">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
@@ -1563,7 +1785,485 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="TextLabel" referent="RBX000076">
+        <Item class="TextLabel" referent="RBX000082">
+          <Properties>
+            <string name="Name">Rewards</string>
+            <UDim2 name="Size">
+              <XS>1</XS>
+              <XO>-28</XO>
+              <YS>0</YS>
+              <YO>24</YO>
+            </UDim2>
+            <UDim2 name="Position">
+              <XS>0</XS>
+              <XO>14</XO>
+              <YS>0</YS>
+              <YO>117</YO>
+            </UDim2>
+            <float name="BackgroundTransparency">1</float>
+            <int name="BorderSizePixel">0</int>
+            <Color3 name="TextColor3">
+              <R>1.00000000</R>
+              <G>0.83529412</G>
+              <B>0.30980392</B>
+            </Color3>
+            <string name="Text" />
+            <float name="TextSize">17</float>
+            <Font name="FontFace">
+              <Family>
+                <url>rbxasset://fonts/families/BuilderSans.json</url>
+              </Family>
+              <Weight>700</Weight>
+              <Style>Normal</Style>
+            </Font>
+            <token name="TextXAlignment">2</token>
+            <bool name="TextWrapped">true</bool>
+            <bool name="TextScaled">true</bool>
+            <bool name="AutoLocalize">false</bool>
+          </Properties>
+          <Item class="UITextSizeConstraint" referent="RBX000083">
+            <Properties>
+              <string name="Name">TextBounds</string>
+              <int name="MinTextSize">12</int>
+              <int name="MaxTextSize">17</int>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="Frame" referent="RBX000084">
+          <Properties>
+            <string name="Name">Trials</string>
+            <UDim2 name="Size">
+              <XS>1</XS>
+              <XO>-28</XO>
+              <YS>0</YS>
+              <YO>22</YO>
+            </UDim2>
+            <UDim2 name="Position">
+              <XS>0</XS>
+              <XO>14</XO>
+              <YS>0</YS>
+              <YO>145</YO>
+            </UDim2>
+            <Color3 name="BackgroundColor3">
+              <R>0.09411765</R>
+              <G>0.14117647</G>
+              <B>0.22352941</B>
+            </Color3>
+            <float name="BackgroundTransparency">1</float>
+            <int name="BorderSizePixel">0</int>
+          </Properties>
+          <Item class="Frame" referent="RBX000085">
+            <Properties>
+              <string name="Name">Step1</string>
+              <UDim2 name="Size">
+                <XS>0.16666666666666666</XS>
+                <XO>-4</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0.0</XS>
+                <XO>2</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <Color3 name="BackgroundColor3">
+                <R>0.21176471</R>
+                <G>0.27450980</G>
+                <B>0.35686275</B>
+              </Color3>
+              <float name="BackgroundTransparency">0</float>
+              <int name="BorderSizePixel">0</int>
+            </Properties>
+            <Item class="TextLabel" referent="RBX000086">
+              <Properties>
+                <string name="Name">Status</string>
+                <UDim2 name="Size">
+                  <XS>1</XS>
+                  <XO>0</XO>
+                  <YS>1</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <UDim2 name="Position">
+                  <XS>0</XS>
+                  <XO>0</XO>
+                  <YS>0</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <float name="BackgroundTransparency">1</float>
+                <int name="BorderSizePixel">0</int>
+                <Color3 name="TextColor3">
+                  <R>0.96470588</R>
+                  <G>0.97254902</G>
+                  <B>1.00000000</B>
+                </Color3>
+                <string name="Text">1</string>
+                <float name="TextSize">13</float>
+                <Font name="FontFace">
+                  <Family>
+                    <url>rbxasset://fonts/families/BuilderSans.json</url>
+                  </Family>
+                  <Weight>700</Weight>
+                  <Style>Normal</Style>
+                </Font>
+                <token name="TextXAlignment">2</token>
+                <bool name="TextWrapped">true</bool>
+                <bool name="TextScaled">false</bool>
+                <bool name="AutoLocalize">false</bool>
+              </Properties>
+            </Item>
+          </Item>
+          <Item class="Frame" referent="RBX000087">
+            <Properties>
+              <string name="Name">Step2</string>
+              <UDim2 name="Size">
+                <XS>0.16666666666666666</XS>
+                <XO>-4</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0.16666666666666666</XS>
+                <XO>2</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <Color3 name="BackgroundColor3">
+                <R>0.21176471</R>
+                <G>0.27450980</G>
+                <B>0.35686275</B>
+              </Color3>
+              <float name="BackgroundTransparency">0</float>
+              <int name="BorderSizePixel">0</int>
+            </Properties>
+            <Item class="TextLabel" referent="RBX000088">
+              <Properties>
+                <string name="Name">Status</string>
+                <UDim2 name="Size">
+                  <XS>1</XS>
+                  <XO>0</XO>
+                  <YS>1</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <UDim2 name="Position">
+                  <XS>0</XS>
+                  <XO>0</XO>
+                  <YS>0</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <float name="BackgroundTransparency">1</float>
+                <int name="BorderSizePixel">0</int>
+                <Color3 name="TextColor3">
+                  <R>0.96470588</R>
+                  <G>0.97254902</G>
+                  <B>1.00000000</B>
+                </Color3>
+                <string name="Text">2</string>
+                <float name="TextSize">13</float>
+                <Font name="FontFace">
+                  <Family>
+                    <url>rbxasset://fonts/families/BuilderSans.json</url>
+                  </Family>
+                  <Weight>700</Weight>
+                  <Style>Normal</Style>
+                </Font>
+                <token name="TextXAlignment">2</token>
+                <bool name="TextWrapped">true</bool>
+                <bool name="TextScaled">false</bool>
+                <bool name="AutoLocalize">false</bool>
+              </Properties>
+            </Item>
+          </Item>
+          <Item class="Frame" referent="RBX000089">
+            <Properties>
+              <string name="Name">Step3</string>
+              <UDim2 name="Size">
+                <XS>0.16666666666666666</XS>
+                <XO>-4</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0.3333333333333333</XS>
+                <XO>2</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <Color3 name="BackgroundColor3">
+                <R>0.21176471</R>
+                <G>0.27450980</G>
+                <B>0.35686275</B>
+              </Color3>
+              <float name="BackgroundTransparency">0</float>
+              <int name="BorderSizePixel">0</int>
+            </Properties>
+            <Item class="TextLabel" referent="RBX000090">
+              <Properties>
+                <string name="Name">Status</string>
+                <UDim2 name="Size">
+                  <XS>1</XS>
+                  <XO>0</XO>
+                  <YS>1</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <UDim2 name="Position">
+                  <XS>0</XS>
+                  <XO>0</XO>
+                  <YS>0</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <float name="BackgroundTransparency">1</float>
+                <int name="BorderSizePixel">0</int>
+                <Color3 name="TextColor3">
+                  <R>0.96470588</R>
+                  <G>0.97254902</G>
+                  <B>1.00000000</B>
+                </Color3>
+                <string name="Text">3</string>
+                <float name="TextSize">13</float>
+                <Font name="FontFace">
+                  <Family>
+                    <url>rbxasset://fonts/families/BuilderSans.json</url>
+                  </Family>
+                  <Weight>700</Weight>
+                  <Style>Normal</Style>
+                </Font>
+                <token name="TextXAlignment">2</token>
+                <bool name="TextWrapped">true</bool>
+                <bool name="TextScaled">false</bool>
+                <bool name="AutoLocalize">false</bool>
+              </Properties>
+            </Item>
+          </Item>
+          <Item class="Frame" referent="RBX000091">
+            <Properties>
+              <string name="Name">Step4</string>
+              <UDim2 name="Size">
+                <XS>0.16666666666666666</XS>
+                <XO>-4</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0.5</XS>
+                <XO>2</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <Color3 name="BackgroundColor3">
+                <R>0.21176471</R>
+                <G>0.27450980</G>
+                <B>0.35686275</B>
+              </Color3>
+              <float name="BackgroundTransparency">0</float>
+              <int name="BorderSizePixel">0</int>
+            </Properties>
+            <Item class="TextLabel" referent="RBX000092">
+              <Properties>
+                <string name="Name">Status</string>
+                <UDim2 name="Size">
+                  <XS>1</XS>
+                  <XO>0</XO>
+                  <YS>1</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <UDim2 name="Position">
+                  <XS>0</XS>
+                  <XO>0</XO>
+                  <YS>0</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <float name="BackgroundTransparency">1</float>
+                <int name="BorderSizePixel">0</int>
+                <Color3 name="TextColor3">
+                  <R>0.96470588</R>
+                  <G>0.97254902</G>
+                  <B>1.00000000</B>
+                </Color3>
+                <string name="Text">4</string>
+                <float name="TextSize">13</float>
+                <Font name="FontFace">
+                  <Family>
+                    <url>rbxasset://fonts/families/BuilderSans.json</url>
+                  </Family>
+                  <Weight>700</Weight>
+                  <Style>Normal</Style>
+                </Font>
+                <token name="TextXAlignment">2</token>
+                <bool name="TextWrapped">true</bool>
+                <bool name="TextScaled">false</bool>
+                <bool name="AutoLocalize">false</bool>
+              </Properties>
+            </Item>
+          </Item>
+          <Item class="Frame" referent="RBX000093">
+            <Properties>
+              <string name="Name">Step5</string>
+              <UDim2 name="Size">
+                <XS>0.16666666666666666</XS>
+                <XO>-4</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0.6666666666666666</XS>
+                <XO>2</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <Color3 name="BackgroundColor3">
+                <R>0.21176471</R>
+                <G>0.27450980</G>
+                <B>0.35686275</B>
+              </Color3>
+              <float name="BackgroundTransparency">0</float>
+              <int name="BorderSizePixel">0</int>
+            </Properties>
+            <Item class="TextLabel" referent="RBX000094">
+              <Properties>
+                <string name="Name">Status</string>
+                <UDim2 name="Size">
+                  <XS>1</XS>
+                  <XO>0</XO>
+                  <YS>1</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <UDim2 name="Position">
+                  <XS>0</XS>
+                  <XO>0</XO>
+                  <YS>0</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <float name="BackgroundTransparency">1</float>
+                <int name="BorderSizePixel">0</int>
+                <Color3 name="TextColor3">
+                  <R>0.96470588</R>
+                  <G>0.97254902</G>
+                  <B>1.00000000</B>
+                </Color3>
+                <string name="Text">5</string>
+                <float name="TextSize">13</float>
+                <Font name="FontFace">
+                  <Family>
+                    <url>rbxasset://fonts/families/BuilderSans.json</url>
+                  </Family>
+                  <Weight>700</Weight>
+                  <Style>Normal</Style>
+                </Font>
+                <token name="TextXAlignment">2</token>
+                <bool name="TextWrapped">true</bool>
+                <bool name="TextScaled">false</bool>
+                <bool name="AutoLocalize">false</bool>
+              </Properties>
+            </Item>
+          </Item>
+          <Item class="Frame" referent="RBX000095">
+            <Properties>
+              <string name="Name">Step6</string>
+              <UDim2 name="Size">
+                <XS>0.16666666666666666</XS>
+                <XO>-4</XO>
+                <YS>1</YS>
+                <YO>0</YO>
+              </UDim2>
+              <UDim2 name="Position">
+                <XS>0.8333333333333334</XS>
+                <XO>2</XO>
+                <YS>0</YS>
+                <YO>0</YO>
+              </UDim2>
+              <Color3 name="BackgroundColor3">
+                <R>0.21176471</R>
+                <G>0.27450980</G>
+                <B>0.35686275</B>
+              </Color3>
+              <float name="BackgroundTransparency">0</float>
+              <int name="BorderSizePixel">0</int>
+            </Properties>
+            <Item class="TextLabel" referent="RBX000096">
+              <Properties>
+                <string name="Name">Status</string>
+                <UDim2 name="Size">
+                  <XS>1</XS>
+                  <XO>0</XO>
+                  <YS>1</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <UDim2 name="Position">
+                  <XS>0</XS>
+                  <XO>0</XO>
+                  <YS>0</YS>
+                  <YO>0</YO>
+                </UDim2>
+                <float name="BackgroundTransparency">1</float>
+                <int name="BorderSizePixel">0</int>
+                <Color3 name="TextColor3">
+                  <R>0.96470588</R>
+                  <G>0.97254902</G>
+                  <B>1.00000000</B>
+                </Color3>
+                <string name="Text">6</string>
+                <float name="TextSize">13</float>
+                <Font name="FontFace">
+                  <Family>
+                    <url>rbxasset://fonts/families/BuilderSans.json</url>
+                  </Family>
+                  <Weight>700</Weight>
+                  <Style>Normal</Style>
+                </Font>
+                <token name="TextXAlignment">2</token>
+                <bool name="TextWrapped">true</bool>
+                <bool name="TextScaled">false</bool>
+                <bool name="AutoLocalize">false</bool>
+              </Properties>
+            </Item>
+          </Item>
+        </Item>
+        <Item class="TextLabel" referent="RBX000097">
+          <Properties>
+            <string name="Name">Goal</string>
+            <UDim2 name="Size">
+              <XS>1</XS>
+              <XO>-28</XO>
+              <YS>0</YS>
+              <YO>37</YO>
+            </UDim2>
+            <UDim2 name="Position">
+              <XS>0</XS>
+              <XO>14</XO>
+              <YS>0</YS>
+              <YO>173</YO>
+            </UDim2>
+            <float name="BackgroundTransparency">1</float>
+            <int name="BorderSizePixel">0</int>
+            <Color3 name="TextColor3">
+              <R>0.70196078</R>
+              <G>0.77254902</G>
+              <B>0.85882353</B>
+            </Color3>
+            <string name="Text" />
+            <float name="TextSize">14</float>
+            <Font name="FontFace">
+              <Family>
+                <url>rbxasset://fonts/families/BuilderSans.json</url>
+              </Family>
+              <Weight>400</Weight>
+              <Style>Normal</Style>
+            </Font>
+            <token name="TextXAlignment">2</token>
+            <bool name="TextWrapped">true</bool>
+            <bool name="TextScaled">true</bool>
+            <bool name="AutoLocalize">false</bool>
+          </Properties>
+          <Item class="UITextSizeConstraint" referent="RBX000098">
+            <Properties>
+              <string name="Name">TextBounds</string>
+              <int name="MinTextSize">12</int>
+              <int name="MaxTextSize">14</int>
+            </Properties>
+          </Item>
+        </Item>
+        <Item class="TextLabel" referent="RBX000099">
           <Properties>
             <string name="Name">Next</string>
             <UDim2 name="Size">
@@ -1599,7 +2299,7 @@
             <bool name="TextScaled">true</bool>
             <bool name="AutoLocalize">false</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000077">
+          <Item class="UITextSizeConstraint" referent="RBX000100">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
@@ -1608,7 +2308,103 @@
           </Item>
         </Item>
       </Item>
-      <Item class="Frame" referent="RBX000078">
+      <Item class="Frame" referent="RBX000101">
+        <Properties>
+          <string name="Name">FeedbackToast</string>
+          <UDim2 name="Size">
+            <XS>1</XS>
+            <XO>-48</XO>
+            <YS>0</YS>
+            <YO>38</YO>
+          </UDim2>
+          <UDim2 name="Position">
+            <XS>0.5</XS>
+            <XO>0</XO>
+            <YS>0.62</YS>
+            <YO>0</YO>
+          </UDim2>
+          <Color3 name="BackgroundColor3">
+            <R>0.09411765</R>
+            <G>0.14117647</G>
+            <B>0.22352941</B>
+          </Color3>
+          <float name="BackgroundTransparency">0.08</float>
+          <int name="BorderSizePixel">0</int>
+          <Vector2 name="AnchorPoint">
+            <X>0.5</X>
+            <Y>0.5</Y>
+          </Vector2>
+          <bool name="Visible">false</bool>
+        </Properties>
+        <Item class="UISizeConstraint" referent="RBX000102">
+          <Properties>
+            <string name="Name">WidthBounds</string>
+            <Vector2 name="MaxSize">
+              <X>500</X>
+              <Y>42</Y>
+            </Vector2>
+          </Properties>
+        </Item>
+        <Item class="UICorner" referent="RBX000103">
+          <Properties>
+            <string name="Name">Corner</string>
+            <UDim name="CornerRadius">
+              <S>0</S>
+              <O>6</O>
+            </UDim>
+          </Properties>
+        </Item>
+        <Item class="UIScale" referent="RBX000104">
+          <Properties>
+            <string name="Name">Pulse</string>
+          </Properties>
+        </Item>
+        <Item class="TextLabel" referent="RBX000105">
+          <Properties>
+            <string name="Name">Message</string>
+            <UDim2 name="Size">
+              <XS>1</XS>
+              <XO>-20</XO>
+              <YS>1</YS>
+              <YO>-8</YO>
+            </UDim2>
+            <UDim2 name="Position">
+              <XS>0</XS>
+              <XO>10</XO>
+              <YS>0</YS>
+              <YO>4</YO>
+            </UDim2>
+            <float name="BackgroundTransparency">1</float>
+            <int name="BorderSizePixel">0</int>
+            <Color3 name="TextColor3">
+              <R>0.96470588</R>
+              <G>0.97254902</G>
+              <B>1.00000000</B>
+            </Color3>
+            <string name="Text" />
+            <float name="TextSize">15</float>
+            <Font name="FontFace">
+              <Family>
+                <url>rbxasset://fonts/families/BuilderSans.json</url>
+              </Family>
+              <Weight>700</Weight>
+              <Style>Normal</Style>
+            </Font>
+            <token name="TextXAlignment">2</token>
+            <bool name="TextWrapped">true</bool>
+            <bool name="TextScaled">true</bool>
+            <bool name="AutoLocalize">false</bool>
+          </Properties>
+          <Item class="UITextSizeConstraint" referent="RBX000106">
+            <Properties>
+              <string name="Name">TextBounds</string>
+              <int name="MinTextSize">12</int>
+              <int name="MaxTextSize">15</int>
+            </Properties>
+          </Item>
+        </Item>
+      </Item>
+      <Item class="Frame" referent="RBX000107">
         <Properties>
           <string name="Name">Actions</string>
           <UDim2 name="Size">
@@ -1635,7 +2431,7 @@
             <Y>1</Y>
           </Vector2>
         </Properties>
-        <Item class="TextButton" referent="RBX000079">
+        <Item class="TextButton" referent="RBX000108">
           <Properties>
             <string name="Name">Collection</string>
             <UDim2 name="Size">
@@ -1678,14 +2474,14 @@
             <bool name="AutoButtonColor">true</bool>
             <bool name="Selectable">true</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000080">
+          <Item class="UITextSizeConstraint" referent="RBX000109">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
               <int name="MaxTextSize">13</int>
             </Properties>
           </Item>
-          <Item class="UICorner" referent="RBX000081">
+          <Item class="UICorner" referent="RBX000110">
             <Properties>
               <string name="Name">Corner</string>
               <UDim name="CornerRadius">
@@ -1695,7 +2491,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="TextButton" referent="RBX000082">
+        <Item class="TextButton" referent="RBX000111">
           <Properties>
             <string name="Name">Motion</string>
             <UDim2 name="Size">
@@ -1738,14 +2534,14 @@
             <bool name="AutoButtonColor">true</bool>
             <bool name="Selectable">true</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000083">
+          <Item class="UITextSizeConstraint" referent="RBX000112">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
               <int name="MaxTextSize">12</int>
             </Properties>
           </Item>
-          <Item class="UICorner" referent="RBX000084">
+          <Item class="UICorner" referent="RBX000113">
             <Properties>
               <string name="Name">Corner</string>
               <UDim name="CornerRadius">
@@ -1755,7 +2551,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="TextButton" referent="RBX000085">
+        <Item class="TextButton" referent="RBX000114">
           <Properties>
             <string name="Name">Audio</string>
             <UDim2 name="Size">
@@ -1798,14 +2594,14 @@
             <bool name="AutoButtonColor">true</bool>
             <bool name="Selectable">true</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000086">
+          <Item class="UITextSizeConstraint" referent="RBX000115">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
               <int name="MaxTextSize">12</int>
             </Properties>
           </Item>
-          <Item class="UICorner" referent="RBX000087">
+          <Item class="UICorner" referent="RBX000116">
             <Properties>
               <string name="Name">Corner</string>
               <UDim name="CornerRadius">
@@ -1816,7 +2612,7 @@
           </Item>
         </Item>
       </Item>
-      <Item class="TextButton" referent="RBX000088">
+      <Item class="TextButton" referent="RBX000117">
         <Properties>
           <string name="Name">SpectateNext</string>
           <UDim2 name="Size">
@@ -1864,14 +2660,14 @@
           </Vector2>
           <bool name="Visible">false</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000089">
+        <Item class="UITextSizeConstraint" referent="RBX000118">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
             <int name="MaxTextSize">13</int>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000090">
+        <Item class="UICorner" referent="RBX000119">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -1881,7 +2677,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="Frame" referent="RBX000091">
+      <Item class="Frame" referent="RBX000120">
         <Properties>
           <string name="Name">CollectionBackdrop</string>
           <UDim2 name="Size">
@@ -1908,7 +2704,7 @@
           <int name="ZIndex">3</int>
         </Properties>
       </Item>
-      <Item class="Frame" referent="RBX000092">
+      <Item class="Frame" referent="RBX000121">
         <Properties>
           <string name="Name">CollectionPanel</string>
           <UDim2 name="Size">
@@ -1938,7 +2734,7 @@
           <bool name="Active">true</bool>
           <int name="ZIndex">4</int>
         </Properties>
-        <Item class="UISizeConstraint" referent="RBX000093">
+        <Item class="UISizeConstraint" referent="RBX000122">
           <Properties>
             <string name="Name">WidthBounds</string>
             <Vector2 name="MaxSize">
@@ -1947,7 +2743,7 @@
             </Vector2>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000094">
+        <Item class="UICorner" referent="RBX000123">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -1956,7 +2752,7 @@
             </UDim>
           </Properties>
         </Item>
-        <Item class="TextLabel" referent="RBX000095">
+        <Item class="TextLabel" referent="RBX000124">
           <Properties>
             <string name="Name">Heading</string>
             <UDim2 name="Size">
@@ -1992,7 +2788,7 @@
             <bool name="TextScaled">true</bool>
             <bool name="AutoLocalize">false</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000096">
+          <Item class="UITextSizeConstraint" referent="RBX000125">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
@@ -2000,7 +2796,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="TextButton" referent="RBX000097">
+        <Item class="TextButton" referent="RBX000126">
           <Properties>
             <string name="Name">Close</string>
             <UDim2 name="Size">
@@ -2043,14 +2839,14 @@
             <bool name="AutoButtonColor">true</bool>
             <bool name="Selectable">true</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000098">
+          <Item class="UITextSizeConstraint" referent="RBX000127">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
               <int name="MaxTextSize">24</int>
             </Properties>
           </Item>
-          <Item class="UICorner" referent="RBX000099">
+          <Item class="UICorner" referent="RBX000128">
             <Properties>
               <string name="Name">Corner</string>
               <UDim name="CornerRadius">
@@ -2060,7 +2856,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="TextButton" referent="RBX000100">
+        <Item class="TextButton" referent="RBX000129">
           <Properties>
             <string name="Name">CosmeticsTab</string>
             <UDim2 name="Size">
@@ -2103,14 +2899,14 @@
             <bool name="AutoButtonColor">true</bool>
             <bool name="Selectable">true</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000101">
+          <Item class="UITextSizeConstraint" referent="RBX000130">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
               <int name="MaxTextSize">14</int>
             </Properties>
           </Item>
-          <Item class="UICorner" referent="RBX000102">
+          <Item class="UICorner" referent="RBX000131">
             <Properties>
               <string name="Name">Corner</string>
               <UDim name="CornerRadius">
@@ -2120,7 +2916,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="TextButton" referent="RBX000103">
+        <Item class="TextButton" referent="RBX000132">
           <Properties>
             <string name="Name">QuestsTab</string>
             <UDim2 name="Size">
@@ -2163,14 +2959,14 @@
             <bool name="AutoButtonColor">true</bool>
             <bool name="Selectable">true</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000104">
+          <Item class="UITextSizeConstraint" referent="RBX000133">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>
               <int name="MaxTextSize">14</int>
             </Properties>
           </Item>
-          <Item class="UICorner" referent="RBX000105">
+          <Item class="UICorner" referent="RBX000134">
             <Properties>
               <string name="Name">Corner</string>
               <UDim name="CornerRadius">
@@ -2180,7 +2976,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="ScrollingFrame" referent="RBX000106">
+        <Item class="ScrollingFrame" referent="RBX000135">
           <Properties>
             <string name="Name">Items</string>
             <UDim2 name="Size">
@@ -2212,7 +3008,7 @@
             <int name="ScrollBarThickness">4</int>
             <bool name="ClipsDescendants">true</bool>
           </Properties>
-          <Item class="UIListLayout" referent="RBX000107">
+          <Item class="UIListLayout" referent="RBX000136">
             <Properties>
               <string name="Name">Rows</string>
               <UDim name="Padding">
@@ -2223,7 +3019,7 @@
             </Properties>
           </Item>
         </Item>
-        <Item class="Frame" referent="RBX000108">
+        <Item class="Frame" referent="RBX000137">
           <Properties>
             <string name="Name">RowTemplate</string>
             <UDim2 name="Size">
@@ -2247,7 +3043,7 @@
             <int name="BorderSizePixel">0</int>
             <bool name="Visible">false</bool>
           </Properties>
-          <Item class="UICorner" referent="RBX000109">
+          <Item class="UICorner" referent="RBX000138">
             <Properties>
               <string name="Name">Corner</string>
               <UDim name="CornerRadius">
@@ -2256,7 +3052,7 @@
               </UDim>
             </Properties>
           </Item>
-          <Item class="Frame" referent="RBX000110">
+          <Item class="Frame" referent="RBX000139">
             <Properties>
               <string name="Name">Swatch</string>
               <UDim2 name="Size">
@@ -2280,7 +3076,7 @@
               <int name="BorderSizePixel">0</int>
             </Properties>
           </Item>
-          <Item class="TextLabel" referent="RBX000111">
+          <Item class="TextLabel" referent="RBX000140">
             <Properties>
               <string name="Name">Title</string>
               <UDim2 name="Size">
@@ -2316,7 +3112,7 @@
               <bool name="TextScaled">true</bool>
               <bool name="AutoLocalize">false</bool>
             </Properties>
-            <Item class="UITextSizeConstraint" referent="RBX000112">
+            <Item class="UITextSizeConstraint" referent="RBX000141">
               <Properties>
                 <string name="Name">TextBounds</string>
                 <int name="MinTextSize">12</int>
@@ -2324,7 +3120,7 @@
               </Properties>
             </Item>
           </Item>
-          <Item class="TextLabel" referent="RBX000113">
+          <Item class="TextLabel" referent="RBX000142">
             <Properties>
               <string name="Name">Detail</string>
               <UDim2 name="Size">
@@ -2360,7 +3156,7 @@
               <bool name="TextScaled">true</bool>
               <bool name="AutoLocalize">false</bool>
             </Properties>
-            <Item class="UITextSizeConstraint" referent="RBX000114">
+            <Item class="UITextSizeConstraint" referent="RBX000143">
               <Properties>
                 <string name="Name">TextBounds</string>
                 <int name="MinTextSize">12</int>
@@ -2368,7 +3164,7 @@
               </Properties>
             </Item>
           </Item>
-          <Item class="TextButton" referent="RBX000115">
+          <Item class="TextButton" referent="RBX000144">
             <Properties>
               <string name="Name">Action</string>
               <UDim2 name="Size">
@@ -2411,14 +3207,14 @@
               <bool name="AutoButtonColor">true</bool>
               <bool name="Selectable">true</bool>
             </Properties>
-            <Item class="UITextSizeConstraint" referent="RBX000116">
+            <Item class="UITextSizeConstraint" referent="RBX000145">
               <Properties>
                 <string name="Name">TextBounds</string>
                 <int name="MinTextSize">12</int>
                 <int name="MaxTextSize">13</int>
               </Properties>
             </Item>
-            <Item class="UICorner" referent="RBX000117">
+            <Item class="UICorner" referent="RBX000146">
               <Properties>
                 <string name="Name">Corner</string>
                 <UDim name="CornerRadius">
@@ -2429,7 +3225,7 @@
             </Item>
           </Item>
         </Item>
-        <Item class="TextLabel" referent="RBX000118">
+        <Item class="TextLabel" referent="RBX000147">
           <Properties>
             <string name="Name">Message</string>
             <UDim2 name="Size">
@@ -2465,7 +3261,7 @@
             <bool name="TextScaled">true</bool>
             <bool name="AutoLocalize">false</bool>
           </Properties>
-          <Item class="UITextSizeConstraint" referent="RBX000119">
+          <Item class="UITextSizeConstraint" referent="RBX000148">
             <Properties>
               <string name="Name">TextBounds</string>
               <int name="MinTextSize">12</int>

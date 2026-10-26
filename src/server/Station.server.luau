@@ -28,6 +28,19 @@ local attempts: { [Player]: Attempt } = {}
 local lastRequest: { [Player]: number } = {}
 local connections: { RBXScriptConnection } = {}
 
+local function initializePlayer(player: Player)
+	-- A first-time arrival chooses when to start. Main also checks EntryChoiceMade,
+	-- so script initialization order cannot admit a still-loading newcomer.
+	if player:GetAttribute("EntryChoiceMade") == nil then
+		player:SetAttribute("LobbyOnly", true)
+		player:SetAttribute("EntryChoiceMade", false)
+	end
+end
+table.insert(connections, Players.PlayerAdded:Connect(initializePlayer))
+for _, player in Players:GetPlayers() do
+	initializePlayer(player)
+end
+
 local function cancel(player: Player)
 	attempts[player] = nil
 	player:SetAttribute("PracticeState", "Idle")
@@ -58,6 +71,7 @@ local function setMode(player: Player, action: string)
 	end
 	cancel(player)
 	player:SetAttribute("LobbyOnly", action ~= "Join")
+	player:SetAttribute("EntryChoiceMade", true)
 	player:SetAttribute("VotedMode", "")
 	if action == "Practice" then
 		local now = Workspace:GetServerTimeNow()

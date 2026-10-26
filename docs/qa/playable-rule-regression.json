@@ -1,0 +1,5382 @@
+{
+  "summary": {
+    "ok": true,
+    "cleanup": {
+      "ok": true,
+      "recovery": {
+        "ok": true,
+        "attempted": false
+      },
+      "productionRestored": true,
+      "errors": []
+    },
+    "failureGoalsUnachieved": 0,
+    "errors": 0,
+    "failureGoalsAchieved": 0,
+    "outcomeMeaning": "ok means fixture execution/restoration; failureOutcome separately reports achieved or unachieved negative-case goals",
+    "failureGoalErrors": 0,
+    "entries": 12
+  },
+  "results": [
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 20.01520800590515,
+      "firstWarningAt": 0.0008249282836914062,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 3.0094690322875977,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "Скоро лунная гравитация! Прыгай к звёздам ★, но не улетай за край.",
+          "updates": false,
+          "start": 1792989124.454256,
+          "finish": 1792989127.463725
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 17.002054929733276,
+          "requestedSeconds": 17,
+          "reason": "deadline",
+          "instruction": "Выше прыжок — больше звёзд! ★ дают очки, монеты и опыт.",
+          "updates": true,
+          "start": 1792989127.466391,
+          "finish": 1792989144.468446
+        }
+      ],
+      "serverStartedAt": 1792989124.453427,
+      "rule": "LowGravity",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "Скоро лунная гравитация! Прыгай к звёздам ★, но не улетай за край.",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 8,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0008900000248104334,
+          "maxY": 30.269054412841797,
+          "minHealth": 100,
+          "minY": 3.7549686431884766,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.0004208087921142578,
+              "health": 100,
+              "pingSeconds": 0.0005039999959990382
+            },
+            {
+              "y": 4,
+              "t": 1.0395019054412842,
+              "health": 100,
+              "pingSeconds": 0.0008900000248104334
+            },
+            {
+              "y": 4,
+              "t": 2.083753824234009,
+              "health": 100,
+              "pingSeconds": 0.0006220000213943422
+            },
+            {
+              "y": 4,
+              "t": 3.010286808013916,
+              "health": 100,
+              "pingSeconds": 0.0005520000122487545
+            },
+            {
+              "y": 4.019256114959717,
+              "t": 4.033288955688477,
+              "health": 100,
+              "pingSeconds": 0.0006019999855197966
+            },
+            {
+              "y": 29.964941024780273,
+              "t": 5.0816810131073,
+              "health": 100,
+              "pingSeconds": 0.0002209999947808683
+            },
+            {
+              "y": 3.9907217025756836,
+              "t": 6.148197889328003,
+              "health": 100,
+              "pingSeconds": 0.0004870000120718032
+            },
+            {
+              "y": 3.9813477993011475,
+              "t": 7.164709806442261,
+              "health": 100,
+              "pingSeconds": 0.00027099999715574086
+            },
+            {
+              "y": 29.422163009643555,
+              "t": 8.198530912399292,
+              "health": 100,
+              "pingSeconds": 0.0005649999948218465
+            },
+            {
+              "y": 8.291772842407227,
+              "t": 9.265316009521484,
+              "health": 100,
+              "pingSeconds": 0.0003980000037699938
+            },
+            {
+              "y": 23.53459930419922,
+              "t": 10.314778804779053,
+              "health": 100,
+              "pingSeconds": 0.00031599999056197703
+            },
+            {
+              "y": 22.06159019470215,
+              "t": 11.348906993865967,
+              "health": 100,
+              "pingSeconds": 0.0007919999770820141
+            },
+            {
+              "y": 4.00856351852417,
+              "t": 12.398839950561523,
+              "health": 100,
+              "pingSeconds": 0.0004600000102072954
+            },
+            {
+              "y": 8.111517906188965,
+              "t": 13.447458982467651,
+              "health": 100,
+              "pingSeconds": 0.000830999983008951
+            },
+            {
+              "y": 29.94683837890625,
+              "t": 14.448546886444092,
+              "health": 100,
+              "pingSeconds": 0.0007019999902695417
+            },
+            {
+              "y": 4.018958568572998,
+              "t": 15.498471021652222,
+              "health": 100,
+              "pingSeconds": 0.0004670000053010881
+            },
+            {
+              "y": 28.668209075927734,
+              "t": 16.531689882278442,
+              "health": 100,
+              "pingSeconds": 0.00048099999548867345
+            },
+            {
+              "y": 13.166873931884766,
+              "t": 17.564553022384644,
+              "health": 100,
+              "pingSeconds": 0.000155999994603917
+            },
+            {
+              "y": 4.015254974365234,
+              "t": 18.56522488594055,
+              "health": 100,
+              "pingSeconds": 0.00040600000647827983
+            },
+            {
+              "y": 4.004289627075195,
+              "t": 19.580363988876343,
+              "health": 100,
+              "pingSeconds": 0.0005559999844990671
+            },
+            {
+              "y": 3.997775077819824,
+              "t": 20.015009880065918,
+              "health": 100,
+              "pingSeconds": 0.000686999992467463
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 29.289798736572266,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 5,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.000686999992467463,
+          "jumpPower": 50,
+          "position": "-27.89459228515625, 3.997775077819824, 28",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 9,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0013989999424666166,
+          "maxY": 30.266878128051758,
+          "minHealth": 100,
+          "minY": 3.5342981815338135,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.0004208087921142578,
+              "health": 100,
+              "pingSeconds": 0.0009519999730400741
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.0395019054412842,
+              "health": 100,
+              "pingSeconds": 0.0013989999424666166
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.083753824234009,
+              "health": 100,
+              "pingSeconds": 0.0009040000149980187
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.010286808013916,
+              "health": 100,
+              "pingSeconds": 0.0007249999907799065
+            },
+            {
+              "y": 17.919780731201172,
+              "t": 4.033288955688477,
+              "health": 100,
+              "pingSeconds": 0.0005760000203736126
+            },
+            {
+              "y": 24.947906494140625,
+              "t": 5.0816810131073,
+              "health": 100,
+              "pingSeconds": 0.00040099999750964344
+            },
+            {
+              "y": 7.895673751831055,
+              "t": 6.148197889328003,
+              "health": 100,
+              "pingSeconds": 0.000577000027988106
+            },
+            {
+              "y": 29.931446075439453,
+              "t": 7.164709806442261,
+              "health": 100,
+              "pingSeconds": 0.00036100001307204366
+            },
+            {
+              "y": 4.006289005279541,
+              "t": 8.198530912399292,
+              "health": 100,
+              "pingSeconds": 0.00036299999919719994
+            },
+            {
+              "y": 28.605993270874023,
+              "t": 9.265316009521484,
+              "health": 100,
+              "pingSeconds": 0.0002770000137388706
+            },
+            {
+              "y": 12.474512100219727,
+              "t": 10.314778804779053,
+              "health": 100,
+              "pingSeconds": 0.00036100001307204366
+            },
+            {
+              "y": 4.016245365142822,
+              "t": 11.348906993865967,
+              "health": 100,
+              "pingSeconds": 0.00048600000445730984
+            },
+            {
+              "y": 3.993699073791504,
+              "t": 12.398839950561523,
+              "health": 100,
+              "pingSeconds": 0.0006419999990612268
+            },
+            {
+              "y": 6.008930683135986,
+              "t": 13.447458982467651,
+              "health": 100,
+              "pingSeconds": 0.0005440000095404685
+            },
+            {
+              "y": 30.169252395629883,
+              "t": 14.448546886444092,
+              "health": 100,
+              "pingSeconds": 0.000375000003259629
+            },
+            {
+              "y": 4.026463031768799,
+              "t": 15.498471021652222,
+              "health": 100,
+              "pingSeconds": 0.0004030000127386302
+            },
+            {
+              "y": 28.12155532836914,
+              "t": 16.531689882278442,
+              "health": 100,
+              "pingSeconds": 0.0003910000086762011
+            },
+            {
+              "y": 14.629312515258789,
+              "t": 17.564553022384644,
+              "health": 100,
+              "pingSeconds": 0.00023799999326001853
+            },
+            {
+              "y": 4.008441925048828,
+              "t": 18.56522488594055,
+              "health": 100,
+              "pingSeconds": 0.0005910000181756914
+            },
+            {
+              "y": 4.0218186378479,
+              "t": 19.580363988876343,
+              "health": 100,
+              "pingSeconds": 0.0005239999736659229
+            },
+            {
+              "y": 4.021721839904785,
+              "t": 20.015009880065918,
+              "health": 100,
+              "pingSeconds": 0.0008820000221021473
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 28.002037048339844,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 4,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0008820000221021473,
+          "jumpPower": 50,
+          "position": "-27.92919921875, 4.021721839904785, 28",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 24.08159899711609,
+      "firstWarningAt": 0.00025200843811035156,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 3.031451940536499,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "Луч пока безопасный. Приготовься перепрыгнуть его три раза!",
+          "updates": false,
+          "start": 1792989147.485796,
+          "finish": 1792989150.517248
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 21.049671173095703,
+          "requestedSeconds": 21,
+          "reason": "deadline",
+          "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье.",
+          "updates": true,
+          "start": 1792989150.517336,
+          "finish": 1792989171.567007
+        }
+      ],
+      "serverStartedAt": 1792989147.485542,
+      "rule": "LaserSweep",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "Луч пока безопасный. Приготовься перепрыгнуть его три раза!",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 3,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0012290000449866056,
+          "maxY": 11.232242584228516,
+          "minHealth": 8.148811340332031,
+          "survivalAwardOnce": true,
+          "minY": 3.780406951904297,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00008082389831542969,
+              "health": 100,
+              "pingSeconds": 0.0007590000168420374
+            },
+            {
+              "y": 4,
+              "t": 1.0497629642486572,
+              "health": 100,
+              "pingSeconds": 0.0005039999959990382
+            },
+            {
+              "y": 4,
+              "t": 2.0816128253936768,
+              "health": 100,
+              "pingSeconds": 0.0007120000082068145
+            },
+            {
+              "y": 4,
+              "t": 3.0316998958587646,
+              "health": 100,
+              "pingSeconds": 0.000914999982342124
+            },
+            {
+              "y": 4,
+              "t": 4.064846038818359,
+              "health": 100,
+              "pingSeconds": 0.0009929999941959977
+            },
+            {
+              "y": 4,
+              "t": 5.08196496963501,
+              "health": 100,
+              "pingSeconds": 0.0009899999713525176
+            },
+            {
+              "y": 5.272851467132568,
+              "t": 6.115756988525391,
+              "health": 65,
+              "pingSeconds": 0.0009629999985918403
+            },
+            {
+              "y": 4,
+              "t": 7.181855916976929,
+              "health": 66.01567840576172,
+              "pingSeconds": 0.0008210000232793391
+            },
+            {
+              "y": 4,
+              "t": 8.232252836227417,
+              "health": 67.01640319824219,
+              "pingSeconds": 0.0007379999733529985
+            },
+            {
+              "y": 4,
+              "t": 9.265313863754272,
+              "health": 68.0328598022461,
+              "pingSeconds": 0.0008699999889358878
+            },
+            {
+              "y": 4,
+              "t": 10.265508890151978,
+              "health": 69.0485610961914,
+              "pingSeconds": 0.0008590000215917826
+            },
+            {
+              "y": 4,
+              "t": 11.299476861953735,
+              "health": 70.04900360107422,
+              "pingSeconds": 0.0009759999811649323
+            },
+            {
+              "y": 4,
+              "t": 12.365108966827393,
+              "health": 71.06587982177734,
+              "pingSeconds": 0.0007029999978840351
+            },
+            {
+              "y": 4,
+              "t": 13.397668838500977,
+              "health": 72.08336639404297,
+              "pingSeconds": 0.0006089999806135893
+            },
+            {
+              "y": 3.780406951904297,
+              "t": 14.449605941772461,
+              "health": 38.098915100097656,
+              "pingSeconds": 0.0005779999773949385
+            },
+            {
+              "y": 4,
+              "t": 15.481045961380005,
+              "health": 39.11530685424805,
+              "pingSeconds": 0.0009219999774359167
+            },
+            {
+              "y": 4,
+              "t": 16.514838933944702,
+              "health": 40.11547088623047,
+              "pingSeconds": 0.000977999996393919
+            },
+            {
+              "y": 4,
+              "t": 17.531839847564697,
+              "health": 41.13338088989258,
+              "pingSeconds": 0.0008539999835193157
+            },
+            {
+              "y": 4,
+              "t": 18.564380884170532,
+              "health": 42.14879608154297,
+              "pingSeconds": 0.0008950000046752393
+            },
+            {
+              "y": 4,
+              "t": 19.564565896987915,
+              "health": 43.14881134033203,
+              "pingSeconds": 0.0007580000092275441
+            },
+            {
+              "y": 4.443939685821533,
+              "t": 20.59791588783264,
+              "health": 9.165657043457031,
+              "pingSeconds": 0.0008549999911338091
+            },
+            {
+              "y": 4,
+              "t": 21.64809489250183,
+              "health": 10.181711196899414,
+              "pingSeconds": 0.0007740000146441162
+            },
+            {
+              "y": 4,
+              "t": 22.681233882904053,
+              "health": 11.181739807128906,
+              "pingSeconds": 0.0009820000268518925
+            },
+            {
+              "y": 4,
+              "t": 23.698376893997192,
+              "health": 12.198185920715332,
+              "pingSeconds": 0.0012290000449866056
+            },
+            {
+              "y": 4,
+              "t": 24.081456899642944,
+              "health": 12.198185920715332,
+              "pingSeconds": 0.0010789999505504966
+            }
+          ],
+          "maxAbsX": 15.000068664550781,
+          "completionAwardOnce": true,
+          "firstDamageAt": 6.065398931503296,
+          "health": 12.198185920715332,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 4.536109924316406,
+              "health": 65,
+              "feetY": 1.5380845069885254,
+              "humanoidState": "Freefall",
+              "t": 6.065400838851929,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.967523574829102,
+              "health": 37.08336639404297,
+              "feetY": 1.9694981575012207,
+              "humanoidState": "Freefall",
+              "t": 13.89863896369934,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.444823265075684,
+              "health": 8.148811340332031,
+              "feetY": 1.4467978477478027,
+              "humanoidState": "Freefall",
+              "t": 20.048080921173096,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            }
+          ],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0010789999505504966,
+          "jumpPower": 50,
+          "position": "-15, 4, -4.9609375",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 3,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0012339999666437507,
+          "maxY": 11.252320289611816,
+          "minHealth": 8.149314880371094,
+          "survivalAwardOnce": true,
+          "minY": 3.8074123859405518,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00008082389831542969,
+              "health": 100,
+              "pingSeconds": 0.0010349999647587538
+            },
+            {
+              "y": 4,
+              "t": 1.0497629642486572,
+              "health": 100,
+              "pingSeconds": 0.0010319999419152737
+            },
+            {
+              "y": 4,
+              "t": 2.0816128253936768,
+              "health": 100,
+              "pingSeconds": 0.0007600000244565308
+            },
+            {
+              "y": 4,
+              "t": 3.0316998958587646,
+              "health": 100,
+              "pingSeconds": 0.0007960000075399876
+            },
+            {
+              "y": 4,
+              "t": 4.064846038818359,
+              "health": 100,
+              "pingSeconds": 0.0011159999994561076
+            },
+            {
+              "y": 4,
+              "t": 5.08196496963501,
+              "health": 100,
+              "pingSeconds": 0.0011859999503940344
+            },
+            {
+              "y": 5.219571113586426,
+              "t": 6.115756988525391,
+              "health": 65,
+              "pingSeconds": 0.0008360000210814178
+            },
+            {
+              "y": 4,
+              "t": 7.181855916976929,
+              "health": 66.01568603515625,
+              "pingSeconds": 0.0009830000344663858
+            },
+            {
+              "y": 4,
+              "t": 8.232252836227417,
+              "health": 67.0164566040039,
+              "pingSeconds": 0.001025000005029142
+            },
+            {
+              "y": 4,
+              "t": 9.265313863754272,
+              "health": 68.032958984375,
+              "pingSeconds": 0.0009069999796338379
+            },
+            {
+              "y": 4,
+              "t": 10.265508890151978,
+              "health": 69.0486831665039,
+              "pingSeconds": 0.0012339999666437507
+            },
+            {
+              "y": 4,
+              "t": 11.299476861953735,
+              "health": 70.04917907714844,
+              "pingSeconds": 0.0008909999742172658
+            },
+            {
+              "y": 4,
+              "t": 12.365108966827393,
+              "health": 71.06610870361328,
+              "pingSeconds": 0.0007880000048317015
+            },
+            {
+              "y": 4,
+              "t": 13.397668838500977,
+              "health": 72.08364868164062,
+              "pingSeconds": 0.0008249999955296516
+            },
+            {
+              "y": 4.676926612854004,
+              "t": 14.449605941772461,
+              "health": 38.099239349365234,
+              "pingSeconds": 0.0008169999928213656
+            },
+            {
+              "y": 4,
+              "t": 15.481045961380005,
+              "health": 39.115657806396484,
+              "pingSeconds": 0.0008789999992586672
+            },
+            {
+              "y": 4,
+              "t": 16.514838933944702,
+              "health": 40.115848541259766,
+              "pingSeconds": 0.0008919999818317592
+            },
+            {
+              "y": 4,
+              "t": 17.531839847564697,
+              "health": 41.133811950683594,
+              "pingSeconds": 0.0012080000014975667
+            },
+            {
+              "y": 4,
+              "t": 18.564380884170532,
+              "health": 42.14927291870117,
+              "pingSeconds": 0.0010779999429360032
+            },
+            {
+              "y": 4,
+              "t": 19.564565896987915,
+              "health": 43.149314880371094,
+              "pingSeconds": 0.0010059999767690897
+            },
+            {
+              "y": 5.471853733062744,
+              "t": 20.59791588783264,
+              "health": 9.166203498840332,
+              "pingSeconds": 0.000742000003810972
+            },
+            {
+              "y": 4,
+              "t": 21.64809489250183,
+              "health": 10.182319641113281,
+              "pingSeconds": 0.0008169999928213656
+            },
+            {
+              "y": 4,
+              "t": 22.681233882904053,
+              "health": 11.182426452636719,
+              "pingSeconds": 0.0006810000049881637
+            },
+            {
+              "y": 4,
+              "t": 23.698376893997192,
+              "health": 12.198943138122559,
+              "pingSeconds": 0.0011909999884665012
+            },
+            {
+              "y": 4,
+              "t": 24.081456899642944,
+              "health": 12.198943138122559,
+              "pingSeconds": 0.0010489999549463391
+            }
+          ],
+          "maxAbsX": 25,
+          "completionAwardOnce": true,
+          "firstDamageAt": 6.06544303894043,
+          "health": 12.198943138122559,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 4.647405624389648,
+              "health": 65,
+              "feetY": 1.6493802070617676,
+              "humanoidState": "Freefall",
+              "t": 6.065443992614746,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.228024005889893,
+              "health": 37.083648681640625,
+              "feetY": 1.2299985885620117,
+              "humanoidState": "Freefall",
+              "t": 13.898659944534302,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.38832426071167,
+              "health": 8.149314880371094,
+              "feetY": 1.390298843383789,
+              "humanoidState": "Freefall",
+              "t": 20.04810905456543,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            }
+          ],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0010489999549463391,
+          "jumpPower": 50,
+          "position": "-14.984375, 4, -4.9921875",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 24.065550088882446,
+      "firstWarningAt": 0.0001361370086669922,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 3.015291929244995,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "Луч пока безопасный. Приготовься перепрыгнуть его три раза!",
+          "updates": false,
+          "start": 1792989174.583811,
+          "finish": 1792989177.599103
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 21.049901008605957,
+          "requestedSeconds": 21,
+          "reason": "deadline",
+          "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье.",
+          "updates": true,
+          "start": 1792989177.599192,
+          "finish": 1792989198.649093
+        }
+      ],
+      "serverStartedAt": 1792989174.583674,
+      "rule": "LaserSweep",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "Луч пока безопасный. Приготовься перепрыгнуть его три раза!",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 3,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0010659999679774046,
+          "maxY": 11.278943061828613,
+          "minHealth": 8.131649017333984,
+          "survivalAwardOnce": true,
+          "minY": 3.7886414527893066,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.0000629425048828125,
+              "health": 100,
+              "pingSeconds": 0.0007379999733529985
+            },
+            {
+              "y": 4,
+              "t": 1.050342082977295,
+              "health": 100,
+              "pingSeconds": 0.0004949999856762588
+            },
+            {
+              "y": 4,
+              "t": 2.1003379821777344,
+              "health": 100,
+              "pingSeconds": 0.0005600000149570405
+            },
+            {
+              "y": 4,
+              "t": 3.0154221057891846,
+              "health": 100,
+              "pingSeconds": 0.0007660000119358301
+            },
+            {
+              "y": 4,
+              "t": 4.050508975982666,
+              "health": 100,
+              "pingSeconds": 0.0006290000164881349
+            },
+            {
+              "y": 4,
+              "t": 5.082376003265381,
+              "health": 100,
+              "pingSeconds": 0.0010659999679774046
+            },
+            {
+              "y": 5.883872032165527,
+              "t": 6.099390029907227,
+              "health": 65,
+              "pingSeconds": 0.0007019999902695417
+            },
+            {
+              "y": 4,
+              "t": 7.149044990539551,
+              "health": 66.01634216308594,
+              "pingSeconds": 0.0008779999916441739
+            },
+            {
+              "y": 4,
+              "t": 8.199113130569458,
+              "health": 67.03339385986328,
+              "pingSeconds": 0.0007939999923110008
+            },
+            {
+              "y": 4,
+              "t": 9.248777151107788,
+              "health": 68.04903411865234,
+              "pingSeconds": 0.001028000027872622
+            },
+            {
+              "y": 4,
+              "t": 10.29888916015625,
+              "health": 69.04913330078125,
+              "pingSeconds": 0.0008980000275187194
+            },
+            {
+              "y": 4,
+              "t": 11.315008163452148,
+              "health": 70.06548309326172,
+              "pingSeconds": 0.0007220000261440873
+            },
+            {
+              "y": 4,
+              "t": 12.365500926971436,
+              "health": 71.0823974609375,
+              "pingSeconds": 0.0008370000286959112
+            },
+            {
+              "y": 4,
+              "t": 13.365577936172485,
+              "health": 72.08256530761719,
+              "pingSeconds": 0.0007600000244565308
+            },
+            {
+              "y": 8.143586158752441,
+              "t": 14.382233142852783,
+              "health": 38.0989875793457,
+              "pingSeconds": 0.00028199999360367656
+            },
+            {
+              "y": 4,
+              "t": 15.382445096969604,
+              "health": 39.0990104675293,
+              "pingSeconds": 0.0007350000087171793
+            },
+            {
+              "y": 4,
+              "t": 16.415557146072388,
+              "health": 40.09926223754883,
+              "pingSeconds": 0.0008800000068731606
+            },
+            {
+              "y": 4,
+              "t": 17.449104070663452,
+              "health": 41.11472702026367,
+              "pingSeconds": 0.0006619999767281115
+            },
+            {
+              "y": 4,
+              "t": 18.498080015182495,
+              "health": 42.115821838378906,
+              "pingSeconds": 0.000846999988425523
+            },
+            {
+              "y": 4,
+              "t": 19.53125810623169,
+              "health": 43.131649017333984,
+              "pingSeconds": 0.000914999982342124
+            },
+            {
+              "y": 7.0440802574157715,
+              "t": 20.548566102981567,
+              "health": 9.132200241088867,
+              "pingSeconds": 0.000750000006519258
+            },
+            {
+              "y": 4,
+              "t": 21.59830594062805,
+              "health": 10.148521423339844,
+              "pingSeconds": 0.0010189999593421817
+            },
+            {
+              "y": 4,
+              "t": 22.632068157196045,
+              "health": 11.164363861083984,
+              "pingSeconds": 0.0008140000281855464
+            },
+            {
+              "y": 4,
+              "t": 23.64872097969055,
+              "health": 12.164677619934082,
+              "pingSeconds": 0.0010130000300705433
+            },
+            {
+              "y": 4,
+              "t": 24.065412044525146,
+              "health": 12.164677619934082,
+              "pingSeconds": 0.0008299999753944576
+            }
+          ],
+          "maxAbsX": 15.000000953674316,
+          "completionAwardOnce": true,
+          "firstDamageAt": 6.03284215927124,
+          "health": 12.164677619934082,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 4.727189064025879,
+              "health": 65,
+              "feetY": 1.729163646697998,
+              "humanoidState": "Freefall",
+              "t": 6.032844066619873,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.410890102386475,
+              "health": 37.08256530761719,
+              "feetY": 1.4128646850585938,
+              "humanoidState": "Freefall",
+              "t": 13.882769107818604,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.354739665985107,
+              "health": 8.131649017333984,
+              "feetY": 1.3567142486572266,
+              "humanoidState": "Freefall",
+              "t": 20.015789031982422,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            }
+          ],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0008299999753944576,
+          "jumpPower": 50,
+          "position": "-15, 4, -5.1640625",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 3,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.001285000005736947,
+          "maxY": 11.26278018951416,
+          "minHealth": 8.132232666015625,
+          "survivalAwardOnce": true,
+          "minY": 3.9032042026519775,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.0000629425048828125,
+              "health": 100,
+              "pingSeconds": 0.0008210000232793391
+            },
+            {
+              "y": 4,
+              "t": 1.050342082977295,
+              "health": 100,
+              "pingSeconds": 0.0005830000154674053
+            },
+            {
+              "y": 4,
+              "t": 2.1003379821777344,
+              "health": 100,
+              "pingSeconds": 0.0008149999775923789
+            },
+            {
+              "y": 4,
+              "t": 3.0154221057891846,
+              "health": 100,
+              "pingSeconds": 0.0008329999982379377
+            },
+            {
+              "y": 4,
+              "t": 4.050508975982666,
+              "health": 100,
+              "pingSeconds": 0.00041099998634308577
+            },
+            {
+              "y": 4,
+              "t": 5.082376003265381,
+              "health": 100,
+              "pingSeconds": 0.0010849999962374568
+            },
+            {
+              "y": 5.723024368286133,
+              "t": 6.099390029907227,
+              "health": 65,
+              "pingSeconds": 0.000645000021904707
+            },
+            {
+              "y": 4,
+              "t": 7.149044990539551,
+              "health": 66.01636505126953,
+              "pingSeconds": 0.0009219999774359167
+            },
+            {
+              "y": 4,
+              "t": 8.199113130569458,
+              "health": 67.0334701538086,
+              "pingSeconds": 0.001003999961540103
+            },
+            {
+              "y": 4,
+              "t": 9.248777151107788,
+              "health": 68.04914093017578,
+              "pingSeconds": 0.0007970000151544809
+            },
+            {
+              "y": 4,
+              "t": 10.29888916015625,
+              "health": 69.0492935180664,
+              "pingSeconds": 0.001285000005736947
+            },
+            {
+              "y": 4,
+              "t": 11.315008163452148,
+              "health": 70.06568908691406,
+              "pingSeconds": 0.0008609999786131084
+            },
+            {
+              "y": 4,
+              "t": 12.365500926971436,
+              "health": 71.08265686035156,
+              "pingSeconds": 0.001019999966956675
+            },
+            {
+              "y": 4,
+              "t": 13.365577936172485,
+              "health": 72.08284759521484,
+              "pingSeconds": 0.0012400000123307109
+            },
+            {
+              "y": 7.489684104919434,
+              "t": 14.382233142852783,
+              "health": 38.099327087402344,
+              "pingSeconds": 0.0004149999876972288
+            },
+            {
+              "y": 4,
+              "t": 15.382445096969604,
+              "health": 39.09939956665039,
+              "pingSeconds": 0.0006130000110715628
+            },
+            {
+              "y": 4,
+              "t": 16.415557146072388,
+              "health": 40.099700927734375,
+              "pingSeconds": 0.0012829999905079603
+            },
+            {
+              "y": 4,
+              "t": 17.449104070663452,
+              "health": 41.115211486816406,
+              "pingSeconds": 0.0007479999912902713
+            },
+            {
+              "y": 4,
+              "t": 18.498080015182495,
+              "health": 42.116355895996094,
+              "pingSeconds": 0.0007989999721758068
+            },
+            {
+              "y": 4,
+              "t": 19.53125810623169,
+              "health": 43.132232666015625,
+              "pingSeconds": 0.0009529999806545675
+            },
+            {
+              "y": 10.01309871673584,
+              "t": 20.548566102981567,
+              "health": 9.132831573486328,
+              "pingSeconds": 0.0007239999831654131
+            },
+            {
+              "y": 4,
+              "t": 21.59830594062805,
+              "health": 10.14918041229248,
+              "pingSeconds": 0.0008009999874047935
+            },
+            {
+              "y": 4,
+              "t": 22.632068157196045,
+              "health": 11.165081977844238,
+              "pingSeconds": 0.0005939999828115106
+            },
+            {
+              "y": 4,
+              "t": 23.64872097969055,
+              "health": 12.165458679199219,
+              "pingSeconds": 0.0005319999763742089
+            },
+            {
+              "y": 4,
+              "t": 24.065412044525146,
+              "health": 12.165458679199219,
+              "pingSeconds": 0.0004799999878741801
+            }
+          ],
+          "maxAbsX": 25,
+          "completionAwardOnce": true,
+          "firstDamageAt": 6.032871961593628,
+          "health": 12.165458679199219,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 4.438620567321777,
+              "health": 65,
+              "feetY": 1.4405951499938965,
+              "humanoidState": "Freefall",
+              "t": 6.032873153686523,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.362786769866943,
+              "health": 37.082847595214844,
+              "feetY": 1.3647613525390625,
+              "humanoidState": "Freefall",
+              "t": 13.882791996002197,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.168010711669922,
+              "health": 8.132232666015625,
+              "feetY": 1.169985294342041,
+              "humanoidState": "Freefall",
+              "t": 20.015810012817383,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            }
+          ],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0004799999878741801,
+          "jumpPower": 50,
+          "position": "-14.984375, 4, -4.9921875",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 24.066070795059204,
+      "firstWarningAt": 0.0001277923583984375,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 3.0492730140686035,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "Луч пока безопасный. Приготовься перепрыгнуть его три раза!",
+          "updates": false,
+          "start": 1792989201.66649,
+          "finish": 1792989204.715763
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 21.016391038894653,
+          "requestedSeconds": 21,
+          "reason": "deadline",
+          "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье.",
+          "updates": true,
+          "start": 1792989204.71593,
+          "finish": 1792989225.732321
+        }
+      ],
+      "serverStartedAt": 1792989201.666361,
+      "rule": "LaserSweep",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "Луч пока безопасный. Приготовься перепрыгнуть его три раза!",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 3,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.001133000012487173,
+          "maxY": 11.267447471618652,
+          "minHealth": 8.116283416748047,
+          "survivalAwardOnce": true,
+          "minY": 3.715714454650879,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00005888938903808594,
+              "health": 100,
+              "pingSeconds": 0.0009120000177063048
+            },
+            {
+              "y": 4,
+              "t": 1.0159549713134766,
+              "health": 100,
+              "pingSeconds": 0.0004579999949783087
+            },
+            {
+              "y": 4,
+              "t": 2.0489749908447266,
+              "health": 100,
+              "pingSeconds": 0.0008720000041648746
+            },
+            {
+              "y": 4,
+              "t": 3.049391984939575,
+              "health": 100,
+              "pingSeconds": 0.0006960000027902424
+            },
+            {
+              "y": 4,
+              "t": 4.082839012145996,
+              "health": 100,
+              "pingSeconds": 0.0010710000060498714
+            },
+            {
+              "y": 4,
+              "t": 5.132023811340332,
+              "health": 100,
+              "pingSeconds": 0.0010999999940395355
+            },
+            {
+              "y": 5.280850887298584,
+              "t": 6.165522813796997,
+              "health": 65,
+              "pingSeconds": 0.0006389999762177467
+            },
+            {
+              "y": 4,
+              "t": 7.18190598487854,
+              "health": 66.00012969970703,
+              "pingSeconds": 0.0006769999745301902
+            },
+            {
+              "y": 4,
+              "t": 8.182291984558105,
+              "health": 67.01637268066406,
+              "pingSeconds": 0.001133000012487173
+            },
+            {
+              "y": 4,
+              "t": 9.248456954956055,
+              "health": 68.01649475097656,
+              "pingSeconds": 0.000813000020571053
+            },
+            {
+              "y": 4,
+              "t": 10.281842947006226,
+              "health": 69.0165786743164,
+              "pingSeconds": 0.0008120000129565597
+            },
+            {
+              "y": 4,
+              "t": 11.316488981246948,
+              "health": 70.03345489501953,
+              "pingSeconds": 0.0008989999769255519
+            },
+            {
+              "y": 4,
+              "t": 12.3490309715271,
+              "health": 71.05021667480469,
+              "pingSeconds": 0.0008529999759048223
+            },
+            {
+              "y": 4,
+              "t": 13.398509979248047,
+              "health": 72.0661849975586,
+              "pingSeconds": 0.0008779999916441739
+            },
+            {
+              "y": 8.388962745666504,
+              "t": 14.447958946228027,
+              "health": 38.066505432128906,
+              "pingSeconds": 0.0005360000068321824
+            },
+            {
+              "y": 4,
+              "t": 15.498981952667236,
+              "health": 39.08222198486328,
+              "pingSeconds": 0.0008219999726861715
+            },
+            {
+              "y": 4,
+              "t": 16.532383918762207,
+              "health": 40.099308013916016,
+              "pingSeconds": 0.0009130000253207982
+            },
+            {
+              "y": 4,
+              "t": 17.548707008361816,
+              "health": 41.09934616088867,
+              "pingSeconds": 0.0005370000144466758
+            },
+            {
+              "y": 4,
+              "t": 18.582218885421753,
+              "health": 42.11538314819336,
+              "pingSeconds": 0.0006619999767281115
+            },
+            {
+              "y": 4,
+              "t": 19.614691972732544,
+              "health": 43.11628341674805,
+              "pingSeconds": 0.0010649999603629112
+            },
+            {
+              "y": 6.041674613952637,
+              "t": 20.66463279724121,
+              "health": 9.132518768310547,
+              "pingSeconds": 0.0008559999987483025
+            },
+            {
+              "y": 4,
+              "t": 21.69861888885498,
+              "health": 10.149133682250977,
+              "pingSeconds": 0.0008699999889358878
+            },
+            {
+              "y": 4,
+              "t": 22.73100781440735,
+              "health": 11.165396690368652,
+              "pingSeconds": 0.0009759999811649323
+            },
+            {
+              "y": 4,
+              "t": 23.765456914901733,
+              "health": 12.182408332824707,
+              "pingSeconds": 0.0009430000209249556
+            },
+            {
+              "y": 4,
+              "t": 24.065953969955444,
+              "health": 12.182408332824707,
+              "pingSeconds": 0.0011109999613836408
+            }
+          ],
+          "maxAbsX": 15.000000953674316,
+          "completionAwardOnce": true,
+          "firstDamageAt": 6.048501968383789,
+          "health": 12.182408332824707,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 4.088799476623535,
+              "health": 65,
+              "feetY": 1.0907740592956543,
+              "humanoidState": "Freefall",
+              "t": 6.048503875732422,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.4774169921875,
+              "health": 37.066184997558594,
+              "feetY": 1.4793915748596191,
+              "humanoidState": "Freefall",
+              "t": 13.965031862258911,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.323475360870361,
+              "health": 8.116283416748047,
+              "feetY": 1.3254499435424805,
+              "humanoidState": "Freefall",
+              "t": 20.064586877822876,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            }
+          ],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0011109999613836408,
+          "jumpPower": 50,
+          "position": "-15, 4, -5.1640625",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 3,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0013170000165700912,
+          "maxY": 11.247546195983887,
+          "minHealth": 8.116966247558594,
+          "survivalAwardOnce": true,
+          "minY": 3.582892417907715,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00005888938903808594,
+              "health": 100,
+              "pingSeconds": 0.0009490000084042549
+            },
+            {
+              "y": 4,
+              "t": 1.0159549713134766,
+              "health": 100,
+              "pingSeconds": 0.0007179999956861138
+            },
+            {
+              "y": 4,
+              "t": 2.0489749908447266,
+              "health": 100,
+              "pingSeconds": 0.0006469999789260328
+            },
+            {
+              "y": 4,
+              "t": 3.049391984939575,
+              "health": 100,
+              "pingSeconds": 0.0008689999813213944
+            },
+            {
+              "y": 4,
+              "t": 4.082839012145996,
+              "health": 100,
+              "pingSeconds": 0.0011899999808520079
+            },
+            {
+              "y": 4,
+              "t": 5.132023811340332,
+              "health": 100,
+              "pingSeconds": 0.0009469999931752682
+            },
+            {
+              "y": 6.0189666748046875,
+              "t": 6.165522813796997,
+              "health": 65,
+              "pingSeconds": 0.0008919999818317592
+            },
+            {
+              "y": 4,
+              "t": 7.18190598487854,
+              "health": 66.0001220703125,
+              "pingSeconds": 0.00029200001154094934
+            },
+            {
+              "y": 4,
+              "t": 8.182291984558105,
+              "health": 67.01643371582031,
+              "pingSeconds": 0.0011099999537691474
+            },
+            {
+              "y": 4,
+              "t": 9.248456954956055,
+              "health": 68.0166015625,
+              "pingSeconds": 0.000977999996393919
+            },
+            {
+              "y": 4,
+              "t": 10.281842947006226,
+              "health": 69.01673889160156,
+              "pingSeconds": 0.0010179999517276883
+            },
+            {
+              "y": 4,
+              "t": 11.316488981246948,
+              "health": 70.03369903564453,
+              "pingSeconds": 0.000986000057309866
+            },
+            {
+              "y": 4,
+              "t": 12.3490309715271,
+              "health": 71.050537109375,
+              "pingSeconds": 0.0008069999748840928
+            },
+            {
+              "y": 4,
+              "t": 13.398509979248047,
+              "health": 72.06654357910156,
+              "pingSeconds": 0.0008660000166855752
+            },
+            {
+              "y": 7.66537618637085,
+              "t": 14.447958946228027,
+              "health": 38.066890716552734,
+              "pingSeconds": 0.0006890000076964498
+            },
+            {
+              "y": 4,
+              "t": 15.498981952667236,
+              "health": 39.08269500732422,
+              "pingSeconds": 0.0006549999816343188
+            },
+            {
+              "y": 4,
+              "t": 16.532383918762207,
+              "health": 40.099830627441406,
+              "pingSeconds": 0.0005890000029467046
+            },
+            {
+              "y": 4,
+              "t": 17.548707008361816,
+              "health": 41.09992599487305,
+              "pingSeconds": 0.0007580000092275441
+            },
+            {
+              "y": 4,
+              "t": 18.582218885421753,
+              "health": 42.11601257324219,
+              "pingSeconds": 0.0008449999731965363
+            },
+            {
+              "y": 4,
+              "t": 19.614691972732544,
+              "health": 43.116966247558594,
+              "pingSeconds": 0.0011180000146850944
+            },
+            {
+              "y": 4.368559837341309,
+              "t": 20.66463279724121,
+              "health": 9.133252143859863,
+              "pingSeconds": 0.0007719999994151294
+            },
+            {
+              "y": 4,
+              "t": 21.69861888885498,
+              "health": 10.149923324584961,
+              "pingSeconds": 0.0008839999791234732
+            },
+            {
+              "y": 4,
+              "t": 22.73100781440735,
+              "health": 11.16623306274414,
+              "pingSeconds": 0.0008430000161752105
+            },
+            {
+              "y": 4,
+              "t": 23.765456914901733,
+              "health": 12.183289527893066,
+              "pingSeconds": 0.0010720000136643648
+            },
+            {
+              "y": 4,
+              "t": 24.065953969955444,
+              "health": 12.183289527893066,
+              "pingSeconds": 0.0013170000165700912
+            }
+          ],
+          "maxAbsX": 25,
+          "completionAwardOnce": true,
+          "firstDamageAt": 6.048534870147705,
+          "health": 12.183289527893066,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 4.212826728820801,
+              "health": 65,
+              "feetY": 1.21480131149292,
+              "humanoidState": "Freefall",
+              "t": 6.0485358238220215,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.111076831817627,
+              "health": 37.06654357910156,
+              "feetY": 1.113051414489746,
+              "humanoidState": "Freefall",
+              "t": 13.898753881454468,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            },
+            {
+              "y": 4.399561882019043,
+              "health": 8.116966247558594,
+              "feetY": 1.401536464691162,
+              "humanoidState": "Freefall",
+              "t": 20.06460690498352,
+              "velocityY": 0,
+              "instruction": "Прыгай через красный луч! Каждое касание отнимает здоровье."
+            }
+          ],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0013170000165700912,
+          "jumpPower": 50,
+          "position": "-14.984375, 4, -4.9921875",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 18.09957003593445,
+      "firstWarningAt": 0.0002181529998779297,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 4.266175031661987,
+          "requestedSeconds": 4.2,
+          "reason": "deadline",
+          "instruction": "◆ РОЗОВЫЙ! Найди такую плитку. Смена 1/3.",
+          "updates": false,
+          "start": 1792989228.748138,
+          "finish": 1792989233.014313
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 1.800091028213501,
+          "requestedSeconds": 1.8,
+          "reason": "deadline",
+          "instruction": "◆ РОЗОВЫЙ — держись на своей плитке!",
+          "updates": false,
+          "start": 1792989233.015054,
+          "finish": 1792989234.815145
+        },
+        {
+          "timerReached": true,
+          "index": 3,
+          "elapsed": 4.2152259349823,
+          "requestedSeconds": 4.2,
+          "reason": "deadline",
+          "instruction": "■ ЗЕЛЁНЫЙ! Найди такую плитку. Смена 2/3.",
+          "updates": false,
+          "start": 1792989234.815956,
+          "finish": 1792989239.031182
+        },
+        {
+          "timerReached": true,
+          "index": 4,
+          "elapsed": 1.8153460025787354,
+          "requestedSeconds": 1.8,
+          "reason": "deadline",
+          "instruction": "■ ЗЕЛЁНЫЙ — держись на своей плитке!",
+          "updates": false,
+          "start": 1792989239.031392,
+          "finish": 1792989240.846738
+        },
+        {
+          "timerReached": true,
+          "index": 5,
+          "elapsed": 4.200115919113159,
+          "requestedSeconds": 4.2,
+          "reason": "deadline",
+          "instruction": "▲ ЖЁЛТЫЙ! Найди такую плитку. Смена 3/3.",
+          "updates": false,
+          "start": 1792989240.847013,
+          "finish": 1792989245.047129
+        },
+        {
+          "timerReached": true,
+          "index": 6,
+          "elapsed": 1.800044059753418,
+          "requestedSeconds": 1.8,
+          "reason": "deadline",
+          "instruction": "▲ ЖЁЛТЫЙ — держись на своей плитке!",
+          "updates": false,
+          "start": 1792989245.047329,
+          "finish": 1792989246.847373
+        }
+      ],
+      "serverStartedAt": 1792989228.747918,
+      "rule": "SafeColor",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "◆ РОЗОВЫЙ! Найди такую плитку. Смена 1/3.",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0011109999613836408,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.9661905765533447,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009107589721679688,
+              "health": 100,
+              "pingSeconds": 0.0007249999907799065
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.050137996673584,
+              "health": 100,
+              "pingSeconds": 0.0008370000286959112
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.0658140182495117,
+              "health": 100,
+              "pingSeconds": 0.000957000011112541
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.1163949966430664,
+              "health": 100,
+              "pingSeconds": 0.0009110000100918114
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.132955074310303,
+              "health": 100,
+              "pingSeconds": 0.00092299998505041
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.266387224197388,
+              "health": 100,
+              "pingSeconds": 0.00092299998505041
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.299641132354736,
+              "health": 100,
+              "pingSeconds": 0.0010029999539256096
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.067220211029053,
+              "health": 100,
+              "pingSeconds": 0.0011109999613836408
+            },
+            {
+              "y": 3.998046875,
+              "t": 7.099860191345215,
+              "health": 100,
+              "pingSeconds": 0.0005610000225715339
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.149615049362183,
+              "health": 100,
+              "pingSeconds": 0.000830999983008951
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.199716091156006,
+              "health": 100,
+              "pingSeconds": 0.0009840000420808792
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.217396020889282,
+              "health": 100,
+              "pingSeconds": 0.0010509999701753259
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.283258199691772,
+              "health": 100,
+              "pingSeconds": 0.0010509999701753259
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.31586217880249,
+              "health": 100,
+              "pingSeconds": 0.0009689999860711396
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.098814010620117,
+              "health": 100,
+              "pingSeconds": 0.0008859999943524599
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.149627208709717,
+              "health": 100,
+              "pingSeconds": 0.0005119999987073243
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.21509313583374,
+              "health": 100,
+              "pingSeconds": 0.0009270000155083835
+            },
+            {
+              "y": 3.998046875,
+              "t": 15.249667167663574,
+              "health": 100,
+              "pingSeconds": 0.0006500000017695129
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.29920506477356,
+              "health": 100,
+              "pingSeconds": 0.000610999995842576
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.299498081207275,
+              "health": 100,
+              "pingSeconds": 0.0007779999868944287
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.099449157714844,
+              "health": 100,
+              "pingSeconds": 0.0009309999877586961
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 34.86334228515625,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0009309999877586961,
+          "jumpPower": 50,
+          "position": "-34.8626708984375, 3.998046875, -20.9986572265625",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0012829999905079603,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.950166702270508,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009107589721679688,
+              "health": 100,
+              "pingSeconds": 0.0007869999972172081
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.050137996673584,
+              "health": 100,
+              "pingSeconds": 0.0006810000049881637
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.0658140182495117,
+              "health": 100,
+              "pingSeconds": 0.0009159999899566174
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.1163949966430664,
+              "health": 100,
+              "pingSeconds": 0.0010290000354871154
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.132955074310303,
+              "health": 100,
+              "pingSeconds": 0.0008839999791234732
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.266387224197388,
+              "health": 100,
+              "pingSeconds": 0.0008839999791234732
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.299641132354736,
+              "health": 100,
+              "pingSeconds": 0.0009850000496953726
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.067220211029053,
+              "health": 100,
+              "pingSeconds": 0.001025000005029142
+            },
+            {
+              "y": 3.998046875,
+              "t": 7.099860191345215,
+              "health": 100,
+              "pingSeconds": 0.0004090000002179295
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.149615049362183,
+              "health": 100,
+              "pingSeconds": 0.0008660000166855752
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.199716091156006,
+              "health": 100,
+              "pingSeconds": 0.0009769999887794256
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.217396020889282,
+              "health": 100,
+              "pingSeconds": 0.0008559999987483025
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.283258199691772,
+              "health": 100,
+              "pingSeconds": 0.0008559999987483025
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.31586217880249,
+              "health": 100,
+              "pingSeconds": 0.0012829999905079603
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.098814010620117,
+              "health": 100,
+              "pingSeconds": 0.0008590000215917826
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.149627208709717,
+              "health": 100,
+              "pingSeconds": 0.0003429999924264848
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.21509313583374,
+              "health": 100,
+              "pingSeconds": 0.0009210000280290842
+            },
+            {
+              "y": 3.998046875,
+              "t": 15.249667167663574,
+              "health": 100,
+              "pingSeconds": 0.0009830000344663858
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.29920506477356,
+              "health": 100,
+              "pingSeconds": 0.0009590000263415277
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.299498081207275,
+              "health": 100,
+              "pingSeconds": 0.0009120000177063048
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.099449157714844,
+              "health": 100,
+              "pingSeconds": 0.0011609999928623438
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 34.90991973876953,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0011609999928623438,
+          "jumpPower": 50,
+          "position": "-34.86279296875, 3.998046875, 6.9989013671875",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 18.242191791534424,
+      "firstWarningAt": 0.0005350112915039062,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 2.432375907897949,
+          "requestedSeconds": 2.4,
+          "reason": "deadline",
+          "instruction": "▶ ЗЕЛЁНЫЙ — беги за звёздами! Сигнал 1/3.",
+          "updates": true,
+          "start": 1792989249.864414,
+          "finish": 1792989252.29679
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 0.9331450462341309,
+          "requestedSeconds": 0.9,
+          "reason": "deadline",
+          "instruction": "⏸ ПРИГОТОВЬСЯ ЗАМЕРЕТЬ!",
+          "updates": false,
+          "start": 1792989252.296877,
+          "finish": 1792989253.230022
+        },
+        {
+          "timerReached": true,
+          "index": 3,
+          "elapsed": 2.7331578731536865,
+          "requestedSeconds": 2.7,
+          "reason": "deadline",
+          "instruction": "■ КРАСНЫЙ — стой! Движение отнимает здоровье.",
+          "updates": true,
+          "start": 1792989253.23023,
+          "finish": 1792989255.963388
+        },
+        {
+          "timerReached": true,
+          "index": 4,
+          "elapsed": 2.4062588214874268,
+          "requestedSeconds": 2.4,
+          "reason": "deadline",
+          "instruction": "▶ ЗЕЛЁНЫЙ — беги за звёздами! Сигнал 2/3.",
+          "updates": true,
+          "start": 1792989255.963993,
+          "finish": 1792989258.370252
+        },
+        {
+          "timerReached": true,
+          "index": 5,
+          "elapsed": 0.9158010482788086,
+          "requestedSeconds": 0.9,
+          "reason": "deadline",
+          "instruction": "⏸ ПРИГОТОВЬСЯ ЗАМЕРЕТЬ!",
+          "updates": false,
+          "start": 1792989258.370339,
+          "finish": 1792989259.28614
+        },
+        {
+          "timerReached": true,
+          "index": 6,
+          "elapsed": 2.748241901397705,
+          "requestedSeconds": 2.7,
+          "reason": "deadline",
+          "instruction": "■ КРАСНЫЙ — стой! Движение отнимает здоровье.",
+          "updates": true,
+          "start": 1792989259.286307,
+          "finish": 1792989262.034549
+        },
+        {
+          "timerReached": true,
+          "index": 7,
+          "elapsed": 2.4056007862091064,
+          "requestedSeconds": 2.4,
+          "reason": "deadline",
+          "instruction": "▶ ЗЕЛЁНЫЙ — беги за звёздами! Сигнал 3/3.",
+          "updates": true,
+          "start": 1792989262.035396,
+          "finish": 1792989264.440997
+        },
+        {
+          "timerReached": true,
+          "index": 8,
+          "elapsed": 0.9175081253051758,
+          "requestedSeconds": 0.9,
+          "reason": "deadline",
+          "instruction": "⏸ ПРИГОТОВЬСЯ ЗАМЕРЕТЬ!",
+          "updates": false,
+          "start": 1792989264.441089,
+          "finish": 1792989265.358597
+        },
+        {
+          "timerReached": true,
+          "index": 9,
+          "elapsed": 2.7470219135284424,
+          "requestedSeconds": 2.7,
+          "reason": "deadline",
+          "instruction": "■ КРАСНЫЙ — стой! Движение отнимает здоровье.",
+          "updates": true,
+          "start": 1792989265.358761,
+          "finish": 1792989268.105783
+        }
+      ],
+      "serverStartedAt": 1792989249.863876,
+      "rule": "RedLight",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "▶ ЗЕЛЁНЫЙ — беги за звёздами! Сигнал 1/3.",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0010529999854043126,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.9723129272460938,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009083747863769531,
+              "health": 100,
+              "pingSeconds": 0.0010529999854043126
+            },
+            {
+              "y": 3.9969401359558105,
+              "t": 1.016603946685791,
+              "health": 100,
+              "pingSeconds": 0.00039000000106170774
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.0326879024505615,
+              "health": 100,
+              "pingSeconds": 0.00037799999699927866
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.432907819747925,
+              "health": 100,
+              "pingSeconds": 0.0004980000085197389
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.3661389350891113,
+              "health": 100,
+              "pingSeconds": 0.0008950000046752393
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.416301965713501,
+              "health": 100,
+              "pingSeconds": 0.0007699999841861427
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.449055910110474,
+              "health": 100,
+              "pingSeconds": 0.0006590000120922923
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.0995049476623535,
+              "health": 100,
+              "pingSeconds": 0.0008210000232793391
+            },
+            {
+              "y": 3.9979617595672607,
+              "t": 7.135771989822388,
+              "health": 100,
+              "pingSeconds": 0.0005830000154674053
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.159421920776367,
+              "health": 100,
+              "pingSeconds": 0.000299000006634742
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.50636887550354,
+              "health": 100,
+              "pingSeconds": 0.000299000006634742
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.42225694656372,
+              "health": 100,
+              "pingSeconds": 0.0004799999878741801
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.45296597480774,
+              "health": 100,
+              "pingSeconds": 0.0005070000188425183
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.483684778213501,
+              "health": 100,
+              "pingSeconds": 0.0006779999821446836
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.170662879943848,
+              "health": 100,
+              "pingSeconds": 0.0008769999840296805
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.20221495628357,
+              "health": 100,
+              "pingSeconds": 0.0003169999981764704
+            },
+            {
+              "y": 4,
+              "t": 14.23210096359253,
+              "health": 100,
+              "pingSeconds": 0.0005510000046342611
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.577112913131714,
+              "health": 100,
+              "pingSeconds": 0.0006339999963529408
+            },
+            {
+              "y": 3.998046875,
+              "t": 15.49471378326416,
+              "health": 100,
+              "pingSeconds": 0.00031900001340545714
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.525800943374634,
+              "health": 100,
+              "pingSeconds": 0.00039900001138448715
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.555388927459717,
+              "health": 100,
+              "pingSeconds": 0.0004970000009052455
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.241899967193604,
+              "health": 100,
+              "pingSeconds": 0.0008190000080503523
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 25.514406204223633,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 2,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0008190000080503523,
+          "jumpPower": 50,
+          "position": "7.64776611328125, 3.998046875, -20.37493896484375",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0011139999842271209,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.991682767868042,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009083747863769531,
+              "health": 100,
+              "pingSeconds": 0.0010900000343099236
+            },
+            {
+              "y": 3.9975428581237793,
+              "t": 1.016603946685791,
+              "health": 100,
+              "pingSeconds": 0.000371000001905486
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.0326879024505615,
+              "health": 100,
+              "pingSeconds": 0.0002300000051036477
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.432907819747925,
+              "health": 100,
+              "pingSeconds": 0.00011300000187475234
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.3661389350891113,
+              "health": 100,
+              "pingSeconds": 0.0009769999887794256
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.416301965713501,
+              "health": 100,
+              "pingSeconds": 0.0010079999919980764
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.449055910110474,
+              "health": 100,
+              "pingSeconds": 0.0007580000092275441
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.0995049476623535,
+              "health": 100,
+              "pingSeconds": 0.0007440000190399587
+            },
+            {
+              "y": 3.9979989528656006,
+              "t": 7.135771989822388,
+              "health": 100,
+              "pingSeconds": 0.0006350000039674342
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.159421920776367,
+              "health": 100,
+              "pingSeconds": 0.00036199999158270657
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.50636887550354,
+              "health": 100,
+              "pingSeconds": 0.00047400000039488077
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.42225694656372,
+              "health": 100,
+              "pingSeconds": 0.0007910000276751816
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.45296597480774,
+              "health": 100,
+              "pingSeconds": 0.0008210000232793391
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.483684778213501,
+              "health": 100,
+              "pingSeconds": 0.0008379999781027436
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.170662879943848,
+              "health": 100,
+              "pingSeconds": 0.0007619999814778566
+            },
+            {
+              "y": 4,
+              "t": 13.20221495628357,
+              "health": 100,
+              "pingSeconds": 0.0003260000084992498
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.23210096359253,
+              "health": 100,
+              "pingSeconds": 0.0004199999966658652
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.577112913131714,
+              "health": 100,
+              "pingSeconds": 0.0007179999956861138
+            },
+            {
+              "y": 3.998046875,
+              "t": 15.49471378326416,
+              "health": 100,
+              "pingSeconds": 0.0006089999806135893
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.525800943374634,
+              "health": 100,
+              "pingSeconds": 0.0005310000269673765
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.555388927459717,
+              "health": 100,
+              "pingSeconds": 0.000977999996393919
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.241899967193604,
+              "health": 100,
+              "pingSeconds": 0.0011139999842271209
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 34.94050598144531,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 3,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0011139999842271209,
+          "jumpPower": 50,
+          "position": "-7.01959228515625, 3.998046875, -27.5675048828125",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 12.03383994102478,
+      "firstWarningAt": 0.0003619194030761719,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 4.008615016937256,
+          "requestedSeconds": 4,
+          "reason": "deadline",
+          "instruction": "Лава поднимется! Запрыгни на одну из девяти голубых платформ.",
+          "updates": false,
+          "start": 1792989271.11245,
+          "finish": 1792989275.121065
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 8.024626016616821,
+          "requestedSeconds": 8,
+          "reason": "deadline",
+          "instruction": "Оставайся на платформе! Оранжевый пол обжигает.",
+          "updates": true,
+          "start": 1792989275.121172,
+          "finish": 1792989283.145798
+        }
+      ],
+      "serverStartedAt": 1792989271.112086,
+      "rule": "LavaRise",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "Лава поднимется! Запрыгни на одну из девяти голубых платформ.",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 1,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.001044000033289194,
+          "maxY": 14.488157272338867,
+          "minHealth": 100,
+          "minY": 3.94541597366333,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009894371032714844,
+              "health": 100,
+              "pingSeconds": 0.0007479999912902713
+            },
+            {
+              "y": 13.896376609802246,
+              "t": 1.0308418273925781,
+              "health": 100,
+              "pingSeconds": 0.0005179999861866236
+            },
+            {
+              "y": 7.998046875,
+              "t": 2.061100959777832,
+              "health": 100,
+              "pingSeconds": 0.0002460000105202198
+            },
+            {
+              "y": 7.998046875,
+              "t": 3.09279203414917,
+              "health": 100,
+              "pingSeconds": 0.00047900000936351717
+            },
+            {
+              "y": 7.998046875,
+              "t": 4.008968830108643,
+              "health": 100,
+              "pingSeconds": 0.00040600000647827983
+            },
+            {
+              "y": 7.998046875,
+              "t": 5.040149927139282,
+              "health": 100,
+              "pingSeconds": 0.0007050000131130219
+            },
+            {
+              "y": 7.998046875,
+              "t": 6.070281028747559,
+              "health": 100,
+              "pingSeconds": 0.0008529999759048223
+            },
+            {
+              "y": 7.998046875,
+              "t": 7.10158896446228,
+              "health": 100,
+              "pingSeconds": 0.0007680000271648169
+            },
+            {
+              "y": 7.998046875,
+              "t": 8.133331060409546,
+              "health": 100,
+              "pingSeconds": 0.00026599998818710446
+            },
+            {
+              "y": 7.998046875,
+              "t": 9.174206018447876,
+              "health": 100,
+              "pingSeconds": 0.00035700001171790063
+            },
+            {
+              "y": 7.998046875,
+              "t": 10.222614049911499,
+              "health": 100,
+              "pingSeconds": 0.0010260000126436353
+            },
+            {
+              "y": 7.998046875,
+              "t": 11.26793098449707,
+              "health": 100,
+              "pingSeconds": 0.001044000033289194
+            },
+            {
+              "y": 7.998046875,
+              "t": 12.033705949783325,
+              "health": 100,
+              "pingSeconds": 0.0006419999990612268
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 27.776866912841797,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0006419999990612268,
+          "jumpPower": 50,
+          "position": "-27.77606201171875, 7.998046875, -0.14300537109375",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 1,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0010710000060498714,
+          "maxY": 13.971324920654297,
+          "minHealth": 100,
+          "minY": 5,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009894371032714844,
+              "health": 100,
+              "pingSeconds": 0.00092299998505041
+            },
+            {
+              "y": 7.957876205444336,
+              "t": 1.0308418273925781,
+              "health": 100,
+              "pingSeconds": 0.00044999999227002263
+            },
+            {
+              "y": 7.998046875,
+              "t": 2.061100959777832,
+              "health": 100,
+              "pingSeconds": 0.0005619999719783664
+            },
+            {
+              "y": 7.998046875,
+              "t": 3.09279203414917,
+              "health": 100,
+              "pingSeconds": 0.0007280000136233866
+            },
+            {
+              "y": 7.998046875,
+              "t": 4.008968830108643,
+              "health": 100,
+              "pingSeconds": 0.0008370000286959112
+            },
+            {
+              "y": 7.998046875,
+              "t": 5.040149927139282,
+              "health": 100,
+              "pingSeconds": 0.0008099999977275729
+            },
+            {
+              "y": 7.998046875,
+              "t": 6.070281028747559,
+              "health": 100,
+              "pingSeconds": 0.0008329999982379377
+            },
+            {
+              "y": 7.998046875,
+              "t": 7.10158896446228,
+              "health": 100,
+              "pingSeconds": 0.0008549999911338091
+            },
+            {
+              "y": 7.998046875,
+              "t": 8.133331060409546,
+              "health": 100,
+              "pingSeconds": 0.0006619999767281115
+            },
+            {
+              "y": 7.998046875,
+              "t": 9.174206018447876,
+              "health": 100,
+              "pingSeconds": 0.0008169999928213656
+            },
+            {
+              "y": 7.998046875,
+              "t": 10.222614049911499,
+              "health": 100,
+              "pingSeconds": 0.0008329999982379377
+            },
+            {
+              "y": 7.998046875,
+              "t": 11.26793098449707,
+              "health": 100,
+              "pingSeconds": 0.0010710000060498714
+            },
+            {
+              "y": 7.998046875,
+              "t": 12.033705949783325,
+              "health": 100,
+              "pingSeconds": 0.0007570000016130507
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 28.11346435546875,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0007570000016130507,
+          "jumpPower": 50,
+          "position": "-28.11346435546875, 7.998046875, 0.38140869140625",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 17.879700899124146,
+      "firstWarningAt": 0.0005078315734863281,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 3.024554967880249,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Уйди с красных квадратов! Метеоры: 1/5.",
+          "updates": true,
+          "start": 1792989286.163346,
+          "finish": 1792989289.187901
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 0.5579929351806641,
+          "requestedSeconds": 0.5,
+          "reason": "deadline",
+          "instruction": "УДАР! Следи за следующими метками.",
+          "updates": false,
+          "start": 1792989289.188003,
+          "finish": 1792989289.745996
+        },
+        {
+          "timerReached": true,
+          "index": 3,
+          "elapsed": 3.048917055130005,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Уйди с красных квадратов! Метеоры: 2/5.",
+          "updates": true,
+          "start": 1792989289.746789,
+          "finish": 1792989292.795706
+        },
+        {
+          "timerReached": true,
+          "index": 4,
+          "elapsed": 0.5324289798736572,
+          "requestedSeconds": 0.5,
+          "reason": "deadline",
+          "instruction": "УДАР! Следи за следующими метками.",
+          "updates": false,
+          "start": 1792989292.79582,
+          "finish": 1792989293.328249
+        },
+        {
+          "timerReached": true,
+          "index": 5,
+          "elapsed": 3.0356080532073975,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Уйди с красных квадратов! Метеоры: 3/5.",
+          "updates": true,
+          "start": 1792989293.329012,
+          "finish": 1792989296.36462
+        },
+        {
+          "timerReached": true,
+          "index": 6,
+          "elapsed": 0.564647912979126,
+          "requestedSeconds": 0.5,
+          "reason": "deadline",
+          "instruction": "УДАР! Следи за следующими метками.",
+          "updates": false,
+          "start": 1792989296.364707,
+          "finish": 1792989296.929355
+        },
+        {
+          "timerReached": true,
+          "index": 7,
+          "elapsed": 3.0160939693450928,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Уйди с красных квадратов! Метеоры: 4/5.",
+          "updates": true,
+          "start": 1792989296.930062,
+          "finish": 1792989299.946156
+        },
+        {
+          "timerReached": true,
+          "index": 8,
+          "elapsed": 0.5124950408935547,
+          "requestedSeconds": 0.5,
+          "reason": "deadline",
+          "instruction": "УДАР! Следи за следующими метками.",
+          "updates": false,
+          "start": 1792989299.946272,
+          "finish": 1792989300.458767
+        },
+        {
+          "timerReached": true,
+          "index": 9,
+          "elapsed": 3.0377771854400635,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Уйди с красных квадратов! Метеоры: 5/5.",
+          "updates": true,
+          "start": 1792989300.459251,
+          "finish": 1792989303.497028
+        },
+        {
+          "timerReached": true,
+          "index": 10,
+          "elapsed": 0.5448188781738281,
+          "requestedSeconds": 0.5,
+          "reason": "deadline",
+          "instruction": "УДАР! Следи за следующими метками.",
+          "updates": false,
+          "start": 1792989303.497137,
+          "finish": 1792989304.041956
+        }
+      ],
+      "serverStartedAt": 1792989286.162836,
+      "rule": "MeteorRain",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "⚠ Уйди с красных квадратов! Метеоры: 1/5.",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0010679999832063913,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.9848825931549072,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009393692016601562,
+              "health": 100,
+              "pingSeconds": 0.0008929999894462526
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.0303008556365967,
+              "health": 100,
+              "pingSeconds": 0.0006810000049881637
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.0346438884735107,
+              "health": 100,
+              "pingSeconds": 0.0004910000134259462
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.0250580310821533,
+              "health": 100,
+              "pingSeconds": 0.0006259999936446548
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.5831518173217773,
+              "health": 100,
+              "pingSeconds": 0.0007249999907799065
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.598368883132935,
+              "health": 100,
+              "pingSeconds": 0.0007719999994151294
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.666086912155151,
+              "health": 100,
+              "pingSeconds": 0.000737000023946166
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.632860898971558,
+              "health": 100,
+              "pingSeconds": 0.0009640000062063336
+            },
+            {
+              "y": 3.998046875,
+              "t": 7.165400981903076,
+              "health": 100,
+              "pingSeconds": 0.0008449999731965363
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.173471927642822,
+              "health": 100,
+              "pingSeconds": 0.00026500000967644155
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.222167015075684,
+              "health": 100,
+              "pingSeconds": 0.0006319999811239541
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.201777935028076,
+              "health": 100,
+              "pingSeconds": 0.0008120000129565597
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.766510963439941,
+              "health": 100,
+              "pingSeconds": 0.0008800000068731606
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.800562858581543,
+              "health": 100,
+              "pingSeconds": 0.0006329999887384474
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.849025964736938,
+              "health": 100,
+              "pingSeconds": 0.0006210000137798488
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.783313035964966,
+              "health": 100,
+              "pingSeconds": 0.0009190000128000975
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.295918941497803,
+              "health": 100,
+              "pingSeconds": 0.0010679999832063913
+            },
+            {
+              "y": 3.998046875,
+              "t": 15.344429969787598,
+              "health": 100,
+              "pingSeconds": 0.0006799999973736703
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.396360874176025,
+              "health": 100,
+              "pingSeconds": 0.000754999986384064
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.334184885025024,
+              "health": 100,
+              "pingSeconds": 0.0005200000014156103
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.879108905792236,
+              "health": 100,
+              "pingSeconds": 0.0007190000033006072
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 20.9960994720459,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0007190000033006072,
+          "jumpPower": 50,
+          "position": "-20.99609375, 3.998046875, -35",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0012580000329762697,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.8835666179656982,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009393692016601562,
+              "health": 100,
+              "pingSeconds": 0.0008099999977275729
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.0303008556365967,
+              "health": 100,
+              "pingSeconds": 0.0005159999709576368
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.0346438884735107,
+              "health": 100,
+              "pingSeconds": 0.0007900000200606883
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.0250580310821533,
+              "health": 100,
+              "pingSeconds": 0.0006469999789260328
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.5831518173217773,
+              "health": 100,
+              "pingSeconds": 0.0008539999835193157
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.598368883132935,
+              "health": 100,
+              "pingSeconds": 0.0007539999787695706
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.666086912155151,
+              "health": 100,
+              "pingSeconds": 0.0006960000027902424
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.632860898971558,
+              "health": 100,
+              "pingSeconds": 0.0011230000527575612
+            },
+            {
+              "y": 3.998046875,
+              "t": 7.165400981903076,
+              "health": 100,
+              "pingSeconds": 0.0007949999999254942
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.173471927642822,
+              "health": 100,
+              "pingSeconds": 0.0006779999821446836
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.222167015075684,
+              "health": 100,
+              "pingSeconds": 0.0008379999781027436
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.201777935028076,
+              "health": 100,
+              "pingSeconds": 0.0010489999549463391
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.766510963439941,
+              "health": 100,
+              "pingSeconds": 0.0012580000329762697
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.800562858581543,
+              "health": 100,
+              "pingSeconds": 0.0006510000093840063
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.849025964736938,
+              "health": 100,
+              "pingSeconds": 0.000775999971665442
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.783313035964966,
+              "health": 100,
+              "pingSeconds": 0.0008960000122897327
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.295918941497803,
+              "health": 100,
+              "pingSeconds": 0.0010450000409036875
+            },
+            {
+              "y": 3.998046875,
+              "t": 15.344429969787598,
+              "health": 100,
+              "pingSeconds": 0.0006590000120922923
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.396360874176025,
+              "health": 100,
+              "pingSeconds": 0.0005849999724887311
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.334184885025024,
+              "health": 100,
+              "pingSeconds": 0.0004220000118948519
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.879108905792236,
+              "health": 100,
+              "pingSeconds": 0.0011970000341534615
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 35.24866485595703,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0011970000341534615,
+          "jumpPower": 50,
+          "position": "-20.8701171875, 3.998046875, 34.9993896484375",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 18.23590397834778,
+      "firstWarningAt": 0.0005698204040527344,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 3.0201268196105957,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Плитки «ПРОВАЛ» исчезнут! Перейди на обычные. Волна 1/4.",
+          "updates": false,
+          "start": 1792989307.05851,
+          "finish": 1792989310.078637
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 1.5430891513824463,
+          "requestedSeconds": 1.5,
+          "reason": "deadline",
+          "instruction": "ПРОВАЛЫ! Держись на оставшемся полу.",
+          "updates": false,
+          "start": 1792989310.078852,
+          "finish": 1792989311.621941
+        },
+        {
+          "timerReached": true,
+          "index": 3,
+          "elapsed": 3.0137569904327393,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Плитки «ПРОВАЛ» исчезнут! Перейди на обычные. Волна 2/4.",
+          "updates": false,
+          "start": 1792989311.623255,
+          "finish": 1792989314.637012
+        },
+        {
+          "timerReached": true,
+          "index": 4,
+          "elapsed": 1.5058491230010986,
+          "requestedSeconds": 1.5,
+          "reason": "deadline",
+          "instruction": "ПРОВАЛЫ! Держись на оставшемся полу.",
+          "updates": false,
+          "start": 1792989314.637178,
+          "finish": 1792989316.143027
+        },
+        {
+          "timerReached": true,
+          "index": 5,
+          "elapsed": 3.0357651710510254,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Плитки «ПРОВАЛ» исчезнут! Перейди на обычные. Волна 3/4.",
+          "updates": false,
+          "start": 1792989316.143874,
+          "finish": 1792989319.179639
+        },
+        {
+          "timerReached": true,
+          "index": 6,
+          "elapsed": 1.542971134185791,
+          "requestedSeconds": 1.5,
+          "reason": "deadline",
+          "instruction": "ПРОВАЛЫ! Держись на оставшемся полу.",
+          "updates": false,
+          "start": 1792989319.179946,
+          "finish": 1792989320.722917
+        },
+        {
+          "timerReached": true,
+          "index": 7,
+          "elapsed": 3.0319459438323975,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "⚠ Плитки «ПРОВАЛ» исчезнут! Перейди на обычные. Волна 4/4.",
+          "updates": false,
+          "start": 1792989320.723783,
+          "finish": 1792989323.755729
+        },
+        {
+          "timerReached": true,
+          "index": 8,
+          "elapsed": 1.5377881526947021,
+          "requestedSeconds": 1.5,
+          "reason": "deadline",
+          "instruction": "ПРОВАЛЫ! Держись на оставшемся полу.",
+          "updates": false,
+          "start": 1792989323.755909,
+          "finish": 1792989325.293697
+        }
+      ],
+      "serverStartedAt": 1792989307.057938,
+      "rule": "DisappearingTiles",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "⚠ Плитки «ПРОВАЛ» исчезнут! Перейди на обычные. Волна 1/4.",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0011790000135079026,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.988619327545166,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00011181831359863281,
+              "health": 100,
+              "pingSeconds": 0.0007580000092275441
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.0350699424743652,
+              "health": 100,
+              "pingSeconds": 0.0003530000103637576
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.071107864379883,
+              "health": 100,
+              "pingSeconds": 0.0009180000051856041
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.0206899642944336,
+              "health": 100,
+              "pingSeconds": 0.0008420000085607171
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.049127817153931,
+              "health": 100,
+              "pingSeconds": 0.0011790000135079026
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.563989877700806,
+              "health": 100,
+              "pingSeconds": 0.0010509999701753259
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.617295980453491,
+              "health": 100,
+              "pingSeconds": 0.0010969999711960554
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.6658079624176025,
+              "health": 100,
+              "pingSeconds": 0.0006399999838322401
+            },
+            {
+              "y": 3.998046875,
+              "t": 7.579064846038818,
+              "health": 100,
+              "pingSeconds": 0.0007970000151544809
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.604203939437866,
+              "health": 100,
+              "pingSeconds": 0.0003279999946244061
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.085081815719604,
+              "health": 100,
+              "pingSeconds": 0.0005389999714680016
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.104488849639893,
+              "health": 100,
+              "pingSeconds": 0.0005799999926239252
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.151306867599487,
+              "health": 100,
+              "pingSeconds": 0.0006179999909363687
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.121692895889282,
+              "health": 100,
+              "pingSeconds": 0.000674000009894371
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.153256893157959,
+              "health": 100,
+              "pingSeconds": 0.0006510000093840063
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.664971828460693,
+              "health": 100,
+              "pingSeconds": 0.0008319999906234443
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.694207906723022,
+              "health": 100,
+              "pingSeconds": 0.0006520000169984996
+            },
+            {
+              "y": 3.998046875,
+              "t": 15.725773811340332,
+              "health": 100,
+              "pingSeconds": 0.00047400000039488077
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.697781801223755,
+              "health": 100,
+              "pingSeconds": 0.0007570000016130507
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.722174882888794,
+              "health": 100,
+              "pingSeconds": 0.000539999979082495
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.235750913619995,
+              "health": 100,
+              "pingSeconds": 0.0006430000066757202
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 35.30414962768555,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0006430000066757202,
+          "jumpPower": 50,
+          "position": "-34.994384765625, 3.998046875, -21.261962890625",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.001246000058017671,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.9727060794830322,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00011181831359863281,
+              "health": 100,
+              "pingSeconds": 0.0008970000199042261
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.0350699424743652,
+              "health": 100,
+              "pingSeconds": 0.000455000001238659
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.071107864379883,
+              "health": 100,
+              "pingSeconds": 0.0007590000168420374
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.0206899642944336,
+              "health": 100,
+              "pingSeconds": 0.001246000058017671
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.049127817153931,
+              "health": 100,
+              "pingSeconds": 0.0011609999928623438
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.563989877700806,
+              "health": 100,
+              "pingSeconds": 0.0008800000068731606
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.617295980453491,
+              "health": 100,
+              "pingSeconds": 0.00088900001719594
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.6658079624176025,
+              "health": 100,
+              "pingSeconds": 0.0007259999983943999
+            },
+            {
+              "y": 3.998046875,
+              "t": 7.579064846038818,
+              "health": 100,
+              "pingSeconds": 0.000661000027321279
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.604203939437866,
+              "health": 100,
+              "pingSeconds": 0.0007190000033006072
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.085081815719604,
+              "health": 100,
+              "pingSeconds": 0.0007009999826550484
+            },
+            {
+              "y": 4,
+              "t": 10.104488849639893,
+              "health": 100,
+              "pingSeconds": 0.0005729999975301325
+            },
+            {
+              "y": 3.99609375,
+              "t": 11.151306867599487,
+              "health": 100,
+              "pingSeconds": 0.0008089999901130795
+            },
+            {
+              "y": 3.99609375,
+              "t": 12.121692895889282,
+              "health": 100,
+              "pingSeconds": 0.0010189999593421817
+            },
+            {
+              "y": 3.99609375,
+              "t": 13.153256893157959,
+              "health": 100,
+              "pingSeconds": 0.0007949999999254942
+            },
+            {
+              "y": 3.99609375,
+              "t": 13.664971828460693,
+              "health": 100,
+              "pingSeconds": 0.0010379999876022339
+            },
+            {
+              "y": 3.99609375,
+              "t": 14.694207906723022,
+              "health": 100,
+              "pingSeconds": 0.000291000003926456
+            },
+            {
+              "y": 3.99609375,
+              "t": 15.725773811340332,
+              "health": 100,
+              "pingSeconds": 0.0005159999709576368
+            },
+            {
+              "y": 3.99609375,
+              "t": 16.697781801223755,
+              "health": 100,
+              "pingSeconds": 0.0006849999772384763
+            },
+            {
+              "y": 3.99609375,
+              "t": 17.722174882888794,
+              "health": 100,
+              "pingSeconds": 0.0007929999846965075
+            },
+            {
+              "y": 3.99609375,
+              "t": 18.235750913619995,
+              "health": 100,
+              "pingSeconds": 0.0006590000120922923
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 25,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0006590000120922923,
+          "jumpPower": 50,
+          "position": "-6.97265625, 3.99609375, -7",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 21.114694833755493,
+      "firstWarningAt": 0.0003578662872314453,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 5.51698899269104,
+          "requestedSeconds": 5.5,
+          "reason": "deadline",
+          "instruction": "■ БЕГИ В ЗЕЛЁНЫЙ КВАДРАТ! Убежище 1/3.",
+          "updates": false,
+          "start": 1792989328.307419,
+          "finish": 1792989333.824408
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 1.5060241222381592,
+          "requestedSeconds": 1.5,
+          "reason": "deadline",
+          "instruction": "ШТОРМ! Оставайся внутри зелёного квадрата.",
+          "updates": true,
+          "start": 1792989333.824493,
+          "finish": 1792989335.330517
+        },
+        {
+          "timerReached": true,
+          "index": 3,
+          "elapsed": 5.533668041229248,
+          "requestedSeconds": 5.5,
+          "reason": "deadline",
+          "instruction": "■ БЕГИ В ЗЕЛЁНЫЙ КВАДРАТ! Убежище 2/3.",
+          "updates": false,
+          "start": 1792989335.330739,
+          "finish": 1792989340.864407
+        },
+        {
+          "timerReached": true,
+          "index": 4,
+          "elapsed": 1.5454089641571045,
+          "requestedSeconds": 1.5,
+          "reason": "deadline",
+          "instruction": "ШТОРМ! Оставайся внутри зелёного квадрата.",
+          "updates": true,
+          "start": 1792989340.864527,
+          "finish": 1792989342.409936
+        },
+        {
+          "timerReached": true,
+          "index": 5,
+          "elapsed": 5.510334014892578,
+          "requestedSeconds": 5.5,
+          "reason": "deadline",
+          "instruction": "■ БЕГИ В ЗЕЛЁНЫЙ КВАДРАТ! Убежище 3/3.",
+          "updates": false,
+          "start": 1792989342.410281,
+          "finish": 1792989347.920615
+        },
+        {
+          "timerReached": true,
+          "index": 6,
+          "elapsed": 1.5007119178771973,
+          "requestedSeconds": 1.5,
+          "reason": "deadline",
+          "instruction": "ШТОРМ! Оставайся внутри зелёного квадрата.",
+          "updates": true,
+          "start": 1792989347.920766,
+          "finish": 1792989349.421478
+        }
+      ],
+      "serverStartedAt": 1792989328.307059,
+      "rule": "SafeZone",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "■ БЕГИ В ЗЕЛЁНЫЙ КВАДРАТ! Убежище 1/3.",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.001091000041924417,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.9541656970977783,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009799003601074219,
+              "health": 100,
+              "pingSeconds": 0.0008069999748840928
+            },
+            {
+              "y": 3.99609375,
+              "t": 1.030566930770874,
+              "health": 100,
+              "pingSeconds": 0.0004130000015720725
+            },
+            {
+              "y": 3.999929189682007,
+              "t": 2.0608558654785156,
+              "health": 100,
+              "pingSeconds": 0.0005450000171549618
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.1039929389953613,
+              "health": 100,
+              "pingSeconds": 0.0005939999828115106
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.133565902709961,
+              "health": 100,
+              "pingSeconds": 0.00030399998649954796
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.174430847167969,
+              "health": 100,
+              "pingSeconds": 0.00046999999904073775
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.51734185218811,
+              "health": 100,
+              "pingSeconds": 0.00040499999886378646
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.549422025680542,
+              "health": 100,
+              "pingSeconds": 0.0009389999904669821
+            },
+            {
+              "y": 3.998046875,
+              "t": 7.02345085144043,
+              "health": 100,
+              "pingSeconds": 0.001091000041924417
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.052343845367432,
+              "health": 100,
+              "pingSeconds": 0.0005249999812804163
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.092895030975342,
+              "health": 100,
+              "pingSeconds": 0.0002899999963119626
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.124742984771729,
+              "health": 100,
+              "pingSeconds": 0.0004959999932907522
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.175206899642944,
+              "health": 100,
+              "pingSeconds": 0.00037299998803064227
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.204206943511963,
+              "health": 100,
+              "pingSeconds": 0.00035200000274926424
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.557334899902344,
+              "health": 100,
+              "pingSeconds": 0.0006280000088736415
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.585945844650269,
+              "health": 100,
+              "pingSeconds": 0.0005569999921135604
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.102860927581787,
+              "health": 100,
+              "pingSeconds": 0.000737000023946166
+            },
+            {
+              "y": 4,
+              "t": 15.140373945236206,
+              "health": 100,
+              "pingSeconds": 0.0003589999978430569
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.182787895202637,
+              "health": 100,
+              "pingSeconds": 0.0006799999973736703
+            },
+            {
+              "y": 4,
+              "t": 17.2256338596344,
+              "health": 100,
+              "pingSeconds": 0.00038300000596791506
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.256353855133057,
+              "health": 100,
+              "pingSeconds": 0.0006590000120922923
+            },
+            {
+              "y": 3.998046875,
+              "t": 19.30428385734558,
+              "health": 100,
+              "pingSeconds": 0.0006929999799467623
+            },
+            {
+              "y": 3.998046875,
+              "t": 19.613541841506958,
+              "health": 100,
+              "pingSeconds": 0.0010689999908208847
+            },
+            {
+              "y": 3.998046875,
+              "t": 20.624539852142334,
+              "health": 100,
+              "pingSeconds": 0.0007619999814778566
+            },
+            {
+              "y": 3.998046875,
+              "t": 21.114413022994995,
+              "health": 100,
+              "pingSeconds": 0.0006270000012591481
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 21.016420364379883,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0006270000012591481,
+          "jumpPower": 50,
+          "position": "-20.94329833984375, 3.998046875, 20.9434814453125",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 0,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0012049999786540866,
+          "maxY": 5,
+          "minHealth": 100,
+          "minY": 3.996093511581421,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00009799003601074219,
+              "health": 100,
+              "pingSeconds": 0.0012049999786540866
+            },
+            {
+              "y": 3.9997990131378174,
+              "t": 1.030566930770874,
+              "health": 100,
+              "pingSeconds": 0.0007949999999254942
+            },
+            {
+              "y": 3.99609375,
+              "t": 2.0608558654785156,
+              "health": 100,
+              "pingSeconds": 0.00029399999766610563
+            },
+            {
+              "y": 4,
+              "t": 3.1039929389953613,
+              "health": 100,
+              "pingSeconds": 0.0004900000058114529
+            },
+            {
+              "y": 3.998046875,
+              "t": 4.133565902709961,
+              "health": 100,
+              "pingSeconds": 0.0005799999926239252
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.174430847167969,
+              "health": 100,
+              "pingSeconds": 0.000653000024612993
+            },
+            {
+              "y": 3.998046875,
+              "t": 5.51734185218811,
+              "health": 100,
+              "pingSeconds": 0.000610999995842576
+            },
+            {
+              "y": 3.998046875,
+              "t": 6.549422025680542,
+              "health": 100,
+              "pingSeconds": 0.0008660000166855752
+            },
+            {
+              "y": 3.998046875,
+              "t": 7.02345085144043,
+              "health": 100,
+              "pingSeconds": 0.0009599999757483602
+            },
+            {
+              "y": 3.998046875,
+              "t": 8.052343845367432,
+              "health": 100,
+              "pingSeconds": 0.0007910000276751816
+            },
+            {
+              "y": 3.998047113418579,
+              "t": 9.092895030975342,
+              "health": 100,
+              "pingSeconds": 0.000539999979082495
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.124742984771729,
+              "health": 100,
+              "pingSeconds": 0.0006220000213943422
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.175206899642944,
+              "health": 100,
+              "pingSeconds": 0.0007440000190399587
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.204206943511963,
+              "health": 100,
+              "pingSeconds": 0.000539999979082495
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.557334899902344,
+              "health": 100,
+              "pingSeconds": 0.0007730000070296228
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.585945844650269,
+              "health": 100,
+              "pingSeconds": 0.000965000013820827
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.102860927581787,
+              "health": 100,
+              "pingSeconds": 0.000598000013269484
+            },
+            {
+              "y": 4,
+              "t": 15.140373945236206,
+              "health": 100,
+              "pingSeconds": 0.0005319999763742089
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.182787895202637,
+              "health": 100,
+              "pingSeconds": 0.0007210000185295939
+            },
+            {
+              "y": 4,
+              "t": 17.2256338596344,
+              "health": 100,
+              "pingSeconds": 0.0007389999809674919
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.256353855133057,
+              "health": 100,
+              "pingSeconds": 0.0005380000220611691
+            },
+            {
+              "y": 3.998046875,
+              "t": 19.30428385734558,
+              "health": 100,
+              "pingSeconds": 0.0006079999729990959
+            },
+            {
+              "y": 3.998046875,
+              "t": 19.613541841506958,
+              "health": 100,
+              "pingSeconds": 0.0009379999828524888
+            },
+            {
+              "y": 3.998046875,
+              "t": 20.624539852142334,
+              "health": 100,
+              "pingSeconds": 0.0009869999485090375
+            },
+            {
+              "y": 3.998046875,
+              "t": 21.114413022994995,
+              "health": 100,
+              "pingSeconds": 0.0009539999882690609
+            }
+          ],
+          "survivalAwardOnce": true,
+          "maxAbsX": 25,
+          "completionAwardOnce": true,
+          "warningBeforeFirstDamage": "no_damage",
+          "health": 100,
+          "damageTrace": [],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0009539999882690609,
+          "jumpPower": 50,
+          "position": "-21.001953125, 3.998046875, 21.001953125",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 0,
+      "behavior": "solve",
+      "duration": 18.0747389793396,
+      "firstWarningAt": 0.0002460479736328125,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 3.0561251640319824,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "Луч начнёт вращаться. Прыгай через него и держись подальше от центра!",
+          "updates": false,
+          "start": 1792989352.436622,
+          "finish": 1792989355.492747
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 15.018090963363647,
+          "requestedSeconds": 15,
+          "reason": "deadline",
+          "instruction": "↻ ПРЫГАЙ ЧЕРЕЗ ВРАЩАЮЩИЙСЯ ЛУЧ!",
+          "updates": true,
+          "start": 1792989355.492862,
+          "finish": 1792989370.510953
+        }
+      ],
+      "serverStartedAt": 1792989352.436374,
+      "rule": "Spinner",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "goal": 0,
+      "firstWarningText": "Луч начнёт вращаться. Прыгай через него и держись подальше от центра!",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": false,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 3,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0009330000029876828,
+          "maxY": 11.242915153503418,
+          "minHealth": 2.088939666748047,
+          "survivalAwardOnce": true,
+          "minY": 3.5716488361358643,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00013113021850585938,
+              "health": 100,
+              "pingSeconds": 0.000522000016644597
+            },
+            {
+              "y": 3.99609375,
+              "t": 1.0343410968780518,
+              "health": 100,
+              "pingSeconds": 0.0005569999921135604
+            },
+            {
+              "y": 4,
+              "t": 2.055392026901245,
+              "health": 100,
+              "pingSeconds": 0.0005949999904260039
+            },
+            {
+              "y": 4,
+              "t": 3.0563650131225586,
+              "health": 100,
+              "pingSeconds": 0.0006539999740198255
+            },
+            {
+              "y": 4,
+              "t": 4.0878379344940186,
+              "health": 100,
+              "pingSeconds": 0.0008229999803006649
+            },
+            {
+              "y": 4,
+              "t": 5.1409690380096436,
+              "health": 100,
+              "pingSeconds": 0.0005799999926239252
+            },
+            {
+              "y": 4,
+              "t": 6.141289949417114,
+              "health": 100,
+              "pingSeconds": 0.0007110000005923212
+            },
+            {
+              "y": 3.829230308532715,
+              "t": 7.2046661376953125,
+              "health": 65,
+              "pingSeconds": 0.0006689999718219042
+            },
+            {
+              "y": 4,
+              "t": 8.217730045318604,
+              "health": 66.01124572753906,
+              "pingSeconds": 0.0009330000029876828
+            },
+            {
+              "y": 4,
+              "t": 9.286487102508545,
+              "health": 67.0126953125,
+              "pingSeconds": 0.0008619999862276018
+            },
+            {
+              "y": 4,
+              "t": 10.308825016021729,
+              "health": 68.0187759399414,
+              "pingSeconds": 0.0008929999894462526
+            },
+            {
+              "y": 3.9997973442077637,
+              "t": 11.325978994369507,
+              "health": 34.02981185913086,
+              "pingSeconds": 0.0004799999878741801
+            },
+            {
+              "y": 4,
+              "t": 12.329720973968506,
+              "health": 35.05731964111328,
+              "pingSeconds": 0.00042799999937415123
+            },
+            {
+              "y": 4,
+              "t": 13.376567125320435,
+              "health": 36.06224060058594,
+              "pingSeconds": 0.0007099999929778278
+            },
+            {
+              "y": 4,
+              "t": 14.384402990341187,
+              "health": 37.08893966674805,
+              "pingSeconds": 0.000770999991800636
+            },
+            {
+              "y": 3.9863977432250977,
+              "t": 15.387244939804077,
+              "health": 3.1031253337860107,
+              "pingSeconds": 0.0007559999939985573
+            },
+            {
+              "y": 4,
+              "t": 16.41892910003662,
+              "health": 4.12936544418335,
+              "pingSeconds": 0.000805000017862767
+            },
+            {
+              "y": 4,
+              "t": 17.457388162612915,
+              "health": 5.131432056427002,
+              "pingSeconds": 0.0005050000036135316
+            },
+            {
+              "y": 4,
+              "t": 18.074564933776855,
+              "health": 6.1399030685424805,
+              "pingSeconds": 0.0005709999823011458
+            }
+          ],
+          "maxAbsX": 15.210912704467773,
+          "completionAwardOnce": true,
+          "firstDamageAt": 6.6007561683654785,
+          "health": 6.1399030685424805,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 4.557291030883789,
+              "health": 65,
+              "feetY": 1.5592656135559082,
+              "humanoidState": "Freefall",
+              "t": 6.6007630825042725,
+              "velocityY": 0,
+              "instruction": "↻ ПРЫГАЙ ЧЕРЕЗ ВРАЩАЮЩИЙСЯ ЛУЧ!"
+            },
+            {
+              "y": 4.457261085510254,
+              "health": 33.018775939941406,
+              "feetY": 1.459235668182373,
+              "humanoidState": "Freefall",
+              "t": 10.61132001876831,
+              "velocityY": 0,
+              "instruction": "↻ ПРЫГАЙ ЧЕРЕЗ ВРАЩАЮЩИЙСЯ ЛУЧ!"
+            },
+            {
+              "y": 4,
+              "health": 2.088939666748047,
+              "feetY": 1.0019745826721191,
+              "humanoidState": "Jumping",
+              "t": 14.575263977050781,
+              "velocityY": 0,
+              "instruction": "↻ ПРЫГАЙ ЧЕРЕЗ ВРАЩАЮЩИЙСЯ ЛУЧ!"
+            }
+          ],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0005709999823011458,
+          "jumpPower": 50,
+          "position": "15.203125, 4, 5.1015625",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 3,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.001231999951414764,
+          "maxY": 11.23400592803955,
+          "minHealth": 2.089305877685547,
+          "survivalAwardOnce": true,
+          "minY": 3.63633394241333,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00013113021850585938,
+              "health": 100,
+              "pingSeconds": 0.0004720000142697245
+            },
+            {
+              "y": 4,
+              "t": 1.0343410968780518,
+              "health": 100,
+              "pingSeconds": 0.00042699999175965786
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.055392026901245,
+              "health": 100,
+              "pingSeconds": 0.0003819999983534217
+            },
+            {
+              "y": 4,
+              "t": 3.0563650131225586,
+              "health": 100,
+              "pingSeconds": 0.0007319999858736992
+            },
+            {
+              "y": 4,
+              "t": 4.0878379344940186,
+              "health": 100,
+              "pingSeconds": 0.0005339999916031957
+            },
+            {
+              "y": 4,
+              "t": 5.1409690380096436,
+              "health": 100,
+              "pingSeconds": 0.0006389999762177467
+            },
+            {
+              "y": 4,
+              "t": 6.141289949417114,
+              "health": 100,
+              "pingSeconds": 0.0010290000354871154
+            },
+            {
+              "y": 4.1148834228515625,
+              "t": 7.2046661376953125,
+              "health": 65,
+              "pingSeconds": 0.0007340000011026859
+            },
+            {
+              "y": 4,
+              "t": 8.217730045318604,
+              "health": 66.01131439208984,
+              "pingSeconds": 0.0009250000002793968
+            },
+            {
+              "y": 4,
+              "t": 9.286487102508545,
+              "health": 67.01282501220703,
+              "pingSeconds": 0.000826000003144145
+            },
+            {
+              "y": 4,
+              "t": 10.308825016021729,
+              "health": 68.04751586914062,
+              "pingSeconds": 0.0008590000215917826
+            },
+            {
+              "y": 3.9990742206573486,
+              "t": 11.325978994369507,
+              "health": 34.049781799316406,
+              "pingSeconds": 0.0008580000139772892
+            },
+            {
+              "y": 4,
+              "t": 12.329720973968506,
+              "health": 35.05753707885742,
+              "pingSeconds": 0.0004900000058114529
+            },
+            {
+              "y": 4,
+              "t": 13.376567125320435,
+              "health": 36.062503814697266,
+              "pingSeconds": 0.000754999986384064
+            },
+            {
+              "y": 4,
+              "t": 14.384402990341187,
+              "health": 37.08930587768555,
+              "pingSeconds": 0.0011149999918416142
+            },
+            {
+              "y": 3.999650716781616,
+              "t": 15.387244939804077,
+              "health": 3.103527545928955,
+              "pingSeconds": 0.0006339999963529408
+            },
+            {
+              "y": 4,
+              "t": 16.41892910003662,
+              "health": 4.129826068878174,
+              "pingSeconds": 0.001231999951414764
+            },
+            {
+              "y": 4,
+              "t": 17.457388162612915,
+              "health": 5.1319451332092285,
+              "pingSeconds": 0.0009679999784566462
+            },
+            {
+              "y": 4,
+              "t": 18.074564933776855,
+              "health": 6.140501499176025,
+              "pingSeconds": 0.0012209999840706587
+            }
+          ],
+          "maxAbsX": 25,
+          "completionAwardOnce": true,
+          "firstDamageAt": 6.600796937942505,
+          "health": 6.140501499176025,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 4.728178977966309,
+              "health": 65,
+              "feetY": 1.7301535606384277,
+              "humanoidState": "Freefall",
+              "t": 6.6007981300354,
+              "velocityY": 0,
+              "instruction": "↻ ПРЫГАЙ ЧЕРЕЗ ВРАЩАЮЩИЙСЯ ЛУЧ!"
+            },
+            {
+              "y": 5.042766571044922,
+              "health": 33.047515869140625,
+              "feetY": 2.044741153717041,
+              "humanoidState": "Freefall",
+              "t": 10.611351013183594,
+              "velocityY": 0,
+              "instruction": "↻ ПРЫГАЙ ЧЕРЕЗ ВРАЩАЮЩИЙСЯ ЛУЧ!"
+            },
+            {
+              "y": 4.06198263168335,
+              "health": 2.089305877685547,
+              "feetY": 1.0639572143554688,
+              "humanoidState": "Freefall",
+              "t": 14.575289011001587,
+              "velocityY": 0,
+              "instruction": "↻ ПРЫГАЙ ЧЕРЕЗ ВРАЩАЮЩИЙСЯ ЛУЧ!"
+            }
+          ],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 0,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0012209999840706587,
+          "jumpPower": 50,
+          "position": "14.859375, 4, 4.9453125",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    },
+    {
+      "charge": 11,
+      "behavior": "solve",
+      "duration": 27.070363998413086,
+      "firstWarningAt": 0.0010330677032470703,
+      "segments": [
+        {
+          "timerReached": true,
+          "index": 1,
+          "elapsed": 3.037308931350708,
+          "requestedSeconds": 3,
+          "reason": "deadline",
+          "instruction": "ОБЩИЙ ФИНАЛ! Соберите 5 зарядов ⚡ и перепрыгивайте луч.",
+          "updates": false,
+          "start": 1792989373.540358,
+          "finish": 1792989376.577667
+        },
+        {
+          "timerReached": true,
+          "index": 2,
+          "elapsed": 24.0317120552063,
+          "requestedSeconds": 24,
+          "reason": "deadline",
+          "instruction": "Заряды общие для команды! ⚡ собирай бегом, красный луч перепрыгивай.",
+          "updates": true,
+          "start": 1792989376.577821,
+          "finish": 1792989400.609533
+        }
+      ],
+      "serverStartedAt": 1792989373.539322,
+      "rule": "ReactorRush",
+      "ok": true,
+      "cleanup": {
+        "ok": true,
+        "recovery": {
+          "ok": true,
+          "attempted": false
+        },
+        "productionRestored": true,
+        "errors": []
+      },
+      "activeStartedAt": 3.0385031700134277,
+      "goal": 5,
+      "firstWarningText": "ОБЩИЙ ФИНАЛ! Соберите 5 зарядов ⚡ и перепрыгивайте луч.",
+      "injection": {
+        "applied": false,
+        "players": [],
+        "requested": false
+      },
+      "completed": true,
+      "warningEvidence": "First server Instruction publication only; not proof of client-visible warning timing",
+      "finale": true,
+      "rewardProbe": "Duplicate AwardSurvivors/CompleteRun on one isolated trial; mock profiles, no actual economy",
+      "finaleMeaning": "ArenaRules candidate before Main award-count normalization; this isolated harness does not execute Main",
+      "evidence": "normal_movement_driver",
+      "players": [
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 10,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.00120900000911206,
+          "maxY": 13.029509544372559,
+          "minHealth": 25.197975158691406,
+          "survivalAwardOnce": true,
+          "minY": 3.708775043487549,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00011110305786132812,
+              "health": 100,
+              "pingSeconds": 0.001069999998435378
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.0379741191864014,
+              "health": 100,
+              "pingSeconds": 0.00024399999529123306
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.054870128631592,
+              "health": 100,
+              "pingSeconds": 0.0007249999907799065
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.0383341312408447,
+              "health": 100,
+              "pingSeconds": 0.000965000013820827
+            },
+            {
+              "y": 3.9996025562286377,
+              "t": 4.104036092758179,
+              "health": 100,
+              "pingSeconds": 0.0005039999959990382
+            },
+            {
+              "y": 3.99609375,
+              "t": 5.10418701171875,
+              "health": 100,
+              "pingSeconds": 0.00120900000911206
+            },
+            {
+              "y": 3.9963996410369873,
+              "t": 6.121356010437012,
+              "health": 100,
+              "pingSeconds": 0.00031800000579096377
+            },
+            {
+              "y": 3.9971530437469482,
+              "t": 7.138595104217529,
+              "health": 100,
+              "pingSeconds": 0.0006670000148005784
+            },
+            {
+              "y": 3.996976613998413,
+              "t": 8.154397010803223,
+              "health": 100,
+              "pingSeconds": 0.00036800000816583633
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.187969207763672,
+              "health": 100,
+              "pingSeconds": 0.0008430000161752105
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.238381147384644,
+              "health": 100,
+              "pingSeconds": 0.0006189999985508621
+            },
+            {
+              "y": 3.995710611343384,
+              "t": 11.238570213317871,
+              "health": 70,
+              "pingSeconds": 0.0007029999978840351
+            },
+            {
+              "y": 3.998046875,
+              "t": 12.306040048599243,
+              "health": 71.01514434814453,
+              "pingSeconds": 0.0007520000217482448
+            },
+            {
+              "y": 3.998046875,
+              "t": 13.321706056594849,
+              "health": 72.03199005126953,
+              "pingSeconds": 0.0006350000039674342
+            },
+            {
+              "y": 3.998046875,
+              "t": 14.354124069213867,
+              "health": 73.04902648925781,
+              "pingSeconds": 0.0004689999914262444
+            },
+            {
+              "y": 3.998046875,
+              "t": 15.38748812675476,
+              "health": 44.049407958984375,
+              "pingSeconds": 0.000674000009894371
+            },
+            {
+              "y": 9.977828979492188,
+              "t": 16.40469002723694,
+              "health": 45.0726318359375,
+              "pingSeconds": 0.0002840000088326633
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.453922986984253,
+              "health": 46.0815544128418,
+              "pingSeconds": 0.0005000000237487257
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.521295070648193,
+              "health": 47.09849166870117,
+              "pingSeconds": 0.0009679999784566462
+            },
+            {
+              "y": 3.998046875,
+              "t": 19.555522203445435,
+              "health": 48.114959716796875,
+              "pingSeconds": 0.0009069999796338379
+            },
+            {
+              "y": 3.998046875,
+              "t": 20.60405206680298,
+              "health": 49.1309814453125,
+              "pingSeconds": 0.0006370000191964209
+            },
+            {
+              "y": 3.998046875,
+              "t": 21.62104105949402,
+              "health": 50.14799118041992,
+              "pingSeconds": 0.0006559999892488122
+            },
+            {
+              "y": 3.998046875,
+              "t": 22.654579162597656,
+              "health": 51.164878845214844,
+              "pingSeconds": 0.000582000007852912
+            },
+            {
+              "y": 3.998046875,
+              "t": 23.654868125915527,
+              "health": 52.180747985839844,
+              "pingSeconds": 0.0009050000226125121
+            },
+            {
+              "y": 3.998046875,
+              "t": 24.720986127853394,
+              "health": 53.181739807128906,
+              "pingSeconds": 0.000691999972332269
+            },
+            {
+              "y": 3.998046875,
+              "t": 25.737333059310913,
+              "health": 54.19737243652344,
+              "pingSeconds": 0.0006810000049881637
+            },
+            {
+              "y": 6.989978313446045,
+              "t": 26.754090070724487,
+              "health": 25.197975158691406,
+              "pingSeconds": 0.00038300000596791506
+            },
+            {
+              "y": 3.997955560684204,
+              "t": 27.070205211639404,
+              "health": 25.197975158691406,
+              "pingSeconds": 0.0002859999949578196
+            }
+          ],
+          "maxAbsX": 35.016456604003906,
+          "completionAwardOnce": true,
+          "firstDamageAt": 10.938358068466187,
+          "health": 25.197975158691406,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 3.9943325519561768,
+              "health": 70,
+              "feetY": 0.9963071346282959,
+              "humanoidState": "Running",
+              "t": 10.938360214233398,
+              "velocityY": 0.4132890999317169,
+              "instruction": "⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
+            },
+            {
+              "y": 4.370056629180908,
+              "health": 43.04902648925781,
+              "feetY": 1.3720312118530273,
+              "humanoidState": "Running",
+              "t": 14.920639991760254,
+              "velocityY": -10.44434928894043,
+              "instruction": "⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
+            },
+            {
+              "y": 4.80759859085083,
+              "health": 25.197975158691406,
+              "feetY": 1.8095731735229492,
+              "humanoidState": "Freefall",
+              "t": 26.28766918182373,
+              "velocityY": 0,
+              "instruction": "⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
+            }
+          ],
+          "name": "Player2",
+          "awardCalls": {
+            "stars": 10,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0002859999949578196,
+          "jumpPower": 50,
+          "position": "-33.97314453125, 3.997955560684204, 7.51123046875",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        },
+        {
+          "useJumpPower": true,
+          "clientTelemetry": {
+            "controlsDisabled": true,
+            "jumpAttempts": 10,
+            "source": "client-reported input attempts; not proof of physical jump"
+          },
+          "maxPingSeconds": 0.0010659999679774046,
+          "maxY": 13.686718940734863,
+          "minHealth": 17.083789825439453,
+          "survivalAwardOnce": true,
+          "minY": 3.498361825942993,
+          "trace": [
+            {
+              "y": 5,
+              "t": 0.00011110305786132812,
+              "health": 100,
+              "pingSeconds": 0.0009879999561235309
+            },
+            {
+              "y": 3.998046875,
+              "t": 1.0379741191864014,
+              "health": 100,
+              "pingSeconds": 0.0005099999834783375
+            },
+            {
+              "y": 3.998046875,
+              "t": 2.054870128631592,
+              "health": 100,
+              "pingSeconds": 0.0009929999941959977
+            },
+            {
+              "y": 3.998046875,
+              "t": 3.0383341312408447,
+              "health": 100,
+              "pingSeconds": 0.0010639999527484179
+            },
+            {
+              "y": 3.997145652770996,
+              "t": 4.104036092758179,
+              "health": 100,
+              "pingSeconds": 0.0005760000203736126
+            },
+            {
+              "y": 3.99609375,
+              "t": 5.10418701171875,
+              "health": 100,
+              "pingSeconds": 0.0010290000354871154
+            },
+            {
+              "y": 3.9965567588806152,
+              "t": 6.121356010437012,
+              "health": 100,
+              "pingSeconds": 0.0004030000127386302
+            },
+            {
+              "y": 3.996393918991089,
+              "t": 7.138595104217529,
+              "health": 100,
+              "pingSeconds": 0.0006590000120922923
+            },
+            {
+              "y": 3.996825933456421,
+              "t": 8.154397010803223,
+              "health": 70,
+              "pingSeconds": 0.0004030000127386302
+            },
+            {
+              "y": 3.998046875,
+              "t": 9.187969207763672,
+              "health": 71.00054931640625,
+              "pingSeconds": 0.0005890000029467046
+            },
+            {
+              "y": 3.998046875,
+              "t": 10.238381147384644,
+              "health": 72.01620483398438,
+              "pingSeconds": 0.0006130000110715628
+            },
+            {
+              "y": 3.998046875,
+              "t": 11.238570213317871,
+              "health": 43.01716613769531,
+              "pingSeconds": 0.000986000057309866
+            },
+            {
+              "y": 3.998037338256836,
+              "t": 12.306040048599243,
+              "health": 44.03402328491211,
+              "pingSeconds": 0.0009480000007897615
+            },
+            {
+              "y": 3.998047113418579,
+              "t": 13.321706056594849,
+              "health": 45.049888610839844,
+              "pingSeconds": 0.0005959999980404973
+            },
+            {
+              "y": 9.233479499816895,
+              "t": 14.354124069213867,
+              "health": 46.06666564941406,
+              "pingSeconds": 0.0007859999896027148
+            },
+            {
+              "y": 9.297239303588867,
+              "t": 15.38748812675476,
+              "health": 17.083789825439453,
+              "pingSeconds": 0.0004920000210404396
+            },
+            {
+              "y": 3.998046875,
+              "t": 16.40469002723694,
+              "health": 18.099279403686523,
+              "pingSeconds": 0.00036800000816583633
+            },
+            {
+              "y": 3.998046875,
+              "t": 17.453922986984253,
+              "health": 19.107282638549805,
+              "pingSeconds": 0.0007989999721758068
+            },
+            {
+              "y": 3.998046875,
+              "t": 18.521295070648193,
+              "health": 20.115400314331055,
+              "pingSeconds": 0.0007140000234358013
+            },
+            {
+              "y": 3.998046875,
+              "t": 19.555522203445435,
+              "health": 21.13218116760254,
+              "pingSeconds": 0.0010659999679774046
+            },
+            {
+              "y": 3.998046875,
+              "t": 20.60405206680298,
+              "health": 22.132801055908203,
+              "pingSeconds": 0.0006130000110715628
+            },
+            {
+              "y": 3.998046875,
+              "t": 21.62104105949402,
+              "health": 23.14879608154297,
+              "pingSeconds": 0.0008290000259876251
+            },
+            {
+              "y": 3.998046875,
+              "t": 22.654579162597656,
+              "health": 25.166048049926758,
+              "pingSeconds": 0.0009899999713525176
+            },
+            {
+              "y": 3.998046875,
+              "t": 23.654868125915527,
+              "health": 26.166322708129883,
+              "pingSeconds": 0.0008759999764151871
+            },
+            {
+              "y": 3.998046875,
+              "t": 24.720986127853394,
+              "health": 27.181427001953125,
+              "pingSeconds": 0.0008520000264979899
+            },
+            {
+              "y": 3.998046875,
+              "t": 25.737333059310913,
+              "health": 28.18228530883789,
+              "pingSeconds": 0.0008650000090710819
+            },
+            {
+              "y": 3.980682134628296,
+              "t": 26.754090070724487,
+              "health": 29.198131561279297,
+              "pingSeconds": 0.00031400000443682075
+            },
+            {
+              "y": 3.998046875,
+              "t": 27.070205211639404,
+              "health": 29.198131561279297,
+              "pingSeconds": 0.0001539999939268455
+            }
+          ],
+          "maxAbsX": 35.1175537109375,
+          "completionAwardOnce": true,
+          "firstDamageAt": 7.487397193908691,
+          "health": 29.198131561279297,
+          "warningBeforeFirstDamage": true,
+          "firstDamageSource": "production_rule_or_boundary",
+          "damageTrace": [
+            {
+              "y": 5.357545375823975,
+              "health": 70,
+              "feetY": 2.3595199584960938,
+              "humanoidState": "Freefall",
+              "t": 7.487399101257324,
+              "velocityY": 49.96062469482422,
+              "instruction": "⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
+            },
+            {
+              "y": 4.345898628234863,
+              "health": 43.01716613769531,
+              "feetY": 1.3478732109069824,
+              "humanoidState": "Running",
+              "t": 10.871744155883789,
+              "velocityY": -28.79049301147461,
+              "instruction": "⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
+            },
+            {
+              "y": 3.6224305629730225,
+              "health": 17.083789825439453,
+              "feetY": 0.6244051456451416,
+              "humanoidState": "Running",
+              "t": 14.788120031356812,
+              "velocityY": -27.033811569213867,
+              "instruction": "⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
+            }
+          ],
+          "name": "Player1",
+          "awardCalls": {
+            "stars": 1,
+            "completion": 1,
+            "wins": 0,
+            "survival": 1
+          },
+          "rig": "R15",
+          "jumpHeight": 7.199999809265137,
+          "pingSeconds": 0.0001539999939268455,
+          "jumpPower": 50,
+          "position": "-35.1175537109375, 3.998046875, 6.9420166015625",
+          "movement": "",
+          "survived": 1,
+          "inRound": true,
+          "walk": 16
+        }
+      ]
+    }
+  ]
+}
