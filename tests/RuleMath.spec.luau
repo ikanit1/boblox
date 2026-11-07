@@ -162,4 +162,101 @@ expect(
 	not RuleMath.missedLanding(0 / 0, 1, -40, 40, 0.1, 196.2, 50),
 	"Nonfinite landing evidence is rejected"
 )
+-- Every equally likely draw must reach exactly one allowed zone. This catches
+-- a missing first corner, repeated previous zones, and biased alternatives.
+for previous = 0, 4 do
+	local visits: { [number]: number } = {}
+	local draws = if previous == 0 then 4 else 3
+	for draw = 1, draws do
+		local selected = RuleMath.nextSafeZone(previous, function(minimum, maximum)
+			expect(minimum == 1 and maximum == draws, "Zone RNG range covers only eligible destinations")
+			return draw
+		end)
+		expect(selected >= 1 and selected <= 4, "Zone selection always stays on the authored map")
+		expect(selected ~= previous, "Consecutive refuge waves must change destination")
+		visits[selected] = (visits[selected] or 0) + 1
+	end
+	for zone = 1, 4 do
+		expect(
+			(visits[zone] or 0) == (if zone == previous then 0 else 1),
+			"Each eligible refuge has exactly one random draw; no corner is omitted or duplicated"
+		)
+	end
+end
+
+local function seededRandom(seed: number): (number, number) -> number
+	return function(minimum, maximum)
+		seed = seed * 16807 % 2147483647
+		return minimum + math.floor(seed / 2147483647 * (maximum - minimum + 1))
+	end
+end
+
+-- Repeated waves must spread targeted warnings, even when roster traversal
+-- reverses every wave. Random environmental impacts are a separate mechanic.
+for _, population in { 1, 2, 4, 8, 12 } do
+	local queue: { number } = {}
+	local counts: { [number]: number } = {}
+	local randomInteger = seededRandom(17)
+	for wave = 1, 60 do
+		local alive: { number } = {}
+		for index = 1, population do
+			table.insert(alive, if wave % 2 == 0 then index else population - index + 1)
+		end
+		local original = table.concat(alive, ",")
+		local targets
+		targets, queue = RuleMath.rotateMeteorTargets(alive, queue, 3, randomInteger)
+		expect(#targets == math.min(3, population), "Each wave has at most three distinct player targets")
+		expect(#queue == population, "Rotation retains every living participant")
+		expect(table.concat(alive, ",") == original, "Target selection must not mutate the caller's roster")
+		local seen: { [number]: boolean } = {}
+		for _, id in targets do
+			expect(not seen[id] and id >= 1 and id <= population, "No player is targeted twice in one wave")
+			seen[id] = true
+			counts[id] = (counts[id] or 0) + 1
+		end
+		local minimum, maximum = math.huge, 0
+		for id = 1, population do
+			minimum = math.min(minimum, counts[id] or 0)
+			maximum = math.max(maximum, counts[id] or 0)
+		end
+		expect(maximum - minimum <= 1, "Stable participants differ by at most one targeted warning")
+	end
+end
+
+local ordered = RuleMath.rotateMeteorTargets({ 11, 22, 33, 44, 55 }, {}, 3, seededRandom(23))
+local reordered = RuleMath.rotateMeteorTargets({ 55, 11, 44, 33, 22 }, {}, 3, seededRandom(23))
+expect(
+	table.concat(ordered, ",") == table.concat(reordered, ","),
+	"Identical random draws ignore the roster's traversal order"
+)
+local targets, queue = RuleMath.rotateMeteorTargets({ 1, 2, 3, 4, 5 }, {}, 3, seededRandom(91))
+local departing = queue[1]
+local alive = {}
+for id = 1, 5 do
+	if id ~= departing then
+		table.insert(alive, id)
+	end
+end
+table.insert(alive, 99)
+local originalQueue = table.concat(queue, ",")
+targets, queue = RuleMath.rotateMeteorTargets(alive, queue, 3, function()
+	error("One newcomer does not need reshuffling of surviving players")
+end)
+expect(#queue == 5, "A departed target is removed and a newcomer joins the rotation")
+expect(not table.find(queue, departing), "Disconnected players cannot remain queued for targeting")
+expect(table.find(queue, 99) ~= nil, "Newly eligible participants are included")
+expect(originalQueue ~= table.concat(queue, ","), "Lifecycle update advances the queue")
+local gotNewcomer = table.find(targets, 99) ~= nil
+for _ = 1, 2 do
+	targets, queue = RuleMath.rotateMeteorTargets(alive, queue, 3, function()
+		error("Existing participants are not repeatedly randomized")
+	end)
+	gotNewcomer = gotNewcomer or table.find(targets, 99) ~= nil
+end
+expect(gotNewcomer, "A newcomer receives a turn within a complete rotation")
+targets, queue = RuleMath.rotateMeteorTargets({}, queue, 3, seededRandom(7))
+expect(#targets == 0 and #queue == 0, "An empty server clears the rotation")
+targets, queue = RuleMath.rotateMeteorTargets({ 4, 4, 5 }, { 4, 4, 99 }, 12, seededRandom(7))
+expect(#targets == 2 and #queue == 2, "Duplicate or stale input IDs never duplicate a target")
+
 print("RuleMath: " .. checks .. " checks passed")

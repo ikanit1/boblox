@@ -6,6 +6,7 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 local PracticeMath = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("PracticeMath"))
+local ProfileStatus = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("ProfileStatus"))
 local remote = ReplicatedStorage:WaitForChild("RuleRoomRemotes"):WaitForChild("StationAction") :: RemoteEvent
 local arena = Workspace:WaitForChild("Arena")
 local lobby = arena:WaitForChild("Lobby")
@@ -34,6 +35,9 @@ local function initializePlayer(player: Player)
 	if player:GetAttribute("EntryChoiceMade") == nil then
 		player:SetAttribute("LobbyOnly", true)
 		player:SetAttribute("EntryChoiceMade", false)
+	end
+	if player:GetAttribute("TemporaryPlayPrompt") == nil then
+		player:SetAttribute("TemporaryPlayPrompt", false)
 	end
 end
 table.insert(connections, Players.PlayerAdded:Connect(initializePlayer))
@@ -64,12 +68,32 @@ local function teleport(character: Model, root: BasePart, position: Vector3)
 	root.AssemblyAngularVelocity = Vector3.zero
 end
 
-local function setMode(player: Player, action: string)
+local function setMode(player: Player, action: string, acceptTemporary: any)
 	local character, _, root = characterParts(player)
 	if not character or not root then
 		return
 	end
+	if action == "Join" then
+		local status, persistent = player:GetAttribute("DataStatus"), player:GetAttribute("DataPersistent")
+		if
+			not ProfileStatus.canJoin(
+				status,
+				persistent,
+				player:GetAttribute("TemporaryPlayAccepted"),
+				acceptTemporary
+			)
+		then
+			if ProfileStatus.describe(status, persistent).Temporary then
+				player:SetAttribute("TemporaryPlayPrompt", true)
+			end
+			return
+		end
+		if ProfileStatus.describe(status, persistent).Temporary and acceptTemporary == true then
+			player:SetAttribute("TemporaryPlayAccepted", true)
+		end
+	end
 	cancel(player)
+	player:SetAttribute("TemporaryPlayPrompt", false)
 	player:SetAttribute("LobbyOnly", action ~= "Join")
 	player:SetAttribute("EntryChoiceMade", true)
 	player:SetAttribute("VotedMode", "")
@@ -92,7 +116,7 @@ local function setMode(player: Player, action: string)
 	end
 end
 
-local function request(player: Player, action: any, distance: number)
+local function request(player: Player, action: any, distance: number, acceptTemporary: any)
 	local now = os.clock()
 	local elapsed = now - (lastRequest[player] or -math.huge)
 	-- Throttle malformed requests too; never accept a client supplied checkpoint/time/position.
@@ -100,13 +124,16 @@ local function request(player: Player, action: any, distance: number)
 	if not PracticeMath.canInteract(action, player:GetAttribute("InRound") == true, distance, elapsed) then
 		return
 	end
-	setMode(player, action)
+	setMode(player, action, acceptTemporary)
 end
 
 table.insert(
 	connections,
-	remote.OnServerEvent:Connect(function(player, action)
+	remote.OnServerEvent:Connect(function(player, action, acceptTemporary)
 		if action ~= "Explore" and action ~= "Join" then
+			return
+		end
+		if acceptTemporary ~= nil and type(acceptTemporary) ~= "boolean" then
 			return
 		end
 		local _, _, root = characterParts(player)
@@ -117,7 +144,7 @@ table.insert(
 		if math.abs(p.X) > 90 or p.Z < 43 or p.Z > 193 or p.Y < -5 or p.Y > 45 then
 			return
 		end
-		request(player, action, 0)
+		request(player, action, 0, acceptTemporary)
 	end)
 )
 table.insert(
@@ -137,7 +164,8 @@ table.insert(
 		if not root then
 			return
 		end
-		request(player, action, (root.Position - parent.Position).Magnitude)
+		-- A world prompt cannot silently accept loss of saved progress.
+		request(player, action, (root.Position - parent.Position).Magnitude, nil)
 	end)
 )
 
@@ -148,6 +176,20 @@ local function updatePlayer(player: Player, now: number)
 			cancel(player)
 		end
 		return
+	end
+	if
+		player:GetAttribute("InRound") ~= true
+		and player:GetAttribute("LobbyOnly") ~= true
+		and ProfileStatus.describe(player:GetAttribute("DataStatus"), player:GetAttribute("DataPersistent")).Temporary
+		and player:GetAttribute("TemporaryPlayAccepted") ~= true
+	then
+		-- Finish an already-started trial normally after lease loss. At the next safe
+		-- boundary leave the queue until the player explicitly accepts temporary play.
+		cancel(player)
+		player:SetAttribute("LobbyOnly", true)
+		player:SetAttribute("TemporaryPlayPrompt", true)
+		player:SetAttribute("VotedMode", "")
+		teleport(character, root, spawn.Position + Vector3.new(0, 2, 0))
 	end
 	if
 		player:GetAttribute("LobbyOnly") == true

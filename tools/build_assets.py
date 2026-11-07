@@ -265,6 +265,14 @@ def hud():
     label(vote, "Hint", "Один голос • награды одинаковые • можно передумать", (1, -20, 0, 25), (0, 10, 1, -29), color=MUTED, text_size=12, align=2, scaled=True)
 
     results = centered(frame(content, "ResultsPanel", (1, -36, 0, 244), (0.5, 0, 0, 46)))
+    # Keep rewards and the next goal reachable on short screens without shrinking text.
+    results.set("class", "ScrollingFrame")
+    prop(results, "UDim2", "CanvasSize", (0, 0, 0, 0))
+    prop(results, "token", "AutomaticCanvasSize", 0)
+    prop(results, "token", "ScrollingDirection", 2)
+    prop(results, "int", "ScrollBarThickness", 4)
+    prop(results, "bool", "ClipsDescendants", True)
+    prop(results, "bool", "Active", True)
     width_bound(results, 620, 280)
     corner(results, 10)
     prop(results, "bool", "Visible", False)
@@ -370,7 +378,7 @@ def station_hud():
     corner(welcome, 12)
     label(welcome, "Eyebrow", "RULE ROOM / ЛАБОРАТОРИЯ ИСПЫТАНИЙ", (1, -32, 0, 18), (0, 16, 0, 12), color=COLORS[0][3], text_size=12, bold=True, align=2, scaled=True)
     label(welcome, "Heading", "КОМНАТА МЕНЯЕТ ПРАВИЛА", (1, -32, 0, 36), (0, 16, 0, 34), text_size=25, bold=True, align=2, scaled=True)
-    label(welcome, "Steps", "1  Читай правило и двигайся в безопасное место.\n2  Ошибка — не конец: вернёшься в следующем испытании.\n3  Пройди 4 из 6 испытаний и переживи общий финал.", (1, -40, 0, 112), (0, 20, 0, 78), text_size=18, scaled=True)
+    label(welcome, "Steps", "1  Читай правило: двигайся, прыгай или замри.\n2  Выбыл? Вернёшься на следующем этапе.\n3  Победа: 4 из 6, заряд реактора и выживание в финале.", (1, -40, 0, 112), (0, 20, 0, 78), text_size=18, scaled=True)
     label(welcome, "Detail", "Монеты за игру открывают следы. Сила у всех одинаковая.", (1, -40, 0, 32), (0, 20, 1, -108), color=MUTED, text_size=14, align=2, scaled=True)
     button(welcome, "Play", "ИГРАТЬ", (0.5, -24, 0, 44), (0, 16, 1, -70), color=COLORS[2][3], ink=NAVY, text_size=16)
     button(welcome, "Explore", "ОСМОТРЕТЬСЯ", (0.5, -24, 0, 44), (0.5, 8, 1, -70), color=(39, 56, 78), text_size=16)

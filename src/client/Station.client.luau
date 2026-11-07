@@ -20,6 +20,9 @@ local welcomeWasVisible = false
 local shared = ReplicatedStorage:WaitForChild("RuleRoomShared")
 local guides = require(shared:WaitForChild("RuleGuides"))
 local config = require(shared:WaitForChild("GameConfig"))
+local ProfileStatus = require(shared:WaitForChild("ProfileStatus"))
+local normalWelcomeSteps = (welcome.Steps :: TextLabel).Text
+local normalWelcomeDetail = (welcome.Detail :: TextLabel).Text
 local remote = ReplicatedStorage:WaitForChild("RuleRoomRemotes"):WaitForChild("StationAction") :: RemoteEvent
 local connections: { RBXScriptConnection } = {}
 local previousSelection: GuiObject? = nil
@@ -144,7 +147,9 @@ end
 local function send(action: string)
 	local character = player.Character
 	local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
-	if not humanoid or humanoid.Health <= 0 or player:GetAttribute("DataStatus") == "Loading" then
+	local saveView =
+		ProfileStatus.describe(player:GetAttribute("DataStatus"), player:GetAttribute("DataPersistent"))
+	if not humanoid or humanoid.Health <= 0 or saveView.Loading then
 		return
 	end
 	if welcome.Visible and os.clock() < waitingChoiceUntil then
@@ -159,7 +164,9 @@ local function send(action: string)
 		requestedChoice = true
 	end
 	closeGuide()
-	remote:FireServer(action)
+	-- Only the clearly labelled welcome choice sends consent. Queue buttons and
+	-- proximity prompts first ask the server to show that choice when required.
+	remote:FireServer(action, action == "Join" and welcome.Visible and saveView.Temporary)
 end
 table.insert(
 	connections,
@@ -236,7 +243,16 @@ table.insert(
 local function render()
 	local exploring = player:GetAttribute("LobbyOnly") == true
 	local inRound = player:GetAttribute("InRound") == true
-	welcome.Visible = player:GetAttribute("EntryChoiceMade") ~= true and not inRound
+	local saveView =
+		ProfileStatus.describe(player:GetAttribute("DataStatus"), player:GetAttribute("DataPersistent"))
+	welcome.Visible = (
+		player:GetAttribute("EntryChoiceMade") ~= true
+		or player:GetAttribute("TemporaryPlayPrompt") == true
+	) and not inRound
+	welcome.Heading.Text = saveView.Title
+	welcome.Steps.Text = if saveView.Warning then saveView.Body else normalWelcomeSteps
+	welcome.Detail.Text = if saveView.Warning then saveView.Hint else normalWelcomeDetail
+	welcome.Play.Text = saveView.PlayText
 	if inRound or collectionPanel.Visible or welcome.Visible then
 		closeGuide()
 	end
@@ -247,7 +263,7 @@ local function render()
 	mainActions.Visible = modal == "" and mainGui:GetAttribute("CompactPlayHUD") ~= true
 	local char = player.Character
 	local humanoid = if char then char:FindFirstChildOfClass("Humanoid") else nil
-	local ready = humanoid ~= nil and humanoid.Health > 0 and player:GetAttribute("DataStatus") ~= "Loading"
+	local ready = humanoid ~= nil and humanoid.Health > 0 and not saveView.Loading
 	local waiting = os.clock() < waitingChoiceUntil
 	for _, button in { welcome.Play, welcome.Explore } do
 		button.Active = ready and not waiting
@@ -261,7 +277,8 @@ local function render()
 		elseif
 			requestedChoice
 		then "Не удалось войти. Нажми ещё раз, когда персонаж появится в лаборатории."
-		else "Можно играть одному или вместе с друзьями."
+		elseif saveView.Warning then saveView.Compact
+		else saveView.Hint
 	if welcome.Visible and not welcomeWasVisible then
 		ContextActionService:BindAction("WelcomeExplore", function(_, inputState)
 			if inputState == Enum.UserInputState.Begin then
@@ -358,6 +375,9 @@ local function render()
 			best
 		)
 		else "Паркур слева · архив правил справа · галерея впереди"
+	if saveView.Warning and not running then
+		bar.Detail.Text = saveView.Compact
+	end
 	bar.Explore.Text = if running
 		then "ЗАКОНЧИТЬ ТРЕНИРОВКУ"
 		else "СВОБОДНАЯ ПРОГУЛКА"

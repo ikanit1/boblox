@@ -1,7 +1,63 @@
 --!strict
 
--- Pure geometry, deliberately independent of Roblox Instances for repeatable tests.
+-- Pure rule decisions, deliberately independent of Roblox Instances for repeatable tests.
 local RuleMath = {}
+
+type RandomInteger = (number, number) -> number
+
+function RuleMath.nextSafeZone(previous: number, randomInteger: RandomInteger): number
+	local choices: { number } = {}
+	for index = 1, 4 do
+		if index ~= previous then
+			table.insert(choices, index)
+		end
+	end
+	return choices[randomInteger(1, #choices)]
+end
+
+function RuleMath.rotateMeteorTargets(
+	aliveIds: { number },
+	previousQueue: { number },
+	limit: number,
+	randomInteger: RandomInteger
+): ({ number }, { number })
+	local available: { [number]: boolean } = {}
+	for _, id in aliveIds do
+		available[id] = true
+	end
+	local queue: { number } = {}
+	for _, id in previousQueue do
+		if available[id] then
+			table.insert(queue, id)
+			available[id] = nil
+		end
+	end
+	local newcomers: { number } = {}
+	for id in available do
+		table.insert(newcomers, id)
+	end
+	-- Canonicalize before shuffling so roster traversal order cannot choose
+	-- the first targets. Survivors retain their place in the rotation.
+	table.sort(newcomers)
+	for index = #newcomers, 2, -1 do
+		local swap = randomInteger(1, index)
+		newcomers[index], newcomers[swap] = newcomers[swap], newcomers[index]
+	end
+	for _, id in newcomers do
+		table.insert(queue, id)
+	end
+	local count = math.clamp(math.floor(limit), 0, #queue)
+	local targets: { number } = {}
+	local nextQueue: { number } = {}
+	for index = count + 1, #queue do
+		table.insert(nextQueue, queue[index])
+	end
+	for index = 1, count do
+		table.insert(targets, queue[index])
+		table.insert(nextQueue, queue[index])
+	end
+	return targets, nextQueue
+end
 
 export type BodyBounds = {
 	x: number,

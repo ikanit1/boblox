@@ -20,4 +20,8 @@ assert(arena.LobbySpawn.CFrame.Position == roblox.Vector3.new(0, 4, 158))
 assert(arena.ArenaSpawn.CFrame.Position == roblox.Vector3.new(0, 5, 0))
 assert(arena.Laser.Transparency == 1 and not arena.Laser.CanCollide)
 assert(place:GetService("StarterGui").RuleRoomHUD.ResetOnSpawn == false)
+local results = place:GetService("StarterGui").RuleRoomHUD.Root.ResultsPanel
+assert(results:IsA("ScrollingFrame"), "Short result screens must retain reachable goal/rewards")
+assert(results.ScrollingDirection == roblox.Enum.ScrollingDirection.Y and results.ClipsDescendants)
+assert(results.Goal:IsA("TextLabel") and results.Rewards:IsA("TextLabel"))
 print("Offline model semantics passed: tile attributes, dimensions, spawn positions, HUD lifecycle.")
