@@ -5,6 +5,7 @@
 local fs = require("@lune/fs")
 local luau = require("@lune/luau")
 local Data = require("../src/server/ProfileData")
+local Status = require("../src/shared/ProfileStatus")
 local checks = 0
 local scenarios: { string } = {}
 
@@ -217,8 +218,11 @@ local function harness()
 		config.Persistence.AutosaveSeconds = options.autosave or 45
 		local shared = {
 			WaitForChild = function(_, name)
-				assert(name == "EconomyConfig", "Shared module lookup must use production config")
-				return config
+				assert(
+					name == "EconomyConfig" or name == "ProfileStatus",
+					"Shared module lookup must use production modules"
+				)
+				return if name == "EconomyConfig" then config else Status
 			end,
 		}
 		local remotes = {
@@ -425,9 +429,11 @@ do
 	local player = server.players:add(102)
 	h.advance(16)
 	expect(
-		player:GetAttribute("DataStatus") == "Unavailable" and server.service.IsReady(player),
-		"Failed load becomes explicitly session-only"
+		player:GetAttribute("DataStatus") == "Unavailable" and not server.service.IsReady(player),
+		"Failed load waits for explicit temporary-play choice"
 	)
+	player:SetAttribute("TemporaryPlayAccepted", true)
+	expect(server.service.IsReady(player), "Accepted fallback can join a new trial")
 	server.service.AwardSurvival(player)
 	server.players:remove(player)
 	h.advance(10)
@@ -574,6 +580,86 @@ do
 	expect(not server.service.IsReady(player), "Late acquire never resurrects a removed player scope")
 	server:close()
 	table.insert(scenarios, "late acquire completion after removal")
+end
+
+do
+	local h = harness()
+	local server = h.server({ optIn = false })
+	local player = server.players:add(109)
+	h.advance(0)
+	expect(
+		player:GetAttribute("DataPersistent") == false,
+		"Studio fallback explicitly declares no persistence"
+	)
+	expect(not server.service.IsReady(player), "Studio entry requires explicit temporary-play consent")
+	-- Existing-trial awards stay separate from new admission, including lease loss.
+	for _ = 1, 30 do
+		server.service.AwardStar(player)
+	end
+	server.remote.OnServerEvent:Fire(player, "Purchase", "Cyan")
+	expect(
+		player:GetAttribute("Coins") == 60 and player:GetAttribute("Owned_Cyan") ~= true,
+		"Temporary purchase cannot bypass missing consent"
+	)
+	player:SetAttribute("TemporaryPlayAccepted", true)
+	expect(server.service.IsReady(player), "Explicit choice allows Session admission")
+	server.remote.OnServerEvent:Fire(player, "Purchase", "Cyan")
+	expect(
+		player:GetAttribute("Coins") == 0 and player:GetAttribute("Owned_Cyan") == true,
+		"Accepted temporary purchase follows the normal server price"
+	)
+	server:close()
+	expect(h.store.calls == 0, "Temporary consent never enables cloud writes")
+	table.insert(scenarios, "explicit temporary admission and purchase consent")
+end
+
+do
+	local h = harness()
+	local server = h.server({ autosave = 2 })
+	local player = server.players:add(110)
+	h.advance(0)
+	server.service.AwardStar(player)
+	h.store.failAll = true
+	h.advance(10)
+	expect(
+		player:GetAttribute("DataStatus") == "Unavailable" and player:GetAttribute("DataPersistent") == true,
+		"Failed autosave distinguishes live-lease retry from memory fallback"
+	)
+	expect(server.service.IsReady(player), "Live lease allows play during automatic retry")
+	h.store.failAll = false
+	h.advance(4)
+	expect(
+		player:GetAttribute("DataStatus") == "Saved" and player:GetAttribute("DataPersistent") == true,
+		"Successful automatic retry restores the persistent state"
+	)
+	expect(
+		player:GetAttribute("ActionMessage") == "Сохранение восстановлено.",
+		"Recovered save does not leave a stale failure message"
+	)
+	server:close()
+	table.insert(scenarios, "autosave retry and clear recovery feedback")
+end
+
+do
+	local h = harness()
+	local server = h.server({ autosave = 400 })
+	local player = server.players:add(111)
+	h.advance(0)
+	player:SetAttribute("TemporaryPlayAccepted", true)
+	h.advance(181)
+	server.service.AwardSurvival(player)
+	expect(player:GetAttribute("Coins") == 12, "Lease loss preserves the already-started trial award")
+	expect(
+		player:GetAttribute("DataPersistent") == false
+			and player:GetAttribute("TemporaryPlayAccepted") == false,
+		"Lease loss revokes stale consent and declares temporary progress"
+	)
+	expect(not server.service.IsReady(player), "A new trial after lease loss requires a new choice")
+	player:SetAttribute("TemporaryPlayAccepted", true)
+	expect(server.service.IsReady(player), "Player may explicitly continue after lease loss")
+	server:close()
+	expect(h.store.records.Player_111.Coins == 0, "Expired owner never persists temporary rewards")
+	table.insert(scenarios, "lease loss, current reward and renewed consent")
 end
 
 print(

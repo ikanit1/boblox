@@ -4,6 +4,8 @@
 local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
 local ContextActionService = game:GetService("ContextActionService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ProfileStatus = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("ProfileStatus"))
 
 local CollectionPanel = {}
 
@@ -59,7 +61,10 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 		openButton.Text = if ready then "ЦЕЛИ: НАГРАДА!" else "КОСМЕТИКА / ЦЕЛИ"
 		questsTab.Text = if ready then "ЗАДАНИЯ · НАГРАДА" else "ЗАДАНИЯ"
 		local coins = numberAttribute("Coins")
-		local loading = player:GetAttribute("DataStatus") == "Loading"
+		local saveView =
+			ProfileStatus.describe(player:GetAttribute("DataStatus"), player:GetAttribute("DataPersistent"))
+		local loading = saveView.Loading
+		local needsConsent = saveView.Temporary and player:GetAttribute("TemporaryPlayAccepted") ~= true
 		for _, entry in rows do
 			local row = entry.Frame
 			local action = row.Action :: TextButton
@@ -96,22 +101,26 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 					elseif entry.Enabled then "ЗАБРАТЬ"
 					else "В ПРОЦЕССЕ"
 			end
+			if needsConsent then
+				entry.Enabled = false
+				action.Text = "ВЫБЕРИ РЕЖИМ"
+			end
 			action.BackgroundColor3 = if entry.Enabled then cyan else Color3.fromRGB(45, 60, 78)
 			action.TextColor3 = if entry.Enabled then Color3.fromRGB(18, 30, 50) else muted
 			action.AutoButtonColor = entry.Enabled
 		end
-		local status = player:GetAttribute("DataStatus")
 		local text = player:GetAttribute("ActionMessage")
 		local defaultText = if currentTab == "Quests"
 			then "Задания на сегодня. Пропуск дня не отнимает награды."
 			else "Следы меняют только внешний вид. Монеты зарабатываются в испытаниях."
 		message.Text = if typeof(text) == "string" and text ~= "" then text else defaultText
-		if status == "Session" then
-			message.Text ..= "  •  Тест Studio: без сохранения."
-		elseif status == "Unavailable" or status == "Busy" then
-			message.Text ..= "  •  Сейчас прогресс не сохраняется."
-		elseif status == "Loading" then
+		if saveView.Loading then
 			message.Text = "Загружаем коллекцию…"
+		elseif needsConsent then
+			message.Text =
+				"Без сохранения. Закрой меню и выбери «В испытания» → «Играть временно», чтобы делать покупки."
+		elseif saveView.Warning then
+			message.Text = saveView.Compact .. "  •  " .. message.Text
 		end
 	end
 
@@ -227,7 +236,9 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 		if visible and not panel.Visible then
 			previousSelection = GuiService.SelectedObject
 		end
-		panel.Visible = visible and phase ~= "Rule"
+		local screen = root.Parent
+		local stationModal = if screen then screen:GetAttribute("StationModal") else nil
+		panel.Visible = visible and phase ~= "Rule" and (stationModal == nil or stationModal == "")
 		backdrop.Visible = panel.Visible
 		if panel.Visible then
 			refresh()
@@ -266,6 +277,13 @@ function CollectionPanel.new(root: Frame, player: Player, remote: RemoteEvent, e
 		selectTab("Quests")
 	end)
 	connect(player.AttributeChanged, refresh)
+	if root.Parent then
+		connect(root.Parent:GetAttributeChangedSignal("StationModal"), function()
+			if root.Parent and root.Parent:GetAttribute("StationModal") ~= "" then
+				setVisible(false)
+			end
+		end)
+	end
 	connect(UserInputService.LastInputTypeChanged, function()
 		if panel.Visible then
 			focusPanel()

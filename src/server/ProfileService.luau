@@ -7,6 +7,7 @@ local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 
 local Config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("EconomyConfig"))
+local ProfileStatus = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("ProfileStatus"))
 local ProfileData = require(script.Parent.ProfileData)
 
 type Profile = ProfileData.Profile
@@ -77,9 +78,19 @@ function ProfileService.new(): Service
 		if scope.player.Parent ~= Players then
 			return
 		end
+		local previousStatus = scope.player:GetAttribute("DataStatus")
+		local wasPersistent = scope.player:GetAttribute("DataPersistent")
+		if wasPersistent == nil or wasPersistent ~= scope.persistent then
+			scope.player:SetAttribute("TemporaryPlayAccepted", false)
+		end
+		-- Unavailable can mean either a pending autosave retry or permanent memory fallback.
+		-- Publish the distinction before DataStatus, so UI never promises an unavailable save.
+		scope.player:SetAttribute("DataPersistent", scope.persistent)
 		scope.player:SetAttribute("DataStatus", value)
 		if message then
 			scope.player:SetAttribute("ActionMessage", message)
+		elseif value == "Saved" and previousStatus == "Unavailable" then
+			scope.player:SetAttribute("ActionMessage", "Сохранение восстановлено.")
 		end
 	end
 
@@ -399,6 +410,20 @@ function ProfileService.new(): Service
 			if not scope or not consume(scope) then
 				return
 			end
+			if
+				not ProfileStatus.canJoin(
+					player:GetAttribute("DataStatus"),
+					scope.persistent,
+					player:GetAttribute("TemporaryPlayAccepted"),
+					nil
+				)
+			then
+				player:SetAttribute(
+					"ActionMessage",
+					"Сначала выбери «Играть временно»: покупки здесь не сохранятся."
+				)
+				return
+			end
 			if type(action) ~= "string" or type(id) ~= "string" or #id > 24 or #action > 12 then
 				return
 			end
@@ -456,7 +481,14 @@ function ProfileService.new(): Service
 	local service: Service
 	service = {
 		IsReady = function(player: Player): boolean
-			return readyScope(player) ~= nil
+			local scope = readyScope(player)
+			return scope ~= nil
+				and ProfileStatus.canJoin(
+					player:GetAttribute("DataStatus"),
+					scope.persistent,
+					player:GetAttribute("TemporaryPlayAccepted"),
+					nil
+				)
 		end,
 		AwardSurvival = function(player: Player)
 			local scope = readyScope(player)

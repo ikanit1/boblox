@@ -28,7 +28,7 @@ local controls = root.ControlsTip :: TextLabel
 local healthBar = root.HealthBar :: Frame
 local teamPanel = root.TeamPanel :: Frame
 local votePanel = root.VotePanel :: Frame
-local resultsPanel = root.ResultsPanel :: Frame
+local resultsPanel = root.ResultsPanel :: ScrollingFrame
 local actions = root.Actions :: Frame
 local state = ReplicatedStorage:WaitForChild("RuleRoomState")
 local remotes = ReplicatedStorage:WaitForChild("RuleRoomRemotes")
@@ -37,6 +37,8 @@ local profileRemote = remotes:WaitForChild("ProfileAction") :: RemoteEvent
 local config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
 local economy = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("EconomyConfig"))
 local hints = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("PlayerHints"))
+local presentation = require(ReplicatedStorage.RuleRoomShared:WaitForChild("RunPresentation"))
+local profileStatus = require(ReplicatedStorage.RuleRoomShared:WaitForChild("ProfileStatus"))
 local feedback = RunFeedback.new(player, state, gui, root.FeedbackToast)
 local collection = CollectionPanel.new(root, player, profileRemote, economy)
 local characters = CharacterPresentation.new(player, economy, root.SpectateNext)
@@ -83,6 +85,7 @@ local lastRuleKey = ""
 local barTweens: { [Instance]: Tween } = {}
 local destroyed = false
 local compactChatHandled = false
+local resultsRound: number? = nil
 
 local function connect(signal: RBXScriptSignal, callback)
 	table.insert(connections, signal:Connect(callback))
@@ -149,15 +152,36 @@ local function compactPlay(): boolean
 		and (root.AbsoluteSize.Y < 470 or (UserInputService.TouchEnabled and root.AbsoluteSize.X < 750))
 end
 
+local function queuedLateEntry(): boolean
+	-- EndRound clears InRound even for survivors. Their recorded participation
+	-- prevents the late-entry warning from appearing during an ordinary break.
+	for index = 1, num(state, "RuleCount", 6) do
+		local outcome = str(player, "TrialOutcome_" .. index, "Pending")
+		if outcome == "Playing" or outcome == "Survived" or outcome == "Eliminated" then
+			return false
+		end
+	end
+	local nextIndex = num(state, "RuleIndex") + 1
+	return (phase == "Rule" or phase == "Break")
+		and player:GetAttribute("InRound") ~= true
+		and player:GetAttribute("Eliminated") ~= true
+		and presentation.isLateEntry(nextIndex, num(state, "RuleCount", 6))
+end
+
 local function phoneCommand(): string
 	if phase == "Break" then
 		return str(state, "RuleName", "Следующее испытание")
 	end
 	if player:GetAttribute("Eliminated") == true then
-		return "ВЫБЫЛ · следующий этап скоро"
+		return hints.compactDefeat(str(player, "EliminationReason", ""))
 	end
 	if player:GetAttribute("InRound") ~= true then
-		return "Войдёшь в следующем испытании"
+		if num(state, "RuleIndex") >= num(state, "RuleCount", 6) then
+			return "Полная попытка — со следующего забега"
+		end
+		return if queuedLateEntry()
+			then "ПОЗДНИЙ ВХОД\nНаграды за этапы сохраняются"
+			else "Войдёшь на следующем этапе"
 	end
 	local id = str(state, "RuleId", "")
 	local stage = str(state, "HazardStage", "Warning")
@@ -209,6 +233,10 @@ local function applyCompactPlay()
 		return
 	end
 	local width = math.min(520, root.AbsoluteSize.X - 24)
+	local eliminated = phase == "Rule" and player:GetAttribute("Eliminated") == true
+	local waitingLate = queuedLateEntry()
+	local coaching = eliminated or waitingLate
+	local inRound = phase == "Rule" and player:GetAttribute("InRound") == true
 	local finale = phase == "Rule"
 		and str(state, "RuleId", "") == "ReactorRush"
 		and player:GetAttribute("InRound") == true
@@ -218,28 +246,42 @@ local function applyCompactPlay()
 	controls.Visible = false
 	actions.Visible = false
 	panel.Position = UDim2.new(0.5, 0, 0, 4)
-	panel.Size = UDim2.fromOffset(width, 48)
+	panel.Size = UDim2.fromOffset(width, if coaching then 64 else 48)
 	panel.BackgroundTransparency = 0.18
 	column.Position = UDim2.fromOffset(12, 0)
-	column.Size = UDim2.new(1, -72, 1, 0)
+	column.Size = UDim2.new(1, if coaching then -24 else -72, 1, 0)
 	column.PhaseLabel.Visible = false
 	column.RuleLabel.Visible = false
-	column.RoundLabel.Visible = false
-	column.Instruction.Position = UDim2.fromOffset(0, if finale then 5 else 7)
-	column.Instruction.Size = UDim2.new(1, 0, 0, if finale then 22 else 28)
+	column.RoundLabel.Visible = coaching
+	column.RoundLabel.Position = UDim2.fromOffset(0, 46)
+	column.RoundLabel.Size = UDim2.new(1, 0, 0, 14)
+	column.RoundLabel.Text = if eliminated
+		then "Вернёшься на следующем этапе"
+		else "Победа доступна со следующего забега"
+	column.RoundLabel.TextSize = 13
+	column.Instruction.Position = UDim2.fromOffset(0, if coaching then 4 elseif finale then 5 else 7)
+	column.Instruction.Size = UDim2.new(1, 0, 0, if coaching then 38 elseif finale then 22 else 28)
 	column.Instruction.Text = phoneCommand()
-	column.Instruction.TextSize = 18
+	column.Instruction.TextSize = if coaching then 16 else 18
+	column.Instruction.TextScaled = not coaching
+	instructionBounds.MinTextSize = 14
 	instructionBounds.MaxTextSize = 18
-	column.Instruction.TextWrapped = false
-	timer.Size = UDim2.fromOffset(44, 32)
-	timer.Position = UDim2.new(1, -8, 0, 20)
+	column.Instruction.TextWrapped = coaching
+	timer.Visible = not coaching
+	timer.Size = UDim2.fromOffset(48, 40)
+	timer.Position = UDim2.new(1, -8, 0, 24)
 	timer.BackgroundTransparency = 1
 	timer.Countdown.Position = UDim2.fromOffset(0, 0)
-	timer.Countdown.Size = UDim2.fromScale(1, 1)
+	timer.Countdown.Size = UDim2.new(1, 0, 0, if inRound then 24 else 36)
 	timer.Countdown.TextColor3 = white
 	timer.Countdown.TextSize = 24
 	countdownBounds.MaxTextSize = 24
-	timer.UnitLabel.Visible = false
+	timer.UnitLabel.Visible = inRound
+	timer.UnitLabel.Position = UDim2.fromOffset(0, 25)
+	timer.UnitLabel.Size = UDim2.new(1, 0, 0, 14)
+	timer.UnitLabel.Text = string.format("♥ %d", math.ceil(math.max(0, health)))
+	timer.UnitLabel.TextSize = 13
+	timer.UnitLabel.TextColor3 = if health <= 35 then pink else green
 	healthBar.Size = UDim2.fromOffset(72, 2)
 	healthBar.Visible = phase == "Rule" and player:GetAttribute("InRound") == true
 	healthBar.Position = UDim2.new(0.5, if finale then width / 2 - 48 else 0, 0, 46)
@@ -260,7 +302,7 @@ local function applyCompactPlay()
 	root.FeedbackToast.Message.Size = UDim2.fromScale(1, 1)
 	root.FeedbackToast.Message.TextStrokeTransparency = 0.2
 	root.SpectateNext.AnchorPoint = Vector2.new(1, 0)
-	root.SpectateNext.Position = UDim2.new(1, -12, 0, 60)
+	root.SpectateNext.Position = UDim2.new(1, -12, 0, if coaching then 74 else 60)
 	root.SpectateNext.Size = UDim2.fromOffset(math.min(220, width), 44)
 	root.SpectateNext.NextSelectionLeft = root.SpectateNext
 	root.SpectateNext.NextSelectionRight = root.SpectateNext
@@ -305,8 +347,9 @@ local function renderStatus()
 			.. "\nВернёшься в следующем испытании."
 		status.TextColor3 = pink
 	elseif phase == "Rule" then
-		status.Text =
-			"СМОТРИ ЗА КОМНАТОЙ  •  ВХОД В СЛЕДУЮЩЕМ ИСПЫТАНИИ"
+		status.Text = if queuedLateEntry()
+			then "ПОЗДНИЙ ВХОД · награды за этапы сохраняются. Полная попытка победить — в следующем забеге."
+			else "СМОТРИ ЗА КОМНАТОЙ  •  ВХОД В СЛЕДУЮЩЕМ ИСПЫТАНИИ"
 		status.TextColor3 = muted
 	elseif phase == "Results" then
 		status.Text = string.format(
@@ -322,8 +365,14 @@ local function renderStatus()
 		status.Text = "ВЫБЕРИ РЕЖИМ  •  6 ИСПЫТАНИЙ  •  ОБЩИЙ ФИНАЛ"
 		status.TextColor3 = white
 	end
-	status.Size =
-		UDim2.new(1, -24, 0, if phase == "Rule" and player:GetAttribute("Eliminated") == true then 42 else 22)
+	status.Size = UDim2.new(
+		1,
+		-24,
+		0,
+		if (phase == "Rule" and player:GetAttribute("Eliminated") == true) or queuedLateEntry()
+			then 42
+			else 22
+	)
 	local compactFinale = root.AbsoluteSize.Y < 260 and str(state, "RuleId", "") == "ReactorRush"
 	healthBar.Visible = phase == "Rule" and player:GetAttribute("InRound") == true and not compactFinale
 	healthBar.Fill.BackgroundColor3 = if health <= 35 then pink else green
@@ -388,23 +437,39 @@ local function renderPlayer()
 		num(state, "RuleCount", 6),
 		num(player, "RunScore")
 	)
-	local result = hints.Results[str(player, "RunResult", "None")] or hints.Results.None
+	local resultCode = str(player, "RunResult", "None")
 	local resultReady = player:GetAttribute("ResultReady") == true
-	resultsPanel.Heading.Text = if resultReady then result.Title else "ЗАБЕГ ЗАВЕРШЁН"
+	local trialCount = num(state, "RuleCount", 6)
+	local outcomes = {}
+	for index = 1, trialCount do
+		outcomes[index] = str(player, "TrialOutcome_" .. index, "Pending")
+	end
+	local lateEntry = presentation.isLateEntry(presentation.firstEnteredTrial(outcomes), trialCount)
+	resultsPanel.Heading.Text = if resultReady
+		then hints.resultsHeading(resultCode, num(player, "RunSurvived"), trialCount)
+		else "ЗАБЕГ ЗАВЕРШЁН"
 	resultsPanel.Summary.Text = if resultReady
-		then result.Detail
-		else "Твой следующий забег начнётся вместе со всеми."
-	resultsPanel.Personal.Text = string.format(
-		"%d / 6 ПРОЙДЕНО  ·  %d ОЧКОВ  ·  %d ЗАРЯДОВ",
-		num(player, "RunSurvived"),
-		num(player, "RunScore"),
-		num(player, "RunStars")
-	)
+		then hints.teamResult(
+			resultCode,
+			state:GetAttribute("FinaleSuccess") == true,
+			num(state, "TeamCharge"),
+			num(state, "TeamGoal")
+		)
+		else "Ты не участвовал в этом забеге."
+	resultsPanel.Personal.Text = if resultReady
+		then hints.resultDetail(resultCode, lateEntry)
+		else "Полная попытка начнётся вместе со всеми."
+	resultsPanel.Personal.TextColor3 = if resultCode == "Won" then green else white
 	resultsPanel.Rewards.Text = string.format(
 		"+%d МОНЕТ  ·  +%d ОПЫТА",
 		num(player, "RunCoinsEarned"),
 		num(player, "RunXPEarned")
 	)
+	local saving =
+		profileStatus.describe(player:GetAttribute("DataStatus"), player:GetAttribute("DataPersistent"))
+	if saving.Warning then
+		resultsPanel.Rewards.Text ..= "\n" .. saving.Compact
+	end
 	resultsPanel.Goal.Text = nextGoal()
 	resultsPanel.Heading.TextColor3 = if resultReady and str(player, "RunResult", "None") == "Won"
 		then green
@@ -439,10 +504,12 @@ local function renderClock()
 	timer.Countdown.Text = if remaining >= 0
 		then tostring(remaining) .. (if compactPlay() then "с" else "")
 		else "—"
-	timer.UnitLabel.Text = if remaining < 0 then "ЖДЁМ" else "СЕК"
+	if not compactPlay() then
+		timer.UnitLabel.Text = if remaining < 0 then "ЖДЁМ" else "СЕК"
+	end
 	resultsPanel.Next.Text = if remaining >= 0
 		then string.format(
-			"НОВЫЙ ЗАБЕГ ЧЕРЕЗ %d СЕК · «Лаборатория» — сделать перерыв",
+			"Новый забег через %d с · «Лаборатория» — перерыв",
 			remaining
 		)
 		else "Следующий забег готовится…"
@@ -479,6 +546,10 @@ local function renderState()
 	deadline = num(state, "PhaseEndsAt")
 	local index = num(state, "RuleIndex")
 	local round = num(state, "Round")
+	if phase == "Results" and (previousPhase ~= "Results" or resultsRound ~= round) then
+		resultsRound = round
+		resultsPanel.CanvasPosition = Vector2.zero
+	end
 	local ruleKey = tostring(round) .. ":" .. tostring(index)
 	if
 		phase == "Rule"
@@ -561,14 +632,23 @@ applyComposition = function()
 	column.Instruction.Text =
 		str(state, "Instruction", "Читай правило и следи за комнатой")
 	column.Instruction.TextSize = 17
+	column.Instruction.TextScaled = true
+	instructionBounds.MinTextSize = 11
 	instructionBounds.MaxTextSize = 17
 	column.Instruction.TextWrapped = true
+	column.RoundLabel.Position = UDim2.new(0, 0, 1, -21)
+	column.RoundLabel.Size = UDim2.new(1, 0, 0, 16)
+	column.RoundLabel.TextSize = 11
+	timer.Visible = true
 	timer.BackgroundTransparency = 0
 	timer.Countdown.Position = UDim2.fromOffset(4, 4)
 	timer.Countdown.TextColor3 = Color3.fromRGB(18, 30, 50)
 	timer.Countdown.TextSize = 37
 	countdownBounds.MaxTextSize = 37
 	timer.UnitLabel.Visible = true
+	timer.UnitLabel.Size = UDim2.new(1, -8, 0, 15)
+	timer.UnitLabel.TextSize = 10
+	timer.UnitLabel.TextColor3 = Color3.fromRGB(18, 30, 50)
 	healthBar.Size = UDim2.fromOffset(160, 4)
 	teamPanel.BackgroundTransparency = 0
 	teamPanel.Meter.Visible = true
@@ -669,24 +749,25 @@ applyComposition = function()
 	votePanel.Hint.Size = UDim2.new(1, -20, 0, if tinyMenu then 16 elseif compactMenu then 18 else 25)
 	votePanel.Hint.Position = UDim2.new(0, 10, 1, if tinyMenu then -20 elseif compactMenu then -23 else -29)
 	votePanel.Hint.Visible = not extremeMenu
-	local resultTop = if root.AbsoluteSize.Y < 300 then 28 else 46
-	local resultHeight = math.min(270, math.max(176, root.AbsoluteSize.Y - resultTop - 70))
-	local compactResult = resultHeight < 225
+	local resultTop = if short then 8 else 46
+	local resultLayout = presentation.resultsLayout(root.AbsoluteSize.Y - resultTop - 64)
+	if phase == "Results" and short then
+		header.Visible = false
+	end
 	resultsPanel.Position = UDim2.new(0.5, 0, 0, resultTop)
-	resultsPanel.Size = UDim2.new(1, -36, 0, resultHeight)
-	resultsPanel.Heading.Position = UDim2.fromOffset(14, 8)
-	resultsPanel.Heading.Size = UDim2.new(1, -28, 0, 28)
-	resultsPanel.Summary.Position = UDim2.fromOffset(14, 39)
-	resultsPanel.Summary.Size = UDim2.new(1, -28, 0, if compactResult then 30 else 38)
-	resultsPanel.Personal.Position = UDim2.fromOffset(14, if compactResult then 73 else 82)
-	resultsPanel.Personal.Size = UDim2.new(1, -28, 0, 21)
-	resultsPanel.Rewards.Position = UDim2.fromOffset(14, if compactResult then 96 else 107)
-	resultsPanel.Rewards.Size = UDim2.new(1, -28, 0, 22)
-	resultsPanel.Trials.Position = UDim2.fromOffset(14, if compactResult then 122 else 136)
-	resultsPanel.Goal.Visible = resultHeight >= 210
-	resultsPanel.Goal.Position = UDim2.fromOffset(14, if compactResult then 147 else 168)
-	resultsPanel.Goal.Size = UDim2.new(1, -28, 0, if compactResult then 34 else 42)
-	resultsPanel.Next.Visible = true
+	resultsPanel.Size = UDim2.new(1, -36, 0, resultLayout.ViewportHeight)
+	resultsPanel.CanvasSize = UDim2.fromOffset(0, resultLayout.ContentHeight)
+	for name, row in resultLayout.Rows do
+		local child = resultsPanel[name] :: GuiObject
+		child.Position = UDim2.fromOffset(14, row.Y)
+		child.Size = UDim2.new(1, -32, 0, row.Height)
+		child.Visible = row.Visible
+	end
+	resultsPanel.Personal.TextSize = 14
+	resultsPanel.Personal.TextBounds.MaxTextSize = 14
+	resultsPanel.Goal.TextSize = 14
+	resultsPanel.Rewards.TextSize = 16
+	resultsPanel.Rewards.TextBounds.MaxTextSize = 16
 	root.FeedbackToast.Position = UDim2.new(0.5, 0, 0, top + height + (if teamPanel.Visible then 111 else 86))
 	local collectionWidth = if narrow then 136 else 160
 	local motionWidth = if narrow then 106 else 128

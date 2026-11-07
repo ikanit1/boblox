@@ -35,6 +35,12 @@ local result = {
 local p1 = Players:FindFirstChild("Player1")
 local p2 = Players:FindFirstChild("Player2")
 assert(p1 and p2, "Exactly two native named test players expected")
+-- These are mock profile attributes, not a cloud/session-service acceptance run.
+for _, player in { p1, p2 } do
+	player:SetAttribute("DataPersistent", false)
+	player:SetAttribute("DataStatus", "Session")
+	player:SetAttribute("TemporaryPlayAccepted", player == p1)
+end
 local driver = p2.PlayerGui:WaitForChild("StationQADriver")
 local function await(predicate, seconds)
 	local deadline = os.clock() + seconds
@@ -131,7 +137,7 @@ local ok, message = xpcall(function()
 		result.explorerAwards == 0 and result.coinsBefore == result.coinsAfter,
 		"Practice granted economic award"
 	)
-	driver:SetAttribute("Command", "Join")
+	driver:SetAttribute("Command", "JoinTemporary")
 	await(function()
 		return p2:GetAttribute("LobbyOnly") == false
 	end, 5)

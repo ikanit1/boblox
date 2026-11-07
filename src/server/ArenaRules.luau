@@ -88,6 +88,9 @@ function ArenaRules.new(arena: Model)
 	effects.Name = "RuleEffects"
 	effects.Parent = arena
 	local rng = Random.new()
+	local function randomInteger(minimum: number, maximum: number): number
+		return rng:NextInteger(minimum, maximum)
+	end
 	local currentRule = ""
 	local currentState: Folder? = nil
 
@@ -382,6 +385,18 @@ function ArenaRules.new(arena: Model)
 	end
 
 	local function redLight(context: RuleContext): boolean
+		local function signalFloor(color: Color3, word: string, symbol: string)
+			for _, tile in tiles do
+				tile.part.Color = color
+				for label in tile.texts do
+					if label.Name == "Symbol" then
+						label.Text = symbol
+					elseif label.Name == "ColorText" then
+						label.Text = word
+					end
+				end
+			end
+		end
 		for cycle = 1, 3 do
 			stage(context, "Recovery")
 			local stars: { BasePart } = {}
@@ -390,9 +405,7 @@ function ArenaRules.new(arena: Model)
 				table.insert(stars, orb(index, tile.Position + Vector3.new(0, 3.5, 0)))
 			end
 			context.state:SetAttribute("Accent", Color3.fromRGB(66, 220, 169))
-			for _, tile in tiles do
-				tile.part.Color = Color3.fromRGB(46, 170, 121)
-			end
+			signalFloor(Color3.fromRGB(46, 170, 121), "БЕГИ", "▶")
 			instruction(
 				context,
 				"▶ ЗЕЛЁНЫЙ — беги за звёздами! Сигнал " .. cycle .. "/3."
@@ -403,6 +416,16 @@ function ArenaRules.new(arena: Model)
 				return false
 			end
 			context.state:SetAttribute("Accent", Color3.fromRGB(255, 210, 88))
+			signalFloor(Color3.fromRGB(255, 210, 88), "ЗАМРИ", "⏸")
+			-- Collection has ended for this cycle. Do not leave visible rewards
+			-- inviting players to move during the stop warning or red phase.
+			for _, star in stars do
+				star.Transparency = 1
+				local label = star:FindFirstChild("PickupLabel")
+				if label and label:IsA("BillboardGui") then
+					label.Enabled = false
+				end
+			end
 			stage(context, "Warning")
 			instruction(context, "⏸ ПРИГОТОВЬСЯ ЗАМЕРЕТЬ!")
 			if not context.waitFor(0.9, nil) then
@@ -414,9 +437,7 @@ function ArenaRules.new(arena: Model)
 			end)
 			context.state:SetAttribute("Accent", Config.Rules.RedLight.Accent)
 			stage(context, "Active")
-			for _, tile in tiles do
-				tile.part.Color = Color3.fromRGB(190, 50, 70)
-			end
+			signalFloor(Color3.fromRGB(190, 50, 70), "СТОЙ", "■")
 			instruction(
 				context,
 				"■ КРАСНЫЙ — стой! Движение отнимает здоровье."
@@ -489,29 +510,29 @@ function ArenaRules.new(arena: Model)
 	end
 
 	local function meteorRain(context: RuleContext): boolean
+		local targetQueue: { number } = {}
 		for wave = 1, 5 do
 			stage(context, "Warning")
 			local positions: { Vector3 } = {}
-			context.roster.ForEachAlive(function(_, _, root)
-				if #positions < 3 then
-					table.insert(
-						positions,
-						Vector3.new(
-							math.clamp(
-								root.Position.X,
-								-Config.ArenaHalfSize + 5.5,
-								Config.ArenaHalfSize - 5.5
-							),
-							0,
-							math.clamp(
-								root.Position.Z,
-								-Config.ArenaHalfSize + 5.5,
-								Config.ArenaHalfSize - 5.5
-							)
-						)
-					)
-				end
+			local aliveIds: { number } = {}
+			local aliveRoots: { [number]: BasePart } = {}
+			context.roster.ForEachAlive(function(player, _, root)
+				table.insert(aliveIds, player.UserId)
+				aliveRoots[player.UserId] = root
 			end)
+			local targets
+			targets, targetQueue = RuleMath.rotateMeteorTargets(aliveIds, targetQueue, 3, randomInteger)
+			for _, id in targets do
+				local position = aliveRoots[id].Position
+				table.insert(
+					positions,
+					Vector3.new(
+						math.clamp(position.X, -Config.ArenaHalfSize + 5.5, Config.ArenaHalfSize - 5.5),
+						0,
+						math.clamp(position.Z, -Config.ArenaHalfSize + 5.5, Config.ArenaHalfSize - 5.5)
+					)
+				)
+			end
 			while #positions < 5 do
 				local tile = tiles[rng:NextInteger(1, #tiles)].part
 				table.insert(positions, Vector3.new(tile.Position.X, 0, tile.Position.Z))
@@ -633,7 +654,7 @@ function ArenaRules.new(arena: Model)
 		local previous = 0
 		for wave = 1, 3 do
 			stage(context, "Warning")
-			local index = (previous + rng:NextInteger(1, 3) - 1) % 4 + 1
+			local index = RuleMath.nextSafeZone(previous, randomInteger)
 			previous = index
 			local center = corners[index]
 			local zone = part(

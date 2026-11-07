@@ -66,6 +66,9 @@ local function command()
 		task.spawn(run)
 	elseif cmd == "Join" or cmd == "Explore" then
 		event:FireServer(cmd)
+	elseif cmd == "JoinTemporary" then
+		-- Deliberate fixture consent; bare Join remains available for rejection checks.
+		event:FireServer("Join", true)
 	elseif cmd == "Malformed" then
 		for _, value in { {}, "Practice", "GiveCoins", 1, true, string.rep("x", 300) } do
 			event:FireServer(value)
