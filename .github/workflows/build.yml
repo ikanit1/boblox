@@ -23,5 +23,7 @@ jobs:
           name: RuleRoom-local-place
           path: |
             build/RuleRoom.rbxlx
+            build/RuleRoomExperiments.rbxlx
             build/structure-check.json
+            build/candidate-manifest.json
           if-no-files-found: error

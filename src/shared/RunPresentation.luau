@@ -29,9 +29,15 @@ function RunPresentation.isLateEntry(firstTrial: number, trialCount: number): bo
 	return firstTrial >= 1 and firstTrial <= trialCount and trialCount - firstTrial + 1 < minimumSurvivals
 end
 
+-- Forfeited confirms admission only; it is not a rewarded survival or an elimination.
 function RunPresentation.firstEnteredTrial(outcomes: { string }): number
 	for index, outcome in outcomes do
-		if outcome == "Playing" or outcome == "Survived" or outcome == "Eliminated" then
+		if
+			outcome == "Playing"
+			or outcome == "Survived"
+			or outcome == "Eliminated"
+			or outcome == "Forfeited"
+		then
 			return index
 		end
 	end

@@ -1,0 +1,14 @@
+{
+  "name": "RuleRoom Isolated Experiments",
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": { "$properties": { "Gravity": 196.2 } },
+    "Lighting": { "$properties": { "ClockTime": 14, "Brightness": 2 } },
+    "ReplicatedStorage": {
+      "PrototypeShared": { "$path": "prototypes/shared" },
+      "PrototypeState": { "$className": "Folder" }
+    },
+    "ServerScriptService": { "PrototypeServer": { "$path": "prototypes/server" } },
+    "StarterPlayer": { "StarterPlayerScripts": { "PrototypeClient": { "$path": "prototypes/client" } } }
+  }
+}

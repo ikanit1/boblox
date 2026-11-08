@@ -1,6 +1,6 @@
 --!strict
 -- Short, local 2D cues derived from replicated gameplay state. Audio never drives gameplay.
--- Four pooled voices; no remote requests, looping tracks, microphone or external dependencies.
+-- Four cue voices and two quiet laboratory voices; no audio remotes or external assets.
 local ContentProvider = game:GetService("ContentProvider")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -20,6 +20,15 @@ local function numberAttribute(source: Instance, name: string): number
 	return if typeof(value) == "number" then value else 0
 end
 
+local function volumeAttribute(player: Player, name: string, fallback: number): number
+	local value = player:GetAttribute(name)
+	return if typeof(value) == "number"
+			and value == value
+			and math.abs(value) < math.huge
+		then math.clamp(value, 0, 1)
+		else fallback
+end
+
 function AudioController.new(player: Player, state: Instance, root: GuiObject, muteButton: TextButton)
 	local folder = Instance.new("Folder")
 	folder.Name = "RuleRoomAudio"
@@ -29,6 +38,9 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 	local group = Instance.new("SoundGroup")
 	group.Name = "RuleRoomMix"
 	group.Parent = folder
+	local musicGroup = Instance.new("SoundGroup")
+	musicGroup.Name = "RuleRoomMusicMix"
+	musicGroup.Parent = folder
 	local connections: { RBXScriptConnection } = {}
 	local healthConnection: RBXScriptConnection? = nil
 	local buttons: { [GuiButton]: RBXScriptConnection } = {}
@@ -37,6 +49,14 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 	local cooldowns: { [string]: number } = {}
 	local destroyed = false
 	local muted = player:GetAttribute("RuleRoomAudioMuted") == true
+	local effectsVolume = 1
+	local musicVolume = 0.5
+	local musicVoices: { any } = {}
+	local musicStartedAt: number? = nil
+	local musicIndex = 1
+	local musicCount = 0
+	local duckUntil = 0
+	local characterAlive = true
 	local sequenceEpoch = 0
 	local characterEpoch = 0
 	local lastRule = ""
@@ -73,7 +93,32 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 		end
 	end
 
-	local function stopAll()
+	for index = 1, Config.Music.Voices do
+		local sound = Instance.new("Sound")
+		sound.Name = "Laboratory_" .. index
+		sound.SoundId = Config.Sources.Tone.SoundId
+		sound.Volume = 0
+		sound.Looped = false
+		sound.SoundGroup = musicGroup
+		sound.Parent = folder
+		table.insert(musicVoices, { Sound = sound, Until = 0, Playing = false })
+		table.insert(preload, sound)
+	end
+	folder:SetAttribute("MusicPlaybackCount", 0)
+
+	local function stopMusic()
+		musicStartedAt = nil
+		musicIndex = 1
+		for _, voice in musicVoices do
+			voice.Sound:Stop()
+			voice.Sound.Volume = 0
+			voice.Playing = false
+			voice.Until = 0
+		end
+		folder:SetAttribute("MusicActive", false)
+	end
+
+	local function stopCues()
 		sequenceEpoch += 1
 		for _, pool in pools do
 			for _, voice in pool do
@@ -87,20 +132,110 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 			end
 		end
 	end
+	local function stopAll()
+		stopCues()
+		stopMusic()
+	end
+	local function musicGain(now: number)
+		musicGroup.Volume = if muted or not Config.Enabled
+			then 0
+			else gain(Config.MasterGainDb) * musicVolume * (if now < duckUntil
+				then Config.Music.DuckGain
+				else 1)
+	end
+	local function updateMusic()
+		local phase = state:GetAttribute("Phase")
+		if
+			destroyed
+			or muted
+			or not Config.Enabled
+			or musicVolume <= 0
+			or not characterAlive
+			or player:GetAttribute("InRound") == true
+			or (phase ~= "Waiting" and phase ~= "Voting")
+		then
+			if musicStartedAt then
+				stopMusic()
+			end
+			return
+		end
+		local now = os.clock()
+		musicGain(now)
+		if not musicStartedAt then
+			musicStartedAt = now + 1.5
+			musicIndex = 1
+			folder:SetAttribute("MusicActive", true)
+		end
+		local elapsedMusic = now - musicStartedAt
+		if elapsedMusic >= Config.Music.LoopSeconds then
+			musicStartedAt += math.floor(elapsedMusic / Config.Music.LoopSeconds) * Config.Music.LoopSeconds
+			elapsedMusic = now - musicStartedAt
+			musicIndex = 1
+		end
+		for _, voice in musicVoices do
+			if voice.Playing then
+				local remaining = voice.Until - now
+				if remaining <= 0 then
+					voice.Sound:Stop()
+					voice.Playing = false
+				else
+					voice.Sound.Volume = gain(Config.Music.GainDb)
+						* math.min(1, remaining / Config.Music.FadeSeconds)
+				end
+			end
+		end
+		-- Skip notes missed during a stall; never catch up with an audible burst.
+		local played = false
+		while musicIndex <= #Config.Music.Notes and Config.Music.Notes[musicIndex].At <= elapsedMusic do
+			local note = Config.Music.Notes[musicIndex]
+			musicIndex += 1
+			if not played and elapsedMusic - note.At <= 0.25 then
+				for _, voice in musicVoices do
+					if not voice.Playing and voice.Sound.IsLoaded then
+						local ok = pcall(function()
+							voice.Sound:Stop()
+							voice.Sound.TimePosition = 0
+							voice.Sound.PlaybackSpeed = note.Speed
+							voice.Sound.Volume = gain(Config.Music.GainDb)
+							voice.Sound:Play()
+						end)
+						if ok then
+							voice.Playing = true
+							voice.Until = now + Config.Music.Seconds + Config.Music.FadeSeconds
+							musicCount += 1
+							folder:SetAttribute("MusicPlaybackCount", musicCount)
+						else
+							folder:SetAttribute("MusicPlaybackError", true)
+						end
+						played = true
+						break
+					end
+				end
+			end
+		end
+	end
 
 	local function applyMute()
 		muted = player:GetAttribute("RuleRoomAudioMuted") == true
-		group.Volume = if muted or not Config.Enabled then 0 else gain(Config.MasterGainDb)
-		muteButton.Text = if muted then "ЗВУК: ВЫКЛ" else "ЗВУК: ВКЛ"
+		effectsVolume = volumeAttribute(player, "RuleRoomEffectsVolume", 1)
+		musicVolume = volumeAttribute(player, "RuleRoomMusicVolume", 0.5)
+		group.Volume = if muted or not Config.Enabled then 0 else gain(Config.MasterGainDb) * effectsVolume
+		musicGain(os.clock())
 		muteButton:SetAttribute("Muted", muted)
 		folder:SetAttribute("Muted", muted)
 		if muted then
 			stopAll()
+		elseif effectsVolume == 0 then
+			stopCues()
 		end
+		if musicVolume == 0 then
+			stopMusic()
+		end
+		updateMusic()
 	end
 
 	local function playNote(id: string, cue, multiplier: number)
-		if destroyed or muted or not Config.Enabled then
+		if destroyed or muted or effectsVolume <= 0 or not Config.Enabled then
 			return
 		end
 		local now = os.clock()
@@ -149,6 +284,8 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 			return
 		end
 		playbackCount += 1
+		duckUntil = math.max(duckUntil, now + Config.Music.DuckSeconds)
+		musicGain(now)
 		folder:SetAttribute("PlaybackCount", playbackCount)
 		folder:SetAttribute("LastCue", id)
 		folder:SetAttribute("LastPlaybackAt", Workspace:GetServerTimeNow())
@@ -169,8 +306,13 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 		end)
 	end
 
+	local function reducedMotion(): boolean
+		local screen = root:FindFirstAncestorOfClass("ScreenGui")
+		return screen ~= nil and screen:GetAttribute("ReducedMotion") == true
+	end
+
 	local function cue(id: string)
-		if destroyed or muted or not Config.Enabled then
+		if destroyed or muted or effectsVolume <= 0 or not Config.Enabled then
 			return
 		end
 		local definition = Config.Cues[id]
@@ -180,7 +322,10 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 		end
 		cooldowns[id] = now + definition.Cooldown
 		local epoch = sequenceEpoch
-		for index, note in definition.Notes or { 1 } do
+		local notes = if reducedMotion() and definition.ReducedNotes
+			then definition.ReducedNotes
+			else definition.Notes or { 1 }
+		for index, note in notes do
 			local delaySeconds = (index - 1) * (definition.Spacing or 0)
 			if delaySeconds == 0 then
 				playNote(id, definition, note)
@@ -195,6 +340,7 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 	end
 
 	local function renderState()
+		updateMusic()
 		local phase = state:GetAttribute("Phase")
 		local participating = player:GetAttribute("InRound") == true
 		if phase == "Rule" and participating then
@@ -217,6 +363,14 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 					cue("Danger")
 				elseif stageName == "Warning" and previousStage ~= "" then
 					cue("Warning")
+				elseif
+					stageName == "Recovery"
+					and previousStage ~= ""
+					and not string.match(previousStage, ":Recovery$")
+				then
+					-- Only a live transition counts; joining mid-Recovery stays silent.
+					-- A separately replicated cycle index must not replay the safe cue.
+					cue("Safe")
 				end
 			end
 			local goal = numberAttribute(state, "TeamGoal")
@@ -247,12 +401,17 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 					cue("Passed")
 				elseif outcome == "Eliminated" then
 					cue("Eliminated")
+				elseif outcome == "Forfeited" then
+					-- Survived, reward withdrawn: neither the success chime nor the defeat cue.
+					cue("Forfeited")
 				end
 			end
 		end
 	end
 
 	local function bindCharacter(character: Model)
+		characterAlive = false
+		stopMusic()
 		characterEpoch += 1
 		local epoch = characterEpoch
 		if healthConnection then
@@ -271,9 +430,15 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 				return
 			end
 			local previous = humanoid.Health
+			characterAlive = previous > 0
+			updateMusic()
 			healthConnection = humanoid.HealthChanged:Connect(function(value)
 				local tookDamage = value < previous
 				previous = value
+				characterAlive = value > 0
+				if not characterAlive then
+					stopMusic()
+				end
 				if
 					tookDamage
 					and state:GetAttribute("Phase") == "Rule"
@@ -309,15 +474,9 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 			buttons[instance] = nil
 		end
 	end)
-	connect(muteButton.Activated, function()
-		local value = not muted
-		player:SetAttribute("RuleRoomAudioMuted", value)
-		applyMute()
-		if not value then
-			cue("UI")
-		end
-	end)
 	connect(player:GetAttributeChangedSignal("RuleRoomAudioMuted"), applyMute)
+	connect(player:GetAttributeChangedSignal("RuleRoomEffectsVolume"), applyMute)
+	connect(player:GetAttributeChangedSignal("RuleRoomMusicVolume"), applyMute)
 	local previousCoins = player:GetAttribute("Coins")
 	connect(player:GetAttributeChangedSignal("Coins"), function()
 		local value = numberAttribute(player, "Coins")
@@ -331,6 +490,15 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 		previousCoins = value
 	end)
 	connect(player.CharacterAdded, bindCharacter)
+	connect(player.CharacterRemoving, function()
+		characterEpoch += 1
+		characterAlive = false
+		stopAll()
+		if healthConnection then
+			healthConnection:Disconnect()
+			healthConnection = nil
+		end
+	end)
 	connect(player.AttributeChanged, function(name)
 		if name == "InRound" or name == "LastTrialOutcome" or name == "ResultReady" then
 			task.defer(function()
@@ -364,6 +532,7 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 			return
 		end
 		elapsed = 0
+		updateMusic()
 		if
 			state:GetAttribute("Phase") == "Rule"
 			and state:GetAttribute("HazardStage") == "Warning"
@@ -379,7 +548,8 @@ function AudioController.new(player: Player, state: Instance, root: GuiObject, m
 					.. tostring(remaining)
 				if not countdownSeen[key] then
 					countdownSeen[key] = true
-					cue("Countdown")
+					-- The final second rises instead of ticking, so "move now" sounds different.
+					cue(if remaining == 1 then "WarningFinal" else "Countdown")
 				end
 			end
 		end

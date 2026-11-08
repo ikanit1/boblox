@@ -5,6 +5,7 @@ local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local rewards =
 	require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("EconomyConfig")).Rewards
+local Hints = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("PlayerHints"))
 local RunFeedback = {}
 
 function RunFeedback.new(player: Player, state: Instance, gui: ScreenGui, toast: Frame)
@@ -70,6 +71,7 @@ function RunFeedback.new(player: Player, state: Instance, gui: ScreenGui, toast:
 	end
 	local previousStars = player:GetAttribute("RunStars") or 0
 	local previousSurvived = player:GetAttribute("RunSurvived") or 0
+	local previousOutcome = player:GetAttribute("LastTrialOutcome")
 	table.insert(
 		connections,
 		player:GetAttributeChangedSignal("RunStars"):Connect(function()
@@ -89,24 +91,38 @@ function RunFeedback.new(player: Player, state: Instance, gui: ScreenGui, toast:
 			previousStars = stars
 		end)
 	)
+	local function renderTrialFeedback()
+		local survived = player:GetAttribute("RunSurvived") or 0
+		local outcome = player:GetAttribute("LastTrialOutcome")
+		-- These attributes may replicate in either order. Wait for both an awarded
+		-- outcome and the increased total before announcing coins, once per increase.
+		previousSurvived = math.min(previousSurvived, survived)
+		local forfeited = outcome == "Forfeited" or player:GetAttribute("MovementWarning") == true
+		if survived > previousSurvived and outcome == "Survived" and not forfeited then
+			previousSurvived = survived
+			show(
+				string.format(
+					"✓ ИСПЫТАНИЕ ПРОЙДЕНО  ·  +%d МОНЕТ  ·  +%d ОПЫТА",
+					rewards.SurvivalCoins,
+					rewards.SurvivalXP
+				),
+				Color3.fromRGB(66, 220, 169),
+				3,
+				string.format("✓ Пройдено · +%d монет", rewards.SurvivalCoins)
+			)
+		elseif outcome == "Forfeited" and outcome ~= previousOutcome then
+			show(Hints.Forfeited.Toast, Color3.fromRGB(255, 213, 79), 3, Hints.Forfeited.CompactToast)
+		end
+		previousOutcome = outcome
+	end
+	table.insert(connections, player:GetAttributeChangedSignal("RunSurvived"):Connect(renderTrialFeedback))
 	table.insert(
 		connections,
-		player:GetAttributeChangedSignal("RunSurvived"):Connect(function()
-			local survived = player:GetAttribute("RunSurvived") or 0
-			if survived > previousSurvived then
-				show(
-					string.format(
-						"✓ ИСПЫТАНИЕ ПРОЙДЕНО  ·  +%d МОНЕТ  ·  +%d ОПЫТА",
-						rewards.SurvivalCoins,
-						rewards.SurvivalXP
-					),
-					Color3.fromRGB(66, 220, 169),
-					3,
-					string.format("✓ Пройдено · +%d монет", rewards.SurvivalCoins)
-				)
-			end
-			previousSurvived = survived
-		end)
+		player:GetAttributeChangedSignal("LastTrialOutcome"):Connect(renderTrialFeedback)
+	)
+	table.insert(
+		connections,
+		player:GetAttributeChangedSignal("MovementWarning"):Connect(renderTrialFeedback)
 	)
 	table.insert(
 		connections,

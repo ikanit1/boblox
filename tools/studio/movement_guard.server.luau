@@ -17,6 +17,9 @@ local profiles = {
 	end,
 	AwardStar = function() end,
 	CompleteRun = function() end,
+	RecordFlawless = function()
+		return false
+	end,
 }
 local world = require(modules.ArenaRules).new(workspace.Arena)
 local roster = require(modules.PlayerRoster).new(world.LobbySpawn, profiles)
@@ -39,8 +42,13 @@ local ok, err = xpcall(function()
 	state:SetAttribute("PhaseEndsAt", workspace:GetServerTimeNow() + 45)
 	state:SetAttribute("Phase", "Rule")
 	local started = os.clock()
-	while os.clock() - started < 7 do
+	local warnedAlive = false
+	-- The first unsupported interval warns; a second one eliminates in the same trial.
+	while os.clock() - started < 12 do
 		roster.CheckBoundaries()
+		if subject:GetAttribute("MovementWarning") == true then
+			warnedAlive = subject:GetAttribute("InRound") == true and subject.Character.Humanoid.Health > 0
+		end
 		task.wait(0.05)
 	end
 	roster.AwardSurvivors("ReactorRush")
@@ -52,9 +60,11 @@ local ok, err = xpcall(function()
 		airborneSeconds = subject:GetAttribute("MovementAirborneSeconds"),
 		sampleSeconds = subject:GetAttribute("MovementSampleSeconds"),
 		eliminated = subject:GetAttribute("Eliminated"),
+		warnedAlive = warnedAlive,
 		awards = awards,
 	}
 	data.passed = data.violation == "Airborne"
+		and data.warnedAlive
 		and data.eliminated == true
 		and (awards[tostring(subject.UserId)] or 0) == 0
 		and awards[tostring(list[2].UserId)] == 1

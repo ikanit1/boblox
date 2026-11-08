@@ -86,6 +86,15 @@ eligible, won = RuleMath.runOutcome(4, true, false)
 expect(eligible and not won, "A failed team objective cannot award wins")
 eligible, won = RuleMath.runOutcome(4, true, true)
 expect(eligible and won, "Four trials plus living through charged finale wins")
+expect(RuleMath.movementResponse(1) == "Warn", "The first movement violation only warns")
+expect(RuleMath.movementResponse(2) == "Eliminate", "The second movement violation eliminates")
+expect(RuleMath.movementResponse(3) == "Eliminate", "Later violations cannot grant another warning")
+for _, invalidCount in { 0, -1, 1.5, math.huge, 0 / 0 } do
+	expect(
+		RuleMath.movementResponse(invalidCount) == "Eliminate",
+		"Invalid violation counts cannot grant a movement warning"
+	)
+end
 expect(RuleMath.travelPlausible(16, 1, 16), "Normal movement at full walk speed is allowed")
 expect(RuleMath.travelPlausible(24, 0.1, 16), "Delayed replication burst receives a jitter envelope")
 expect(RuleMath.travelPlausible(30, 1, 16), "Minor collision and correction displacement is tolerated")

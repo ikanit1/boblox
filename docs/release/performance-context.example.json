@@ -1,0 +1,12 @@
+{
+  "DeviceModel": "",
+  "GraphicsQuality": "",
+  "NetworkDescription": "",
+  "Scenario": "meteors",
+  "ActualClients": null,
+  "SourcesComparedWithCandidate": false,
+  "TargetFPS": 30,
+  "PhysicalDevice": false,
+  "CompletedRuns": 0,
+  "note": "Шаблон, не свидетельство. Заполнить по настоящей записи; имена игроков не нужны."
+}

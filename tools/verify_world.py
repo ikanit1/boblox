@@ -43,5 +43,18 @@ for index in range(1, 8):
     dx, dy, dz = (target[i] - previous[i] for i in range(3))
     assert 0 < dy <= 2.1 and math.hypot(dx, dz) <= 15, f"Jump {index} out of budget"
     previous = target
-assert len([n for n in world.iter("Item") if n.attrib["class"] == "ProximityPrompt"]) == 14
-print("World safety passed: 84x84 grid, no permanent hazard refuge, 7 jump budgets, 14 stations.")
+assert len([n for n in world.iter("Item") if n.attrib["class"] == "ProximityPrompt"]) == 16
+print("World safety passed: 84x84 grid, no permanent hazard refuge, 7 jump budgets, 16 stations.")
+
+# Cosmetic variants are a separate, bounded folder and never affect physics or ray queries.
+atmosphere = next(n for n in world.findall("Item") if name(n) == "Atmosphere")
+decorations = [n for n in atmosphere.iter("Item") if n.attrib["class"] == "Part"]
+assert 0 < len(decorations) <= 80
+for node in decorations:
+    for flag in ("CanCollide", "CanTouch", "CanQuery", "CastShadow"):
+        assert node.findtext(f"Properties/bool[@name='{flag}']") == "false", (name(node), flag)
+order = re.search(r"RuleOrder\s*=\s*\{([^}]+)\}", config, re.S)
+rule_ids = re.findall(r'"([A-Za-z]+)"', order.group(1))
+import build_station
+assert rule_ids == [entry[0] for entry in build_station.GUIDES], "Archive and production catalog differ"
+print(f"Theme/catalog safety passed: {len(decorations)} cosmetic parts, {len(rule_ids)} rule exhibits.")

@@ -1,5 +1,7 @@
 """Original, editable laboratory complex. No imported assets or runtime geometry."""
 
+import math
+
 COURSE = [(-64, 3, 137), (-73, 5, 126), (-64, 7, 115), (-74, 9, 104),
           (-64, 11, 93), (-74, 13, 82), (-64, 15, 71)]
 GUIDES = [
@@ -12,7 +14,9 @@ GUIDES = [
     ("DisappearingTiles", "07 / ИСЧЕЗАЮЩИЙ ПОЛ", "Уйди с плиток «ПРОВАЛ».\nСледи за каждой волной.", (208, 142, 255)),
     ("SafeZone", "08 / НАЙДИ УБЕЖИЩЕ", "Добеги до зелёной зоны.\nОстанься в ней до сигнала.", (66, 220, 169)),
     ("Spinner", "09 / КРУГОВОЙ ЛУЧ", "Следи за вращением.\nПерепрыгивай луч.", (255, 115, 173)),
-    ("ReactorRush", "10 / ЗАРЯДИ РЕАКТОР", "Собирайте заряды вместе.\nДоживите до конца!", (80, 225, 255)),
+    ("PressureWave", "10 / ВОЛНА ДАВЛЕНИЯ", "Встань за экран.\nВстречная волна меняет укрытие.", (91, 221, 202)),
+    ("ChangingWalls", "11 / МЕНЯЮЩИЕСЯ СТЕНЫ", "Найди зелёный проём.\nПройди навстречу стене.", (203, 171, 255)),
+    ("ReactorRush", "12 / ЗАРЯДИ РЕАКТОР", "Соберите заряды.\nВыживите ещё 4 секунды!", (80, 225, 255)),
 ]
 
 
@@ -57,6 +61,16 @@ def build(world, api):
     for x in (-42, -21, 21, 42):
         decor(architecture, f"WindowMullion_{x}", (0.6, 32, 1), (x, 15, 43))
     board(architecture, "MainSign", (0, 19, -41.8), (54, 10, 0.5), "RULE ROOM / 06", "КОМНАТА МЕНЯЕТ ПРАВИЛА\n6 ИСПЫТАНИЙ · ОДНА КОМАНДА", gold, collide=False)
+    # Stable, colour-independent landmarks sit above movement and never form refuge platforms.
+    for name, heading, position, size, face in (
+        ("ZoneA", "A  /  ●", (-25, 10, -41.6), (14, 5, 0.5), 2),
+        ("ZoneB", "B  /  ◆", (25, 10, -41.6), (14, 5, 0.5), 2),
+        ("ZoneC", "C  /  ▲", (-41.6, 10, 25), (0.5, 5, 14), 0),
+        ("ZoneD", "D  /  ■", (41.6, 10, 25), (0.5, 5, 14), 3),
+    ):
+        marker = board(architecture, name, position, size, heading, "ОРИЕНТИР", white, face=face, collide=False)
+        prop(marker, "bool", "CanQuery", False)
+        prop(marker, "bool", "CastShadow", False)
     for x in (-32, 32):
         decor(architecture, f"TopBeam_{x}", (2, 2, 88), (x, 33, 0))
         light_panel = decor(architecture, f"ArenaLight_{x}", (8, 0.7, 4), (x, 27, -36), white, material=288)
@@ -64,6 +78,32 @@ def build(world, api):
         prop(light, "float", "Range", 58)
         prop(light, "float", "Brightness", 1.2)
         prop(light, "Color3", "Color", white)
+
+    # Two visual settings share every collision and gameplay surface. Only this folder is themed.
+    atmosphere = item(world, "Folder", "Atmosphere")
+    attrs(atmosphere, {"Purpose": "Cosmetic laboratory/orbital variants; never hazard geometry"})
+
+    def themed(name, size, position, role, **kw):
+        colors = {"Panel": (36, 53, 73), "Frame": (72, 98, 119), "Accent": (139, 201, 226), "Orbit": (177, 182, 235)}
+        node = decor(atmosphere, name, size, position, colors[role], transparency=1 if role == "Orbit" else 0, **kw)
+        attrs(node, {"ThemeRole": role})
+        return node
+
+    for side in (-1, 1):
+        # High wall panels leave feet, tile labels and the first jump arc unobstructed.
+        themed(f"ObservationPanel{side}", (0.1, 9, 29), (side * 41.85, 22, -7), "Panel")
+        for z in (-21, 7):
+            themed(f"PanelFrame{side}_{z}", (0.2, 9.5, 0.4), (side * 41.7, 22, z), "Frame")
+        for index in range(6):
+            themed(f"PanelStar{side}_{index}", (0.22, 0.3, 0.3),
+                   (side * 41.6, 19 + (index * 5 % 7), -18 + (index * 7 % 24)), "Orbit", material=288)
+        themed(f"DistantTower{side}", (12, 44, 12), (side * 116, 42, -68), "Panel")
+        themed(f"DistantTowerCrown{side}", (18, 1, 18), (side * 116, 64, -68), "Accent")
+    for index in range(12):
+        # A distant orbital gantry above the arena silhouette has no collision or light sources.
+        angle = index * math.tau / 12
+        themed(f"OrbitalGantry{index}", (12, 1.2, 2),
+               (math.cos(angle) * 58, 55 + math.sin(angle) * 10, -76), "Orbit")
 
     lobby = item(world, "Folder", "Lobby")
     attrs(lobby, {"Zone": "Research station / bounds X -90..90, Z 48..192", "Activities": "Practice / rule gallery / cosmetics / viewing deck"})
@@ -102,7 +142,7 @@ def build(world, api):
     for z in (143, 134, 125, 116, 107, 98, 89, 80):
         decor(lobby, f"Wayfinder_{z}", (3.5, 0.1, 0.6), (0, 1.1, z), gold, material=288)
     board(lobby, "Welcome", (0, 14, 190.7), (64, 12, 0.5), "ЛАБОРАТОРИЯ ПРАВИЛ", "ВПЕРЁД — ИСПЫТАНИЯ\nСЛЕВА — ПАРКУР  /  СПРАВА — СЕКРЕТЫ ПРАВИЛ", gold, face=5)
-    for x, heading, text in ((-42, "ТРЕНИРОВОЧНЫЙ КОНТУР", "7 ПРЫЖКОВ · ЛИЧНЫЙ РЕКОРД"), (42, "АРХИВ ИСПЫТАНИЙ", "10 ПРАВИЛ · ПОДСКАЗКИ БЕЗ РИСКА")):
+    for x, heading, text in ((-42, "ТРЕНИРОВОЧНЫЙ КОНТУР", "7 ПРЫЖКОВ · ЛИЧНЫЙ РЕКОРД"), (42, "АРХИВ ИСПЫТАНИЙ", "12 ПРАВИЛ · ПОДСКАЗКИ БЕЗ РИСКА")):
         board(lobby, f"WingSign_{x}", (x, 12, 172), (38, 7, 0.8), heading, text)
         part(lobby, f"WingPost_{x}", (1, 11, 1), (x, 6, 172), steel)
 
@@ -111,6 +151,14 @@ def build(world, api):
     part(reactor, "Base", (11, 2, 11), (0, 4, 177), navy)
     core = decor(reactor, "EnergyCore", (6, 9, 6), (0, 11, 177), cyan, material=288)
     prop(core, "token", "Shape", 0)
+    for index in range(1, 7):
+        x = -7.7 if index <= 3 else 7.7
+        y = 6.5 + ((index - 1) % 3) * 3.5
+        decor(reactor, f"Progress{index}", (1.2, 2.5, 1.2), (x, y, 173), steel, material=288, transparency=0.65)
+    status = board(reactor, "StatusBoard", (0, 19, 176.5), (23, 5, 0.5),
+                   "РЕАКТОР ОЖИДАЕТ", "6 ЭТАПОВ · ОБЩИЙ ФИНАЛ", cyan, face=5, collide=False)
+    prop(status, "bool", "CanQuery", False)
+    prop(status, "bool", "CastShadow", False)
     for y in (6, 16):
         for axis in (0, 1):
             decor(reactor, f"Containment_{y}_{axis}", (12, 0.7, 2) if axis == 0 else (2, 0.7, 12), (0, y, 177), gold)
@@ -130,7 +178,7 @@ def build(world, api):
     prompt(explore, "Explore", "Остаться здесь", "ЛАБОРАТОРИЯ")
 
     practice = item(lobby, "Folder", "Practice")
-    attrs(practice, {"Purpose": "Optional ordered server-timed course; session record only; no currency"})
+    attrs(practice, {"Purpose": "Optional ordered server-timed course; persistent best when profile allows; no currency"})
     part(practice, "StartPad", (10, 1, 10), (-64, 1.6, 150), (44, 116, 119))
     start = board(practice, "StartConsole", (-51, 3.5, 153), (8, 5, 2), "ПАРКУР / 07", "Стартуй и побей свой рекорд!", cyan, face=5)
     prompt(start, "Practice", "Начать / заново", "ТРЕНИРОВОЧНЫЙ КОНТУР")
@@ -159,6 +207,13 @@ def build(world, api):
             for j in range(4):
                 tile_color = ((70, 168, 244), (255, 115, 173), gold, (66, 220, 169))[j] if rule_id == "SafeColor" else ((66, 220, 169) if j == 2 else steel)
                 decor(icon, f"Tile{j}", (4, 0.6, 2), (x - 2.2 + (j % 2) * 4.4, 10.8 + (1 if rule_id == "DisappearingTiles" and j % 2 else 0), z - 1.1 + (j // 2) * 2.2), tile_color)
+        elif rule_id == "PressureWave":
+            decor(icon, "Screen", (6, 4, 0.6), (x, 12.4, z), (91, 221, 202))
+            decor(icon, "Shelter", (6, 0.12, 2.5), (x, 10.5, z + 1.8), (66, 220, 169))
+        elif rule_id == "ChangingWalls":
+            for side in (-1, 1):
+                decor(icon, f"Gate{side}", (3.5, 4, 0.6), (x + side * 4.4, 12.4, z), (203, 171, 255))
+            decor(icon, "Gap", (5.2, 0.12, 4), (x, 10.5, z), (66, 220, 169))
         elif rule_id in ("LaserSweep", "Spinner"):
             decor(icon, "Beam", (12, 0.35, 0.35), (x, 12, z), color, material=288)
             for side in (-1, 1):

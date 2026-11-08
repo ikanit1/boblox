@@ -75,4 +75,34 @@ function ProfileStatus.canJoin(status: any, persistent: any, accepted: any, requ
 	return not view.Loading and (not view.Temporary or accepted == true or requestAcceptance == true)
 end
 
+function ProfileStatus.retry(canRetry: any, retryAt: any, remaining: any, now: any): any
+	local valid = canRetry == true
+		and type(retryAt) == "number"
+		and retryAt == retryAt
+		and math.abs(retryAt) < math.huge
+		and retryAt >= 0
+		and type(remaining) == "number"
+		and remaining >= 1
+		and remaining <= 3
+		and remaining % 1 == 0
+		and type(now) == "number"
+		and now == now
+		and math.abs(now) < math.huge
+	if not valid then
+		return { Visible = false, Enabled = false, Text = "ПОВТОРИТЬ ЗАГРУЗКУ", Hint = "" }
+	end
+	local seconds = math.max(0, math.ceil(retryAt - now))
+	return {
+		Visible = true,
+		Enabled = seconds == 0,
+		Text = if seconds > 0
+			then string.format("ПОВТОР ЧЕРЕЗ %d С", math.min(seconds, 999))
+			else "ПОВТОРИТЬ ЗАГРУЗКУ",
+		Hint = string.format(
+			"Ещё попыток: %d. Повтор доступен до временной игры.",
+			remaining
+		),
+	}
+end
+
 return ProfileStatus

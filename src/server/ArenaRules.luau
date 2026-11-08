@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local Config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
 local RuleMath = require(script.Parent.RuleMath)
+local TraversalMath = require(script.Parent.TraversalMath)
 local PlayerRoster = require(script.Parent.PlayerRoster)
 
 type TileSnapshot = {
@@ -20,7 +21,7 @@ type TileSnapshot = {
 export type RuleContext = {
 	roster: PlayerRoster.Roster,
 	state: Folder,
-	waitFor: (number, ((number, number) -> ())?) -> boolean,
+	waitFor: (number, ((number, number) -> boolean?)?) -> boolean,
 }
 local ArenaRules = {}
 local function requiredPart(parent: Instance, name: string): BasePart
@@ -92,7 +93,18 @@ function ArenaRules.new(arena: Model)
 		return rng:NextInteger(minimum, maximum)
 	end
 	local currentRule = ""
+	local generation = 0
 	local currentState: Folder? = nil
+	local lunarCollectors: { [Player]: { root: BasePart, mask: number, count: number } } = {}
+	local function resetLunarPickups()
+		for player in lunarCollectors do
+			-- Clear the goal first so delayed client replication cannot expose stale pickups.
+			player:SetAttribute("LunarStarGoal", 0)
+			player:SetAttribute("LunarStarMask", 0)
+			player:SetAttribute("LunarStarCount", 0)
+		end
+		table.clear(lunarCollectors)
+	end
 
 	local function restoreTiles()
 		for _, tile in tiles do
@@ -120,7 +132,31 @@ function ArenaRules.new(arena: Model)
 			label.Enabled = false
 		end
 	end
+	-- Text and symbol cue that a tile is about to vanish; readable without colour or motion.
+	local function warnTile(tile: TileSnapshot, word: string)
+		tile.part.Color = Color3.fromRGB(255, 160, 65)
+		tile.part.Transparency = 0.15
+		for label in tile.texts do
+			if label.Name == "Symbol" then
+				label.Text = "⚠"
+			elseif label.Name == "ColorText" then
+				label.Text = word
+			end
+		end
+	end
+	local function tileUnder(position: Vector3): TileSnapshot?
+		local half = Config.TileSize / 2
+		for _, tile in tiles do
+			local p = tile.part.Position
+			if math.abs(position.X - p.X) <= half and math.abs(position.Z - p.Z) <= half then
+				return tile
+			end
+		end
+		return nil
+	end
 	local function restore()
+		generation += 1
+		resetLunarPickups()
 		for _, binding in lunarForces do
 			binding.root:SetAttribute("TrialGravityScale", nil)
 			binding.force:Destroy()
@@ -139,6 +175,8 @@ function ArenaRules.new(arena: Model)
 		effects:ClearAllChildren()
 		if currentState then
 			currentState:SetAttribute("HazardStage", "Recovery")
+			currentState:SetAttribute("FinaleStage", "")
+			currentState:SetAttribute("StabilizeEndsAt", 0)
 		end
 	end
 	local function part(
@@ -209,9 +247,17 @@ function ArenaRules.new(arena: Model)
 		gui.Parent = p
 		return p
 	end
-	local function collect(context: RuleContext, pickups: { BasePart }, onCollected: (() -> ())?)
+	local function collect(
+		context: RuleContext,
+		pickups: { BasePart },
+		onCollected: (() -> ())?,
+		canCollect: (() -> boolean)?
+	)
 		context.roster.ForEachAlive(function(player, _, root)
 			for index = #pickups, 1, -1 do
+				if canCollect and not canCollect() then
+					return
+				end
 				local pickup = pickups[index]
 				if
 					(pickup.Position - root.Position).Magnitude <= Config.LowGravity.CollectionRadius
@@ -229,30 +275,75 @@ function ArenaRules.new(arena: Model)
 	local function beamUpdate(
 		context: RuleContext,
 		sweepSeconds: number,
-		damage: number
-	): (number, number) -> ()
+		damage: number,
+		maximumElapsed: number
+	): (number, number, number?) -> ()
 		local hit = damageGate(1.2)
 		local edge = Config.ArenaHalfSize - 0.5
-		local previousZ = -edge
-		return function(elapsed)
+		local epoch = generation
+		local previousElapsed = 0
+		local previous: { [Player]: { root: BasePart, body: TraversalMath.Body } } = {}
+		context.roster.ForEachAlive(function(player, humanoid, root)
+			previous[player] = { root = root, body = bodyBounds(humanoid, root) }
+		end)
+		-- Bound work by the configured trial, never by a delayed frame's delta.
+		assert(
+			sweepSeconds > 0 and maximumElapsed > 0 and maximumElapsed / sweepSeconds <= 8,
+			"Beam timeline must contain at most eight sweeps"
+		)
+		return function(elapsed, _delta, observedElapsed)
+			local observed = observedElapsed or elapsed
+			if
+				epoch ~= generation
+				or not RuleMath.isFinite(elapsed)
+				or not RuleMath.isFinite(observed)
+				or elapsed < previousElapsed
+				or observed < elapsed
+			then
+				return
+			end
+			elapsed = math.min(elapsed, maximumElapsed)
 			local z = RuleMath.pingPong(elapsed, sweepSeconds, edge)
 			laser.CFrame = CFrame.new(0, 1.9, z)
-			context.roster.ForEachAlive(function(player, humanoid, root)
-				if
-					RuleMath.sweptBeamIntersects(
-						bodyBounds(humanoid, root),
-						previousZ,
-						z,
-						1.9,
-						0.5,
-						0.5,
-						Config.ArenaHalfSize
-					)
-				then
-					hit(player, humanoid, damage)
+			local cuts = { previousElapsed }
+			local firstTurn = math.floor(previousElapsed / sweepSeconds) + 1
+			local lastTurn = math.min(8, math.floor(elapsed / sweepSeconds))
+			for turn = firstTurn, lastTurn do
+				local at = turn * sweepSeconds
+				if at < elapsed then
+					table.insert(cuts, at)
 				end
+			end
+			table.insert(cuts, elapsed)
+			context.roster.ForEachAlive(function(player, humanoid, root)
+				local measured = bodyBounds(humanoid, root)
+				local sample = previous[player]
+				local before = if sample and sample.root == root then sample.body else measured
+				local fraction = if observed > previousElapsed
+					then math.clamp((elapsed - previousElapsed) / (observed - previousElapsed), 0, 1)
+					else 1
+				local after = TraversalMath.lerpBody(before, measured, fraction)
+				local span = elapsed - previousElapsed
+				for index = 2, #cuts do
+					local start, finish = cuts[index - 1], cuts[index]
+					local a = if span > 0 then (start - previousElapsed) / span else 0
+					local b = if span > 0 then (finish - previousElapsed) / span else 1
+					if
+						TraversalMath.beamContact(
+							TraversalMath.lerpBody(before, after, a),
+							TraversalMath.lerpBody(before, after, b),
+							RuleMath.pingPong(start, sweepSeconds, edge),
+							RuleMath.pingPong(finish, sweepSeconds, edge),
+							Config.ArenaHalfSize
+						)
+					then
+						hit(player, humanoid, damage)
+						break
+					end
+				end
+				previous[player] = { root = root, body = after }
 			end)
-			previousZ = z
+			previousElapsed = elapsed
 		end
 	end
 	local function showBeam(warning: boolean)
@@ -324,15 +415,28 @@ function ArenaRules.new(arena: Model)
 		)
 		return context.waitFor(
 			Config.LaserSweep.ActiveSeconds,
-			beamUpdate(context, Config.LaserSweep.SweepSeconds, 35)
+			beamUpdate(
+				context,
+				Config.LaserSweep.SweepSeconds,
+				Config.LaserSweep.Damage,
+				Config.LaserSweep.ActiveSeconds
+			)
 		)
 	end
 
 	local function lowGravity(context: RuleContext): boolean
+		-- Freeze admission before the warning. A replacement character or a late arrival
+		-- cannot inherit a participant's remaining personal pickups.
+		context.roster.ForEachAlive(function(player, _, root)
+			lunarCollectors[player] = { root = root, mask = 0, count = 0 }
+			player:SetAttribute("LunarStarMask", 0)
+			player:SetAttribute("LunarStarCount", 0)
+			player:SetAttribute("LunarStarGoal", Config.LowGravity.PersonalStarGoal)
+		end)
 		stage(context, "Warning")
 		instruction(
 			context,
-			"Скоро лунная гравитация! Прыгай к звёздам ★, но не улетай за край."
+			"Скоро лунная гравитация! У каждого свои 3 звезды ★. Не улетай за край."
 		)
 		if not context.waitFor(Config.LowGravity.WarningSeconds, nil) then
 			return false
@@ -361,14 +465,16 @@ function ArenaRules.new(arena: Model)
 		stage(context, "Active")
 		for x = -Config.TileSize * 2, Config.TileSize * 2, Config.TileSize * 2 do
 			for z = -Config.TileSize * 2, Config.TileSize * 2, Config.TileSize * 2 do
-				table.insert(stars, orb(#stars + 1, Vector3.new(x, 10, z)))
+				local pickup = orb(#stars + 1, Vector3.new(x, 10, z))
+				pickup:SetAttribute("LunarStarIndex", #stars + 1)
+				table.insert(stars, pickup)
 			end
 		end
 		instruction(
 			context,
-			"Выше прыжок — больше звёзд! ★ дают очки, монеты и опыт."
+			"Собери свои 3 звезды ★: по 2 монеты и 3 опыта. Другим они тоже доступны."
 		)
-		return context.waitFor(Config.LowGravity.ActiveSeconds, function()
+		local function updateLunar()
 			for _, binding in lunarForces do
 				binding.force.Force = if binding.root.Parent
 						and not binding.root.Anchored
@@ -380,8 +486,89 @@ function ArenaRules.new(arena: Model)
 					)
 					else Vector3.zero
 			end
-			collect(context, stars, nil)
-		end)
+			context.roster.ForEachAlive(function(player, _, root)
+				local collector = lunarCollectors[player]
+				if
+					not collector
+					or collector.root ~= root
+					or player:GetAttribute("MovementWarning") == true
+					or collector.count >= Config.LowGravity.PersonalStarGoal
+				then
+					return
+				end
+				for index, pickup in stars do
+					local bit = bit32.lshift(1, index - 1)
+					if
+						bit32.band(collector.mask, bit) == 0
+						and (pickup.Position - root.Position).Magnitude <= Config.LowGravity.CollectionRadius
+						and context.roster.AwardStar(player)
+					then
+						-- AwardStar owns current-roster, life and forfeiture checks. Rejection
+						-- must consume neither this pickup nor the participant's personal quota.
+						collector.mask = bit32.bor(collector.mask, bit)
+						collector.count += 1
+						player:SetAttribute("LunarStarMask", collector.mask)
+						player:SetAttribute("LunarStarCount", collector.count)
+						if collector.count >= Config.LowGravity.PersonalStarGoal then
+							break
+						end
+					end
+				end
+			end)
+		end
+		-- Each floor warning owns a real wait/deadline, so the HUD and final warning
+		-- sound count down to the disappearing floor rather than the end of the trial.
+		local waves = Config.LowGravity.FloorWaves
+		local elapsed = 0
+		for wave, settings in waves do
+			if not context.waitFor(settings.WarnAt - elapsed, updateLunar) then
+				return false
+			end
+			restoreTiles()
+			local doomed: { [TileSnapshot]: boolean } = {}
+			context.roster.ForEachAlive(function(_, _, root)
+				local tile = tileUnder(root.Position)
+				if tile then
+					doomed[tile] = true
+				end
+			end)
+			local candidates: { TileSnapshot } = {}
+			for _, tile in tiles do
+				if not doomed[tile] then
+					table.insert(candidates, tile)
+				end
+			end
+			-- Draw without replacement: even repeated random indices add six distinct tiles.
+			for _ = 1, math.min(Config.LowGravity.ExtraDoomedTiles, #candidates) do
+				local tile = table.remove(candidates, rng:NextInteger(1, #candidates))
+				doomed[tile] = true
+			end
+			for tile in doomed do
+				warnTile(tile, "ПРОВАЛ")
+			end
+			stage(context, "Warning")
+			instruction(
+				context,
+				"⚠ Пол «ПРОВАЛ» исчезнет — перепрыгни на другую плитку! Волна "
+					.. wave
+					.. "/"
+					.. #waves
+					.. "."
+			)
+			if not context.waitFor(settings.WarningSeconds, updateLunar) then
+				return false
+			end
+			for tile in doomed do
+				hideTile(tile)
+			end
+			stage(context, "Active")
+			instruction(
+				context,
+				"Прыгай по оставшимся плиткам и собирай ★!"
+			)
+			elapsed = settings.WarnAt + settings.WarningSeconds
+		end
+		return context.waitFor(Config.LowGravity.ActiveSeconds - elapsed, updateLunar)
 	end
 
 	local function redLight(context: RuleContext): boolean
@@ -398,6 +585,8 @@ function ArenaRules.new(arena: Model)
 			end
 		end
 		for cycle = 1, 3 do
+			-- The previous cycle's vanished tiles return before the next green signal.
+			restoreTiles()
 			stage(context, "Recovery")
 			local stars: { BasePart } = {}
 			for index = 1, 4 do
@@ -406,14 +595,29 @@ function ArenaRules.new(arena: Model)
 			end
 			context.state:SetAttribute("Accent", Color3.fromRGB(66, 220, 169))
 			signalFloor(Color3.fromRGB(46, 170, 121), "БЕГИ", "▶")
+			-- Green is a real decision: the tile each player stands on vanishes when it ends,
+			-- so standing still is not a safe strategy. Red still punishes moving.
+			local doomed: { [TileSnapshot]: boolean } = {}
+			context.roster.ForEachAlive(function(_, _, root)
+				local tile = tileUnder(root.Position)
+				if tile and not doomed[tile] then
+					doomed[tile] = true
+					warnTile(tile, "УЙДИ")
+				end
+			end)
 			instruction(
 				context,
-				"▶ ЗЕЛЁНЫЙ — беги за звёздами! Сигнал " .. cycle .. "/3."
+				"▶ ЗЕЛЁНЫЙ — уйди с плитки «УЙДИ ⚠» и беги за звёздами! Сигнал "
+					.. cycle
+					.. "/3."
 			)
 			if not context.waitFor(2.4, function()
 				collect(context, stars, nil)
 			end) then
 				return false
+			end
+			for tile in doomed do
+				hideTile(tile)
 			end
 			context.state:SetAttribute("Accent", Color3.fromRGB(255, 210, 88))
 			signalFloor(Color3.fromRGB(255, 210, 88), "ЗАМРИ", "⏸")
@@ -466,16 +670,37 @@ function ArenaRules.new(arena: Model)
 
 	local function lavaRise(context: RuleContext): boolean
 		stage(context, "Warning")
+		local platformSize = Vector3.new(Config.TileSize * 0.8, 4, Config.TileSize * 0.8)
+		local platformCenterY = 3
+		local platformTop = platformCenterY + platformSize.Y / 2
+		local centers: { Vector3 } = {}
 		for x = -Config.TileSize * 2, Config.TileSize * 2, Config.TileSize * 2 do
 			for z = -Config.TileSize * 2, Config.TileSize * 2, Config.TileSize * 2 do
-				part(
-					"SafePlatform",
-					Vector3.new(Config.TileSize * 0.8, 4, Config.TileSize * 0.8),
-					Vector3.new(x, 3, z),
-					Color3.fromRGB(70, 180, 230),
-					true
-				)
+				table.insert(centers, Vector3.new(x, platformCenterY, z))
 			end
+		end
+		-- Survivors keep their break position. A solid platform must not appear inside
+		-- someone: lift anyone whose body overlaps a footprint onto its top first.
+		context.roster.ForEachAlive(function(_, humanoid, root)
+			local bounds = bodyBounds(humanoid, root)
+			for _, center in centers do
+				if
+					math.abs(bounds.x - center.X) <= platformSize.X / 2 + bounds.halfX
+					and math.abs(bounds.z - center.Z) <= platformSize.Z / 2 + bounds.halfZ
+					and bounds.feetY < platformTop
+				then
+					local character = humanoid.Parent
+					if character and character:IsA("Model") then
+						local lift = platformTop + 0.1 - bounds.feetY
+						character:PivotTo(character:GetPivot() + Vector3.new(0, lift, 0))
+						root.AssemblyLinearVelocity = Vector3.zero
+					end
+					break
+				end
+			end
+		end)
+		for _, center in centers do
+			part("SafePlatform", platformSize, center, Color3.fromRGB(70, 180, 230), true)
 		end
 		local lava = part(
 			"Lava",
@@ -598,6 +823,10 @@ function ArenaRules.new(arena: Model)
 	end
 
 	local function disappearingTiles(context: RuleContext): boolean
+		-- Random diagonal direction and phase per trial: the pattern stays readable within
+		-- a run but cannot be memorised as one fixed safe tile sequence across runs.
+		local phase = rng:NextInteger(0, 2)
+		local mirrored = rng:NextInteger(0, 1) == 1
 		for wave = 1, 4 do
 			restoreTiles()
 			stage(context, "Warning")
@@ -609,18 +838,11 @@ function ArenaRules.new(arena: Model)
 				local z = math.floor(
 					(tile.part.Position.Z + Config.ArenaHalfSize - Config.TileSize / 2) / Config.TileSize
 				)
-				if (x + z + wave) % 3 == 0 then
+				local diagonal = if mirrored then x - z else x + z
+				if (diagonal + wave + phase) % 3 == 0 then
 					table.insert(doomed, tile)
-					tile.part.Color = Color3.fromRGB(255, 160, 65)
-					tile.part.Transparency = 0.15
 					-- Steady text and symbol cues remain readable with reduced motion.
-					for label in tile.texts do
-						if label.Name == "Symbol" then
-							label.Text = "⚠"
-						elseif label.Name == "ColorText" then
-							label.Text = "ПРОВАЛ"
-						end
-					end
+					warnTile(tile, "ПРОВАЛ")
 				end
 			end
 			instruction(
@@ -666,6 +888,12 @@ function ArenaRules.new(arena: Model)
 			zone.Transparency = 0.25
 			for _, tile in tiles do
 				tile.part.Color = Color3.fromRGB(70, 81, 110)
+				-- A grey floor must not keep naming its old colour; restoreTiles returns the text.
+				for label in tile.texts do
+					if label.Name == "Symbol" or label.Name == "ColorText" then
+						label.Text = ""
+					end
+				end
 			end
 			instruction(
 				context,
@@ -748,12 +976,315 @@ function ArenaRules.new(arena: Model)
 		end)
 	end
 
+	local function traversal(context: RuleContext, pressure: boolean): boolean
+		local settings = if pressure then Config.PressureWave else Config.ChangingWalls
+		local quarter = randomInteger(0, 3)
+		local gapX = Config.ChangingWalls.GapOffset * (if randomInteger(0, 1) == 0 then -1 else 1)
+		local epoch = generation
+		local function finish(completed: boolean): boolean
+			if epoch == generation then
+				effects:ClearAllChildren()
+				stage(context, "Recovery")
+			end
+			return completed
+		end
+		local function world(point: TraversalMath.Point, plan: TraversalMath.Plan): Vector3
+			local p = TraversalMath.worldPoint(point, plan.Quarter)
+			return Vector3.new(p.X, p.Y, p.Z)
+		end
+		local function planarPart(
+			name: string,
+			width: number,
+			height: number,
+			depth: number,
+			x: number,
+			y: number,
+			z: number,
+			plan: TraversalMath.Plan,
+			color: Color3
+		): BasePart
+			local size = if plan.Quarter % 2 == 0
+				then Vector3.new(width, height, depth)
+				else Vector3.new(depth, height, width)
+			-- Energy screens affect the hazard, never character physics. They cannot
+			-- spawn a solid volume around a player or push one out of a safe area.
+			return part(name, size, world({ X = x, Y = y, Z = z }, plan), color, false)
+		end
+		local function label(parent: BasePart, text: string)
+			local gui = Instance.new("BillboardGui")
+			gui.Name = "TraversalLabel"
+			gui.Size = UDim2.fromOffset(170, 32)
+			gui.StudsOffset = Vector3.new(0, 2, 0)
+			gui.MaxDistance = 110
+			local caption = Instance.new("TextLabel")
+			caption.Size = UDim2.fromScale(1, 1)
+			caption.BackgroundTransparency = 0.25
+			caption.BackgroundColor3 = Color3.fromRGB(15, 28, 40)
+			caption.TextColor3 = Color3.new(1, 1, 1)
+			caption.TextScaled = true
+			caption.Text = text
+			caption.Parent = gui
+			gui.Parent = parent
+		end
+		for beat = 1, settings.Beats do
+			effects:ClearAllChildren()
+			local plan = TraversalMath.plan(quarter, beat, Config.ArenaHalfSize, gapX)
+			local movers: { { part: BasePart, x: number } } = {}
+			local frontStart = TraversalMath.front(0, Config.ArenaHalfSize, settings.BodyRadius)
+			local green = Color3.fromRGB(66, 220, 169)
+			local accent = Config.Rules[if pressure then "PressureWave" else "ChangingWalls"].Accent
+			-- The real front starts outside the floor, behind the authored opaque walls.
+			-- Keep its warning source visible inside the room without changing hit geometry.
+			local source = planarPart(
+				"TraversalSource",
+				(Config.ArenaHalfSize - settings.BodyRadius) * 2,
+				0.12,
+				0.7,
+				0,
+				1.12,
+				-Config.ArenaHalfSize + 1.5,
+				plan,
+				Color3.fromRGB(255, 213, 79)
+			)
+			source.Transparency = 0.15
+			label(source, if pressure then "ВОЛНА ОТСЮДА" else "СТЕНА ОТСЮДА")
+			if pressure then
+				local cover = Config.PressureWave
+				local shadowStart = cover.CoverZ + cover.CoverDepth / 2 + cover.BodyRadius
+				local shadowEnd = Config.ArenaHalfSize - cover.BodyRadius
+				for index, x in plan.Covers do
+					local screen = planarPart(
+						"PressureScreen" .. index,
+						cover.CoverWidth,
+						cover.CoverHeight,
+						cover.CoverDepth,
+						x,
+						1 + cover.CoverHeight / 2,
+						cover.CoverZ,
+						plan,
+						accent
+					)
+					screen.Transparency = 0.6
+					local shadow = planarPart(
+						"PressureShelter" .. index,
+						cover.CoverWidth - cover.BodyRadius * 2,
+						0.1,
+						shadowEnd - shadowStart,
+						x,
+						1.08,
+						(shadowStart + shadowEnd) / 2,
+						plan,
+						green
+					)
+					shadow.Transparency = 0.45
+					label(shadow, "↓ ЗА ЭКРАНОМ")
+				end
+				local wave = planarPart(
+					"PressureFront",
+					Config.ArenaHalfSize * 2,
+					settings.Height,
+					0.5,
+					0,
+					1 + settings.Height / 2,
+					frontStart,
+					plan,
+					accent
+				)
+				wave.Transparency = 0.7
+				table.insert(movers, { part = wave, x = 0 })
+				instruction(
+					context,
+					if beat == 1
+						then "Волна идёт от яркой стены! Встань на зелёный след ЗА экраном."
+						else "Волна с другой стороны! Найди НОВЫЙ зелёный след за экраном."
+				)
+			else
+				local half = Config.ArenaHalfSize
+				local opening = Config.ChangingWalls.GapHalfWidth
+				for index, segment in { { -half, plan.GapX - opening }, { plan.GapX + opening, half } } do
+					local center = (segment[1] + segment[2]) / 2
+					local wall = planarPart(
+						"ChangingWall" .. index,
+						segment[2] - segment[1],
+						settings.Height,
+						1,
+						center,
+						1 + settings.Height / 2,
+						frontStart,
+						plan,
+						accent
+					)
+					wall.Transparency = 0.5
+					table.insert(movers, { part = wall, x = center })
+				end
+				local lane = planarPart(
+					"WallOpening",
+					(opening - settings.BodyRadius) * 2,
+					0.1,
+					(half - settings.BodyRadius) * 2,
+					plan.GapX,
+					1.08,
+					0,
+					plan,
+					green
+				)
+				lane.Transparency = 0.5
+				label(lane, "↕ ПРОЁМ")
+				instruction(
+					context,
+					if beat == 1
+						then "Стена с проёмом пойдёт через комнату. Перейди на зелёную полосу!"
+						else "Следующая стена с другой стороны! Зелёный проём СМЕНИЛ МЕСТО."
+				)
+			end
+			stage(context, "Warning")
+			if not context.waitFor(settings.WarningSeconds, nil) or epoch ~= generation then
+				return finish(false)
+			end
+			local previous: { [Player]: { root: BasePart, point: TraversalMath.Point } } = {}
+			local hit: { [Player]: boolean } = {}
+			context.roster.ForEachAlive(function(player, _, root)
+				previous[player] =
+					{ root = root, point = { X = root.Position.X, Y = root.Position.Y, Z = root.Position.Z } }
+			end)
+			local previousElapsed = 0
+			local startedAt = Workspace:GetServerTimeNow()
+			local active = true
+			local function safe(before: TraversalMath.Point, after: TraversalMath.Point): boolean
+				if pressure then
+					local c = Config.PressureWave
+					local first = TraversalMath.shelterIndex(
+						before,
+						plan,
+						c.CoverWidth,
+						c.CoverDepth,
+						c.CoverZ,
+						c.CoverHeight,
+						c.BodyRadius
+					)
+					return first ~= nil
+						and first
+							== TraversalMath.shelterIndex(
+								after,
+								plan,
+								c.CoverWidth,
+								c.CoverDepth,
+								c.CoverZ,
+								c.CoverHeight,
+								c.BodyRadius
+							)
+				end
+				return TraversalMath.inGap(
+					before,
+					plan,
+					Config.ChangingWalls.GapHalfWidth,
+					settings.BodyRadius
+				) and TraversalMath.inGap(
+					after,
+					plan,
+					Config.ChangingWalls.GapHalfWidth,
+					settings.BodyRadius
+				)
+			end
+			local function update(elapsed: number, _delta: number)
+				if
+					not active
+					or epoch ~= generation
+					or not TraversalMath.finite(elapsed)
+					or elapsed < previousElapsed
+				then
+					return
+				end
+				local clippedElapsed = math.min(elapsed, settings.ActiveSeconds)
+				local frontBefore = TraversalMath.front(
+					previousElapsed / settings.ActiveSeconds,
+					Config.ArenaHalfSize,
+					settings.BodyRadius
+				)
+				local frontAfter = TraversalMath.front(
+					clippedElapsed / settings.ActiveSeconds,
+					Config.ArenaHalfSize,
+					settings.BodyRadius
+				)
+				for _, moving in movers do
+					moving.part.Position =
+						world({ X = moving.x, Y = 1 + settings.Height / 2, Z = frontAfter }, plan)
+				end
+				context.roster.ForEachAlive(function(player, humanoid, root)
+					local sample = previous[player]
+					local position = { X = root.Position.X, Y = root.Position.Y, Z = root.Position.Z }
+					local point = if sample and sample.root == root
+						then TraversalMath.clip(
+							sample.point,
+							position,
+							previousElapsed,
+							elapsed,
+							settings.ActiveSeconds
+						)
+						else nil
+					local unsafe = point == nil
+					if point and sample then
+						local enter, leave = TraversalMath.contactInterval(
+							sample.point,
+							point,
+							frontBefore,
+							frontAfter,
+							plan.Quarter,
+							settings.BodyRadius
+						)
+						if enter and leave then
+							unsafe = not safe(
+								TraversalMath.lerp(sample.point, point, enter),
+								TraversalMath.lerp(sample.point, point, leave)
+							)
+						end
+						previous[player] = { root = root, point = point }
+					end
+					if unsafe and not hit[player] then
+						hit[player] = true
+						damagePlayer(player, humanoid, settings.Damage)
+					end
+				end)
+				previousElapsed = clippedElapsed
+			end
+			stage(context, "Active")
+			for _, moving in movers do
+				moving.part.Transparency = if pressure then 0.7 else 0.3
+			end
+			instruction(
+				context,
+				if pressure
+					then "ВОЛНА! Держись зелёного следа за экраном, пока фронт не пройдёт."
+					else "СТЕНА ДВИЖЕТСЯ! Пройди через зелёный проём — перепрыгнуть стену нельзя."
+			)
+			local completed = context.waitFor(settings.ActiveSeconds, update)
+			if completed and epoch == generation then
+				-- Main's half-open timer deliberately omits a late callback. Close only
+				-- swept geometry here, clipped to the deadline; never pickups or rewards.
+				update(math.max(settings.ActiveSeconds, Workspace:GetServerTimeNow() - startedAt), 0)
+			end
+			active = false
+			if not completed or epoch ~= generation then
+				return finish(false)
+			end
+			effects:ClearAllChildren()
+			stage(context, "Recovery")
+			if not context.waitFor(settings.RecoverySeconds, nil) or epoch ~= generation then
+				return finish(false)
+			end
+		end
+		return finish(true)
+	end
+
 	local function reactorRush(context: RuleContext): boolean
+		local epoch = generation
 		stage(context, "Warning")
 		local goal = RuleMath.teamGoal(context.roster.AliveCount())
 		context.state:SetAttribute("TeamCharge", 0)
 		context.state:SetAttribute("TeamGoal", goal)
 		context.state:SetAttribute("FinaleSuccess", false)
+		context.state:SetAttribute("FinaleStage", "Collect")
+		context.state:SetAttribute("StabilizeEndsAt", 0)
 		local pickups: { BasePart } = {}
 		local shuffled = table.clone(tiles)
 		for index = #shuffled, 2, -1 do
@@ -763,6 +1294,21 @@ function ArenaRules.new(arena: Model)
 		for index = 1, math.min(goal + 6, #shuffled) do
 			table.insert(pickups, orb(index, shuffled[index].part.Position + Vector3.new(0, 3.5, 0), true))
 		end
+		local function clearPickups()
+			for _, pickup in pickups do
+				pickup:Destroy()
+			end
+			table.clear(pickups)
+		end
+		local function fail(completed: boolean): boolean
+			clearPickups()
+			if epoch == generation then
+				context.state:SetAttribute("FinaleStage", "Failed")
+				context.state:SetAttribute("StabilizeEndsAt", 0)
+				context.state:SetAttribute("FinaleSuccess", false)
+			end
+			return completed
+		end
 		showBeam(true)
 		instruction(
 			context,
@@ -770,8 +1316,8 @@ function ArenaRules.new(arena: Model)
 				.. goal
 				.. " зарядов ⚡ и перепрыгивайте луч."
 		)
-		if not context.waitFor(Config.ReactorRush.WarningSeconds, nil) then
-			return false
+		if not context.waitFor(Config.ReactorRush.WarningSeconds, nil) or epoch ~= generation then
+			return fail(false)
 		end
 		showBeam(false)
 		stage(context, "Active")
@@ -780,25 +1326,102 @@ function ArenaRules.new(arena: Model)
 			"Заряды общие для команды! ⚡ собирай бегом, красный луч перепрыгивай."
 		)
 		local charge = 0
-		local sweep = beamUpdate(context, Config.ReactorRush.SweepSeconds, 30)
+		local sweep = beamUpdate(
+			context,
+			Config.ReactorRush.SweepSeconds,
+			30,
+			Config.ReactorRush.ActiveSeconds + Config.ReactorRush.StabilizeSeconds
+		)
+		local collecting = true
+		local collectElapsed = 0
 		local completed = context.waitFor(Config.ReactorRush.ActiveSeconds, function(elapsed, delta)
+			if not collecting or epoch ~= generation then
+				return false
+			end
+			-- Collection is half-open; a delayed or exact-deadline callback cannot
+			-- create a last charge, even if an adapter erroneously invokes it.
+			if not RuleMath.isFinite(elapsed) or elapsed < collectElapsed then
+				return false
+			end
+			if elapsed >= Config.ReactorRush.ActiveSeconds then
+				collecting = false
+				return false
+			end
+			collectElapsed = elapsed
 			sweep(elapsed, delta)
+			if context.roster.AliveCount() == 0 then
+				return false
+			end
 			collect(context, pickups, function()
 				charge += 1
 				context.state:SetAttribute("TeamCharge", charge)
-				if charge >= goal then
-					instruction(
-						context,
-						"⚡ РЕАКТОР ЗАРЯЖЕН! Доживи до конца, перепрыгивая луч!"
-					)
-				end
+			end, function()
+				return charge < goal and epoch == generation
 			end)
+			if charge >= goal then
+				collecting = false
+				return true
+			end
+			return false
 		end)
+		collecting = false
+		clearPickups()
+		if not completed or epoch ~= generation or context.roster.AliveCount() == 0 then
+			return fail(false)
+		end
+		if charge < goal then
+			return fail(true)
+		end
+		context.state:SetAttribute("FinaleStage", "Stabilizing")
 		context.state:SetAttribute(
-			"FinaleSuccess",
-			RuleMath.finaleSucceeded(charge, goal, completed, context.roster.AliveCount())
+			"StabilizeEndsAt",
+			Workspace:GetServerTimeNow() + Config.ReactorRush.StabilizeSeconds
 		)
-		return completed
+		instruction(
+			context,
+			"⚡ ЗАРЯД СОБРАН! Стабилизация 4 секунды — перепрыгивай луч!"
+		)
+		local stabilizing = true
+		local stabilizeElapsed = 0
+		local stabilizeStartedAt = Workspace:GetServerTimeNow()
+		local stabilized = context.waitFor(Config.ReactorRush.StabilizeSeconds, function(elapsed, delta)
+			if
+				stabilizing
+				and epoch == generation
+				and RuleMath.isFinite(elapsed)
+				and elapsed >= stabilizeElapsed
+				and elapsed < Config.ReactorRush.StabilizeSeconds
+			then
+				stabilizeElapsed = elapsed
+				-- The existing beam continues from its collected-charge position.
+				-- No new hazard or unannounced direction reset starts here.
+				sweep(collectElapsed + elapsed, delta)
+			end
+			return false
+		end)
+		stabilizing = false
+		if stabilized and epoch == generation then
+			-- Close geometry only. A late root observation is interpolated back to
+			-- the stabilization deadline, and turnaround segments are checked separately.
+			sweep(
+				collectElapsed + Config.ReactorRush.StabilizeSeconds,
+				0,
+				collectElapsed
+					+ math.max(
+						Config.ReactorRush.StabilizeSeconds,
+						Workspace:GetServerTimeNow() - stabilizeStartedAt
+					)
+			)
+		end
+		local success = epoch == generation
+			and RuleMath.finaleSucceeded(charge, goal, stabilized, context.roster.AliveCount())
+		if not success then
+			return fail(false)
+		end
+		context.state:SetAttribute("FinaleSuccess", true)
+		context.state:SetAttribute("FinaleStage", "Complete")
+		context.state:SetAttribute("StabilizeEndsAt", 0)
+		return true
 	end
 
 	local handlers: { [string]: (RuleContext) -> boolean } = {
@@ -811,6 +1434,12 @@ function ArenaRules.new(arena: Model)
 		DisappearingTiles = disappearingTiles,
 		SafeZone = safeZone,
 		Spinner = spinner,
+		PressureWave = function(context)
+			return traversal(context, true)
+		end,
+		ChangingWalls = function(context)
+			return traversal(context, false)
+		end,
 		ReactorRush = reactorRush,
 	}
 	return {
@@ -820,9 +1449,13 @@ function ArenaRules.new(arena: Model)
 		Run = function(id: string, context: RuleContext): boolean
 			local handler = handlers[id]
 			assert(handler, "Unknown rule " .. id)
+			resetLunarPickups()
+			generation += 1
 			currentRule = id
 			currentState = context.state
 			context.state:SetAttribute("HazardCycle", 0)
+			context.state:SetAttribute("FinaleStage", "")
+			context.state:SetAttribute("StabilizeEndsAt", 0)
 			return handler(context)
 		end,
 		Destroy = function()

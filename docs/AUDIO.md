@@ -1,6 +1,6 @@
 # RuleRoom audio
 
-The alpha uses short, local 2D feedback cues. Audio never determines damage, timing, rewards, or voting. Every meaningful event still has a visual/text cue. There is no background music, looping ambience, microphone capture, voice chat modification, or downloaded audio pack.
+The alpha uses short, local 2D feedback cues. Audio never determines damage, timing, rewards, or voting. Every meaningful event still has a visual/text cue. The current roadmap package adds an original sparse laboratory phrase using the existing bundled tone; there is no downloaded audio pack, microphone capture or voice-chat modification. Listening acceptance remains open.
 
 ## Source provenance
 
@@ -15,24 +15,29 @@ Verified installation: `C:/Program Files/Roblox/Versions/version-7aaa6838d36c444
 
 ## Implementation and mix
 
-`src/shared/AudioConfig.luau` defines the two sources, gains in dB, pitch/speed, short playback windows, fade duration, per-cue cooldowns, and priority. `src/client/AudioController.luau` owns one local folder `SoundService.RuleRoomAudio`, one `SoundGroup`, three reusable tone voices, and one impact voice. It never creates a new sound per event. Short fades avoid a hard cut; four voices is the strict maximum.
+`src/shared/AudioConfig.luau` defines the two sources, gains in dB, pitch/speed, short playback windows, fade duration, per-cue cooldowns, and priority. `src/client/AudioController.luau` owns one local folder `SoundService.RuleRoomAudio`, two `SoundGroup` mixes, three reusable cue tone voices, one impact voice and two independent music voices. It never creates a new sound per event. Short fades avoid a hard cut; six voices is the strict total maximum (four cues plus two music).
 
-The small `Sound`/`SoundGroup` route is intentional for a few non-spatial UI cues. The installed Roblox audio skill permits this simple 2D case. More complex spatial audio or a future music mix should use the current modular audio graph rather than expand this pool into a general music engine.
+The small `Sound`/`SoundGroup` route is intentional for a few non-spatial UI cues. The installed Roblox audio skill permits this simple 2D case. The sparse non-spatial phrase uses the same classic Sound route with a separate fixed two-voice pool; it is not a general streaming or spatial music engine.
 
 | Cue | Trigger | Gain before master | Limit |
 |---|---|---:|---|
 | Rule | New run/trial identity while the local player participates | -18 dB | 0.8 s cooldown |
 | Warning | A later warning wave starts during the current trial | -22 dB | 0.7 s cooldown |
 | Danger | HazardStage changes to Active for a participant | -20 dB | 0.8 s cooldown |
-| Countdown | Last 3, 2, 1 seconds of each Warning wave while the local player participates | -22 dB | 0.45 s cooldown; each timer value once per run/trial/HazardCycle |
+| Countdown | Last 3 and 2 seconds of each Warning wave while the local player participates | -22 dB | 0.45 s cooldown; each timer value once per run/trial/HazardCycle |
+| WarningFinal | Last second (1) of each Warning wave; replaces the plain Countdown tick | -21 dB | Three rising notes 1 / 1.19 / 1.41, 0.09 s apart; one note with reduced motion; once per run/trial/HazardCycle |
+| Safe | HazardStage changes to Recovery after another stage of the same trial | -25 dB | Two falling notes 1.33 / 1, 0.13 s apart; one note with reduced motion; 0.8 s cooldown; silent when joining mid-Recovery |
 | Damage | Local character health decreases during an active trial | -18 dB | 0.4 s cooldown |
 | Reward | Confirmed replicated coin balance increases | -23 dB | 0.55 s cooldown; no cue for spending |
 | Passed | Personal LastTrialOutcome changes to Survived | -21 dB | Two rising notes, 0.12 s apart; 1 s cooldown |
+| Forfeited | Personal LastTrialOutcome changes to Forfeited | -25 dB | One quiet note; distinct from survival and elimination; 1 s cooldown |
 | Eliminated | Personal LastTrialOutcome changes to Eliminated | -24 dB | Two falling notes, 0.14 s apart; 1 s cooldown |
 | TeamReady | Reactor charge first reaches its goal during the participant's finale | -21 dB | Two rising notes, 0.14 s apart; once per trial, 2 s cooldown |
 | Finale | Results and ResultReady are present, personal RunResult is Won | -17 dB | Three rising notes, 0.18 s apart; once per run |
 | RunEnd | Other confirmed personal result | -23 dB | One soft closing cue; once per run |
 | UI | Authored and dynamically cloned game `GuiButton.Activated`, including StationHUD | -29 dB | 0.1 s cooldown |
+
+2026-11-08 (второй пакет): WarningFinal, Safe и Forfeited используют тот же встроенный источник Tone; новых SoundId нет. Mute глушит их как остальные сигналы; `ReducedNotes` применяется, когда HUD выставил `ReducedMotion`. Не прослушано на устройстве — см. [SECOND_PACKAGE](SECOND_PACKAGE.md).
 
 The master gain is -2 dB. The damage cue has higher priority than optional UI/reward feedback. Full pools drop lower-priority cues. There are no reverb, pitch-shifter, or acoustic simulation effects.
 
@@ -40,23 +45,35 @@ As of the playable-loop iteration on 2026-10-26, the countdown key includes the 
 
 Personal outcome sounds follow changes of LastTrialOutcome rather than the global RuleIndex, so resetting the index at voting does not replay the previous result. Result audio waits for both Results and ResultReady and consumes the run identity once, accommodating either attribute replication order. Explore cancels pending voices; unrelated global trials do not play rule/stage cues for an explorer. These guards do not change gameplay or reward eligibility.
 
-Audio initialization asynchronously preloads the four pool instances (two unique sources); the HUD does not wait. Source loading and playback are protected so an unavailable optional sound cannot stop gameplay. Character health listeners are replaced on respawn, dynamic button listeners are removed with their buttons, and destroy cancels pending notes/fades and removes the pool.
+Audio initialization asynchronously preloads the six pool instances (two unique sources); the HUD does not wait. Source loading and playback are protected so an unavailable optional sound cannot stop gameplay. Character health listeners are replaced on respawn, dynamic button listeners are removed with their buttons, and destroy cancels pending notes/fades and removes the pool.
 
 ## Player control and integration
 
-The authored `Root.Actions.Audio` button uses `Activated`, making it usable by touch, mouse, and controller. Its text is `ЗВУК: ВКЛ` / `ЗВУК: ВЫКЛ`. Muting immediately silences the mix, stops every voice, and invalidates delayed finale notes. Unmuting permits future cues without replaying old ones.
+The authored `Root.Actions.Audio` button uses Activated. In the lobby it opens a scrollable settings panel with separate Effects/Music controls in 25% steps, mute and reduced effects. Targets are at least 44px, B/Escape closes and restores available focus; conflicting menus and active participation close the panel. The visible action button during an active trial remains a quick mute. Compact Rule/Break screens still hide the action row to preserve the arena and default touch controls.
 
-On compact gameplay screens, the action row is hidden during Rule/Break to keep the arena and Roblox touch controls clear. Audio keeps the selected preference; the mute control is available again outside that compact gameplay state. The compact command and timer retain visual timing information even when audio is muted.
+AudioPreferences applies local choices immediately and serializes ProfileAction("SetPreference", key, value) requests, minimum 0.6s apart, one in flight and no more than three timeout attempts per pending choice. PrefsReady/PrefsRevision and the corresponding Pref value acknowledge server memory; they do not prove a completed cloud save. Preferences live in profile schema 4. Session/fallback says the change lasts only until leaving. A newer local choice is not discarded by older loading/acknowledgement.
 
-The local player attribute `RuleRoomAudioMuted` stores the preference across character respawns for the current server session. It is local presentation state, is not a gameplay remote or a cloud-saved preference, and does not change Roblox's global volume or other experiences' audio. Reduced motion and audio mute are separate controls.
+Local attributes: RuleRoomEffectsVolume, RuleRoomMusicVolume, RuleRoomAudioMuted, RuleRoomUserReducedMotion, RuleRoomPreferenceStatus. Server attributes: PrefEffectsVolume, PrefMusicVolume, PrefAudioMuted, PrefReducedMotion (unset is nil), PrefsReady, PrefsRevision. Effective reduced motion is device setting OR user setting; saved false never switches off device accessibility. These controls do not change global Roblox/system volume. See [SAVES](SAVES.md).
+
+### Laboratory phrase
+
+AudioConfig.Music defines an original eight-note phrase over 24 seconds with silence between phrases, two pooled voices, -29dB gain before the -2dB master and user music volume (default 50%). It uses only the already-documented bundled Tone sample; no new uploaded asset ID or copied audio file. The sequence is authored in this project, not a licensed commercial composition.
+
+The existing Heartbeat advances notes; hitches skip missed notes rather than replaying a burst. The phrase is eligible only in Waiting/Voting outside InRound; Rule/Break/InRound, mute and character lifecycle stop it. A cue ducks the music mix to 22% for 0.8s. Effects volume and music volume remain independent. Loading/playback failures drop optional audio without delaying the game. Diagnostics add MusicPlaybackCount, MusicActive and MusicPlaybackError; counts are engine-call observations, not proof of audibility.
+
+The six-voice mix, source-failure fallback, preference reconciliation and panel lifecycle are checked with local adapters. No speaker/headphone/phone listening or native audio quality claim is made. Historical four-voice observations below remain historical, not acceptance of this new mix.
 
 HUD integration:
 
 ```luau
 local AudioController = require(script.Parent:WaitForChild("AudioController"))
+local preferences = AudioPreferences.new(player, profileRemote)
 local audio = AudioController.new(player, state, root, root.Actions.Audio)
+local settings = AudioSettings.new(root, player, state, root.Actions.Audio, preferences)
 -- During HUD cleanup:
+settings.Destroy()
 audio.Destroy()
+preferences.Destroy()
 ```
 
 ## Verification and evidence limits

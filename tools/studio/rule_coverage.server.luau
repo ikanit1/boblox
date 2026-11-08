@@ -54,6 +54,11 @@ local failureGoals = {
 		kind = "hurt",
 		text = "Receive spinner damage while idling in the corner; death is not required",
 	},
+	PressureWave = {
+		kind = "hurt",
+		text = "Receive damage outside the green screen shadow; no jump shortcut",
+	},
+	ChangingWalls = { kind = "hurt", text = "Receive damage outside the moving wall opening" },
 	ReactorRush = {
 		kind = "uncharged",
 		text = "Survive the finale with insufficient team charge and no team success",
@@ -100,6 +105,10 @@ local profiles = {
 	end,
 	CompleteRun = function(p, won)
 		award(p, "completion", won)
+	end,
+	-- Mastery is outside this mock-reward fixture's acceptance scope.
+	RecordFlawless = function()
+		return false
 	end,
 }
 local telemetryConnection = telemetry.OnServerEvent:Connect(function(player, index, attempts, disabled)
@@ -178,8 +187,12 @@ local function sample(entry, force)
 		end
 	end
 end
-local function injectFault(entry, activeElapsed)
-	if entry.injection.applied or activeElapsed < 18.85 then
+local function injectFault(entry, activeElapsed, segmentSeconds)
+	-- End-of-finale faults target the actual stabilization segment, not a legacy 19s timer.
+	if state:GetAttribute("FinaleStage") ~= "Stabilizing" then
+		return
+	end
+	if entry.injection.applied or activeElapsed < math.max(0, segmentSeconds - 0.15) then
 		return
 	end
 	if entry.behavior ~= "fault_last_tick_death" and entry.behavior ~= "fault_last_tick_low_y" then
@@ -220,7 +233,7 @@ context.waitFor = function(seconds, update, finishWhen)
 	local last = start
 	local reactorActive = current.rule == "ReactorRush" and update ~= nil
 	if reactorActive then
-		current.activeStartedAt = elapsed(current)
+		current.activeStartedAt = current.activeStartedAt or elapsed(current)
 	end
 	state:SetAttribute("PhaseEndsAt", start + seconds)
 	while workspace:GetServerTimeNow() - start < seconds do
@@ -239,14 +252,12 @@ context.waitFor = function(seconds, update, finishWhen)
 			return finish(false, "no_alive_players")
 		end
 		local now = workspace:GetServerTimeNow()
-		if update then
-			update(now - start, now - last)
-		end
+		local early = if update then update(now - start, now - last) else nil
 		if reactorActive then
-			injectFault(current, now - start)
+			injectFault(current, now - start, seconds)
 		end
 		sample(current, false)
-		if finishWhen and finishWhen() then
+		if early == true or (finishWhen and finishWhen()) then
 			roster.CheckBoundaries()
 			return finish(roster.AliveCount() > 0, "finish_predicate")
 		end

@@ -13,6 +13,13 @@ expect(
 	"A late finalist sees the missing threshold"
 )
 expect(Presentation.resultCode(5, false, true) == "FinaleMissed", "Team success is not personal success")
+-- A living forfeited finalist has survivedFinale=false even when the reactor succeeds.
+for survived = 0, 6 do
+	expect(
+		Presentation.resultCode(survived, false, true) ~= "Won",
+		"Forfeited finale cannot grant a personal win at any survival threshold"
+	)
+end
 expect(
 	Presentation.resultCode(4, true, false) == "FinaleFailed",
 	"Living through an uncharged finale is not a win"
@@ -47,6 +54,33 @@ expect(
 	"An early death still counts as participation when explaining late entry"
 )
 expect(Presentation.firstEnteredTrial({ "Skipped", "Pending", "Pending" }) == 0, "No invented participation")
+expect(
+	Presentation.firstEnteredTrial({ "Skipped", "Forfeited", "Pending", "Survived" }) == 2,
+	"A forfeited survivor participated before the first rewarded survival"
+)
+expect(
+	Presentation.firstEnteredTrial({ "Skipped", "Skipped", "Skipped", "Forfeited", "Pending", "Pending" })
+		== 4,
+	"A forfeited-only attempt still records the first admission"
+)
+expect(not Presentation.isLateEntry(
+	Presentation.firstEnteredTrial({
+		"Forfeited",
+		"Skipped",
+		"Skipped",
+		"Survived",
+		"Survived",
+		"Survived",
+	}),
+	6
+), "Withheld rewards do not turn an on-time participant into a late entry")
+expect(
+	Presentation.isLateEntry(
+		Presentation.firstEnteredTrial({ "Skipped", "Skipped", "Skipped", "Forfeited", "Pending", "Pending" }),
+		6
+	),
+	"Late participation remains visible when its only outcome has withheld rewards"
+)
 expect(Presentation.firstEnteredTrial({
 	"Survived",
 	"Survived",

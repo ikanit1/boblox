@@ -145,6 +145,12 @@ function RuleMath.teamGoal(players: number): number
 	return math.max(5, math.clamp(math.floor(players), 1, 12) * 2)
 end
 
+function RuleMath.movementResponse(violationsThisTrial: number): "Warn" | "Eliminate"
+	-- The count includes the current violation. Only the first earns a warning;
+	-- repeated or invalid counts must not grant another correction.
+	return if violationsThisTrial == 1 then "Warn" else "Eliminate"
+end
+
 -- Conservative plausibility envelopes, not authoritative character simulation.
 -- The minimum observation interval absorbs bursty replication; extra distance
 -- allows normal avatar collisions and turn/position correction jitter.

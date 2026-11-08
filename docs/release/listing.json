@@ -1,0 +1,25 @@
+{
+  "status": "offline_copy_for_review_not_published",
+  "ru": {
+    "name": "RuleRoom — Комната меняет правила",
+    "description": "Одна комната. Новое правило на каждом этапе. Уходи от метеоров, прыгай через лучи, ищи укрытие от волн и проходи сквозь движущиеся стены.\n\nВ каждом забеге — 6 этапов из 12 испытаний и общий финал. Соберите энергию реактора и переживите 4 секунды стабилизации. Для личной победы пройди минимум 4 этапа и выживи в успешном финале.\n\nВыбыл? Наблюдай за командой и возвращайся со следующего этапа. В лаборатории есть тренировочный паркур, наглядный архив правил и примерка следов. Ставь личные рекорды и открывай косметику за монеты и мастерство.\n\nМожно играть одному. Звук помогает, но все важные сигналы видны на экране. Косметика не даёт преимущества. Если сохранение недоступно, игра предупредит до начала временной сессии."
+  },
+  "en": {
+    "name": "RuleRoom — The Room Changes the Rules",
+    "description": "One room. A new rule every stage. Dodge meteors, jump over beams, take cover from pressure waves and find the opening in moving walls.\n\nEach run has 6 stages drawn from 12 challenges, ending in a shared reactor finale. Collect energy together, then survive 4 seconds of stabilization. Earn a personal win by clearing at least 4 stages and surviving a successful finale.\n\nEliminated? Watch the team and return at the next stage. Explore a practice course, illustrated rule archive and cosmetic previews in the laboratory. Set personal records and unlock trails with earned coins and mastery.\n\nSolo play works too. Every important audio cue has a visual counterpart. Cosmetics never improve survival. If saving is unavailable, the game warns you before temporary play."
+  },
+  "catalogRules": 12,
+  "stagesPerRun": 6,
+  "configuredAdmissionCap": 12,
+  "verifiedReleaseCapacity": null,
+  "paidProducts": [],
+  "publication": {
+    "authorized": false,
+    "ownerId": null,
+    "universeId": null,
+    "placeId": null,
+    "deviceAvailability": "pending_real_device_acceptance",
+    "maturityQuestionnaire": "pending_owner_review_of_actual_content",
+    "audienceEligibility": "pending_platform_and_owner_review"
+  }
+}

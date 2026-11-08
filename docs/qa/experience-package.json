@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "date": "2026-11-08",
+  "kind": "local_candidate_not_release_acceptance",
+  "baseCommit": "08ba71efb1c263634003d2dc16e4f2555780dfdf",
+  "candidateCommit": null,
+  "branch": "feat/readable-fair-first-session",
+  "dirty": true,
+  "inputFingerprint": "3a3777330e9eb9637c7862a91f151f83c1671d42324bde302f91591953518dc2",
+  "artifact": {
+    "path": "build/RuleRoom.rbxlx",
+    "sha256": "d896367cb42b8f6f201031c26b986da985ad8ab946b9ed790b7a394d574981a1",
+    "bytes": 1369003,
+    "matchingScripts": 37
+  },
+  "prototypeArtifact": {
+    "path": "build/RuleRoomExperiments.rbxlx",
+    "sha256": "468dacc5ebb7d7811d7626126ab1cd712af839ced20dcd8d86d1bf082d0d30ed",
+    "bytes": 27532,
+    "matchingScripts": 4,
+    "kind": "isolated_studio_only_not_released"
+  },
+  "checks": {
+    "fullBuild": "PASS",
+    "stylua": "PASS",
+    "selene": {
+      "errors": 0,
+      "warnings": 0,
+      "parseErrors": 0
+    },
+    "compiledLuauFiles": 75,
+    "luneSuites": 34,
+    "luneAssertions": 170368,
+    "pythonTests": 16,
+    "mainPlaceInstances": 1078,
+    "generatedAssetsIdempotent": true
+  },
+  "limitations": {
+    "inputSnapshotUnchanged": true,
+    "builtScriptSourcesMatch": true,
+    "nativeStudio": "not_attested",
+    "physicalDevice": "not_attested",
+    "cloudSaves": "not_attested",
+    "capacity": "not_attested",
+    "humanPlaytest": "not_attested"
+  },
+  "additionalNotAttested": [
+    "audio_listening",
+    "native_social_api",
+    "native_gamepad",
+    "prototype_physics_and_playability",
+    "github_actions"
+  ],
+  "logs": [
+    "build/experience-build.log",
+    "build/experience-lune.log"
+  ]
+}

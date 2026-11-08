@@ -263,8 +263,69 @@
           </Properties>
         </Item>
       </Item>
+      <Item class="TextButton" referent="RBX000015">
+        <Properties>
+          <string name="Name">Invite</string>
+          <UDim2 name="Size">
+            <XS>0.3333333333333333</XS>
+            <XO>-13</XO>
+            <YS>0</YS>
+            <YO>44</YO>
+          </UDim2>
+          <UDim2 name="Position">
+            <XS>0.6666666666666666</XS>
+            <XO>2</XO>
+            <YS>0</YS>
+            <YO>59</YO>
+          </UDim2>
+          <float name="BackgroundTransparency">0</float>
+          <int name="BorderSizePixel">0</int>
+          <Color3 name="TextColor3">
+            <R>0.07058824</R>
+            <G>0.11764706</G>
+            <B>0.19607843</B>
+          </Color3>
+          <string name="Text">ПОЗВАТЬ ДРУЗЕЙ</string>
+          <float name="TextSize">14</float>
+          <Font name="FontFace">
+            <Family>
+              <url>rbxasset://fonts/families/BuilderSans.json</url>
+            </Family>
+            <Weight>700</Weight>
+            <Style>Normal</Style>
+          </Font>
+          <token name="TextXAlignment">2</token>
+          <bool name="TextWrapped">true</bool>
+          <bool name="TextScaled">true</bool>
+          <bool name="AutoLocalize">false</bool>
+          <Color3 name="BackgroundColor3">
+            <R>1.00000000</R>
+            <G>0.45098039</G>
+            <B>0.67843137</B>
+          </Color3>
+          <bool name="AutoButtonColor">true</bool>
+          <bool name="Selectable">true</bool>
+          <bool name="Visible">false</bool>
+        </Properties>
+        <Item class="UITextSizeConstraint" referent="RBX000016">
+          <Properties>
+            <string name="Name">TextBounds</string>
+            <int name="MinTextSize">12</int>
+            <int name="MaxTextSize">14</int>
+          </Properties>
+        </Item>
+        <Item class="UICorner" referent="RBX000017">
+          <Properties>
+            <string name="Name">Corner</string>
+            <UDim name="CornerRadius">
+              <S>0</S>
+              <O>8</O>
+            </UDim>
+          </Properties>
+        </Item>
+      </Item>
     </Item>
-    <Item class="TextButton" referent="RBX000015">
+    <Item class="TextButton" referent="RBX000018">
       <Properties>
         <string name="Name">ExploreToggle</string>
         <UDim2 name="Size">
@@ -308,14 +369,14 @@
         <bool name="Selectable">true</bool>
         <bool name="Visible">false</bool>
       </Properties>
-      <Item class="UITextSizeConstraint" referent="RBX000016">
+      <Item class="UITextSizeConstraint" referent="RBX000019">
         <Properties>
           <string name="Name">TextBounds</string>
           <int name="MinTextSize">12</int>
           <int name="MaxTextSize">13</int>
         </Properties>
       </Item>
-      <Item class="UICorner" referent="RBX000017">
+      <Item class="UICorner" referent="RBX000020">
         <Properties>
           <string name="Name">Corner</string>
           <UDim name="CornerRadius">
@@ -325,7 +386,7 @@
         </Properties>
       </Item>
     </Item>
-    <Item class="Frame" referent="RBX000018">
+    <Item class="Frame" referent="RBX000021">
       <Properties>
         <string name="Name">ModalBackdrop</string>
         <UDim2 name="Size">
@@ -351,7 +412,7 @@
         <bool name="Visible">false</bool>
       </Properties>
     </Item>
-    <Item class="Frame" referent="RBX000019">
+    <Item class="Frame" referent="RBX000022">
       <Properties>
         <string name="Name">Guide</string>
         <UDim2 name="Size">
@@ -380,7 +441,7 @@
         <bool name="Visible">false</bool>
         <bool name="Active">true</bool>
       </Properties>
-      <Item class="UISizeConstraint" referent="RBX000020">
+      <Item class="UISizeConstraint" referent="RBX000023">
         <Properties>
           <string name="Name">WidthBounds</string>
           <Vector2 name="MaxSize">
@@ -389,7 +450,7 @@
           </Vector2>
         </Properties>
       </Item>
-      <Item class="UICorner" referent="RBX000021">
+      <Item class="UICorner" referent="RBX000024">
         <Properties>
           <string name="Name">Corner</string>
           <UDim name="CornerRadius">
@@ -398,7 +459,7 @@
           </UDim>
         </Properties>
       </Item>
-      <Item class="TextLabel" referent="RBX000022">
+      <Item class="TextLabel" referent="RBX000025">
         <Properties>
           <string name="Name">Heading</string>
           <UDim2 name="Size">
@@ -434,7 +495,7 @@
           <bool name="TextScaled">true</bool>
           <bool name="AutoLocalize">false</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000023">
+        <Item class="UITextSizeConstraint" referent="RBX000026">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
@@ -442,7 +503,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextButton" referent="RBX000024">
+      <Item class="TextButton" referent="RBX000027">
         <Properties>
           <string name="Name">Close</string>
           <UDim2 name="Size">
@@ -489,14 +550,14 @@
             <Y>0</Y>
           </Vector2>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000025">
+        <Item class="UITextSizeConstraint" referent="RBX000028">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
             <int name="MaxTextSize">16</int>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000026">
+        <Item class="UICorner" referent="RBX000029">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -506,7 +567,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextLabel" referent="RBX000027">
+      <Item class="TextLabel" referent="RBX000030">
         <Properties>
           <string name="Name">Body</string>
           <UDim2 name="Size">
@@ -542,7 +603,7 @@
           <bool name="TextScaled">true</bool>
           <bool name="AutoLocalize">false</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000028">
+        <Item class="UITextSizeConstraint" referent="RBX000031">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
@@ -551,7 +612,7 @@
         </Item>
       </Item>
     </Item>
-    <Item class="Frame" referent="RBX000029">
+    <Item class="Frame" referent="RBX000032">
       <Properties>
         <string name="Name">Welcome</string>
         <UDim2 name="Size">
@@ -580,7 +641,7 @@
         <bool name="Visible">true</bool>
         <bool name="Active">true</bool>
       </Properties>
-      <Item class="UISizeConstraint" referent="RBX000030">
+      <Item class="UISizeConstraint" referent="RBX000033">
         <Properties>
           <string name="Name">WidthBounds</string>
           <Vector2 name="MaxSize">
@@ -589,7 +650,7 @@
           </Vector2>
         </Properties>
       </Item>
-      <Item class="UICorner" referent="RBX000031">
+      <Item class="UICorner" referent="RBX000034">
         <Properties>
           <string name="Name">Corner</string>
           <UDim name="CornerRadius">
@@ -598,7 +659,7 @@
           </UDim>
         </Properties>
       </Item>
-      <Item class="TextLabel" referent="RBX000032">
+      <Item class="TextLabel" referent="RBX000035">
         <Properties>
           <string name="Name">Eyebrow</string>
           <UDim2 name="Size">
@@ -634,7 +695,7 @@
           <bool name="TextScaled">true</bool>
           <bool name="AutoLocalize">false</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000033">
+        <Item class="UITextSizeConstraint" referent="RBX000036">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
@@ -642,7 +703,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextLabel" referent="RBX000034">
+      <Item class="TextLabel" referent="RBX000037">
         <Properties>
           <string name="Name">Heading</string>
           <UDim2 name="Size">
@@ -678,7 +739,7 @@
           <bool name="TextScaled">true</bool>
           <bool name="AutoLocalize">false</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000035">
+        <Item class="UITextSizeConstraint" referent="RBX000038">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
@@ -686,7 +747,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextLabel" referent="RBX000036">
+      <Item class="TextLabel" referent="RBX000039">
         <Properties>
           <string name="Name">Steps</string>
           <UDim2 name="Size">
@@ -724,7 +785,7 @@
           <bool name="TextScaled">true</bool>
           <bool name="AutoLocalize">false</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000037">
+        <Item class="UITextSizeConstraint" referent="RBX000040">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
@@ -732,7 +793,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextLabel" referent="RBX000038">
+      <Item class="TextLabel" referent="RBX000041">
         <Properties>
           <string name="Name">Detail</string>
           <UDim2 name="Size">
@@ -768,7 +829,7 @@
           <bool name="TextScaled">true</bool>
           <bool name="AutoLocalize">false</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000039">
+        <Item class="UITextSizeConstraint" referent="RBX000042">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
@@ -776,7 +837,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextButton" referent="RBX000040">
+      <Item class="TextButton" referent="RBX000043">
         <Properties>
           <string name="Name">Play</string>
           <UDim2 name="Size">
@@ -819,14 +880,14 @@
           <bool name="AutoButtonColor">true</bool>
           <bool name="Selectable">true</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000041">
+        <Item class="UITextSizeConstraint" referent="RBX000044">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
             <int name="MaxTextSize">16</int>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000042">
+        <Item class="UICorner" referent="RBX000045">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -836,7 +897,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextButton" referent="RBX000043">
+      <Item class="TextButton" referent="RBX000046">
         <Properties>
           <string name="Name">Explore</string>
           <UDim2 name="Size">
@@ -879,14 +940,14 @@
           <bool name="AutoButtonColor">true</bool>
           <bool name="Selectable">true</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000044">
+        <Item class="UITextSizeConstraint" referent="RBX000047">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>
             <int name="MaxTextSize">16</int>
           </Properties>
         </Item>
-        <Item class="UICorner" referent="RBX000045">
+        <Item class="UICorner" referent="RBX000048">
           <Properties>
             <string name="Name">Corner</string>
             <UDim name="CornerRadius">
@@ -896,7 +957,7 @@
           </Properties>
         </Item>
       </Item>
-      <Item class="TextLabel" referent="RBX000046">
+      <Item class="TextLabel" referent="RBX000049">
         <Properties>
           <string name="Name">Status</string>
           <UDim2 name="Size">
@@ -932,7 +993,7 @@
           <bool name="TextScaled">true</bool>
           <bool name="AutoLocalize">false</bool>
         </Properties>
-        <Item class="UITextSizeConstraint" referent="RBX000047">
+        <Item class="UITextSizeConstraint" referent="RBX000050">
           <Properties>
             <string name="Name">TextBounds</string>
             <int name="MinTextSize">12</int>

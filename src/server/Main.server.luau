@@ -1,6 +1,7 @@
 --!strict
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 local Workspace = game:GetService("Workspace")
 local Shared = ReplicatedStorage:WaitForChild("RuleRoomShared")
 local Config = require(Shared:WaitForChild("GameConfig"))
@@ -8,6 +9,7 @@ local RuleDeck = require(Shared:WaitForChild("RuleDeck"))
 local ArenaRules = require(script.Parent.ArenaRules)
 local PlayerRoster = require(script.Parent.PlayerRoster)
 local ProfileService = require(script.Parent.ProfileService)
+local RuleAvailability = require(script.Parent.RuleAvailability)
 local state = ReplicatedStorage:WaitForChild("RuleRoomState") :: Folder
 local vote = ReplicatedStorage:WaitForChild("RuleRoomRemotes"):WaitForChild("Vote") :: RemoteEvent
 
@@ -30,7 +32,11 @@ local initialAttributes = {
 	TeamGoal = 0,
 	FinaleSuccess = false,
 	ResultsText = "",
+	ContributionsJson = "",
+	ContributionsRound = 0,
 	AliveCount = 0,
+	RunsPaused = false,
+	RunPauseReason = "",
 }
 for name, value in initialAttributes do
 	state:SetAttribute(name, value)
@@ -128,7 +134,33 @@ local function publish(phase: string, title: string, instruction: string)
 	state:SetAttribute("Phase", phase)
 end
 
-local function waitFor(seconds: number, active: boolean, update: ((number, number) -> ())?): boolean
+local function availableDeck(seed: number, mode: string): ({ string }?, string?)
+	local controls = ServerStorage:FindFirstChild("RuleRoomControls")
+	if not controls then
+		controls = Instance.new("Folder")
+		controls.Name = "RuleRoomControls"
+		for _, id in Config.RuleOrder do
+			controls:SetAttribute("Disabled_" .. id, false)
+		end
+		controls.Parent = ServerStorage
+	end
+	if not controls:IsA("Folder") then
+		return nil, "InvalidControls"
+	end
+	local disabled, reason = RuleAvailability.snapshot(controls:GetAttributes(), Config.RuleOrder)
+	if not disabled then
+		return nil, reason
+	end
+	return RuleDeck.tryDraw(seed, mode, disabled)
+end
+
+local function publishPause(reason: string?)
+	state:SetAttribute("RunsPaused", true)
+	state:SetAttribute("RunPauseReason", reason or "NoLegalDeck")
+	publish("Waiting", "КОМНАТА НА ПЕРЕРЫВЕ", RuleAvailability.message(reason))
+end
+
+local function waitFor(seconds: number, active: boolean, update: ((number, number) -> boolean?)?): boolean
 	local startedAt = Workspace:GetServerTimeNow()
 	local deadline = startedAt + seconds
 	local previousAt = startedAt
@@ -155,7 +187,11 @@ local function waitFor(seconds: number, active: boolean, update: ((number, numbe
 			return true
 		end
 		if update then
-			update(now - startedAt, now - previousAt)
+			local finished = update(now - startedAt, now - previousAt)
+			-- A phase may finish early, but damage from that same update wins over success.
+			if finished == true then
+				return not active or roster.AliveCount() > 0
+			end
 		end
 		previousAt = now
 		task.wait(Config.StepSeconds)
@@ -194,16 +230,47 @@ while running do
 	world.Restore()
 	roster.EndRound()
 	if queuedCount() == 0 then
-		publish(
-			"Waiting",
-			"ЛАБОРАТОРИЯ ОТКРЫТА",
-			"Нажми «В испытания», когда будешь готов. Можно играть одному!"
-		)
 		repeat
+			-- Explore keeps players connected. Release controls still need to refresh
+			-- here, or a repaired room retains an obsolete pause until someone rejoins.
+			local available, reason = availableDeck(1, "Balanced")
+			if available then
+				state:SetAttribute("RunsPaused", false)
+				state:SetAttribute("RunPauseReason", "")
+				publish(
+					"Waiting",
+					"ЛАБОРАТОРИЯ ОТКРЫТА",
+					"Нажми «В испытания», когда будешь готов. Можно играть одному!"
+				)
+			else
+				publishPause(reason)
+			end
 			task.wait(0.25)
 		until not running or queuedCount() > 0
 		continue
 	end
+	-- Test feasibility before Voting so an invalid control set cannot spin a vote loop.
+	local preview, pauseReason = availableDeck(1, "Balanced")
+	if not preview then
+		publishPause(pauseReason)
+		repeat
+			task.wait(0.5)
+			if not running or queuedCount() == 0 then
+				break
+			end
+			local recovered, nextReason = availableDeck(1, "Balanced")
+			if recovered then
+				break
+			end
+			if nextReason ~= pauseReason then
+				pauseReason = nextReason
+				publishPause(pauseReason)
+			end
+		until not running
+		continue
+	end
+	state:SetAttribute("RunsPaused", false)
+	state:SetAttribute("RunPauseReason", "")
 	roster.PrepareIntermission()
 	table.clear(votes)
 	publishVotes()
@@ -215,6 +282,8 @@ while running do
 	state:SetAttribute("TeamGoal", 0)
 	state:SetAttribute("FinaleSuccess", false)
 	state:SetAttribute("ResultsText", "")
+	state:SetAttribute("ContributionsJson", "")
+	state:SetAttribute("ContributionsRound", 0)
 	publish(
 		"Voting",
 		"ВЫБЕРИТЕ НАСТРОЕНИЕ КОМНАТЫ",
@@ -225,10 +294,14 @@ while running do
 	end
 	local seed = rng:NextInteger(1, 2147483646)
 	local mode = RuleDeck.chooseMode(counts(), seed)
+	-- Re-read after Voting, then freeze the selected deck for this entire run.
+	local deck = availableDeck(seed, mode)
+	if not deck then
+		continue
+	end
 	state:SetAttribute("ModeId", mode)
 	runNumber += 1
 	state:SetAttribute("Round", runNumber)
-	local deck = RuleDeck.draw(seed, mode)
 	roster.BeginRun(deck)
 	local completedRun = false
 	local success, failure = xpcall(function()
@@ -262,11 +335,14 @@ while running do
 			local completed = world.Run(ruleId, context)
 			-- Check falls before restoring the floor, so it cannot rescue a lost player.
 			roster.CheckBoundaries()
-			local awarded = if completed then roster.AwardSurvivors(ruleId) else 0
+			local awarded, forfeitedAlive = 0, 0
+			if completed then
+				awarded, forfeitedAlive = roster.AwardSurvivors(ruleId)
+			end
 			if ruleId == "ReactorRush" then
 				state:SetAttribute(
 					"FinaleSuccess",
-					state:GetAttribute("FinaleSuccess") == true and awarded > 0
+					state:GetAttribute("FinaleSuccess") == true and awarded + forfeitedAlive > 0
 				)
 			end
 			world.Restore()
@@ -293,6 +369,9 @@ while running do
 	local teamSuccess = success and completedRun and state:GetAttribute("FinaleSuccess") == true
 	state:SetAttribute("FinaleSuccess", teamSuccess)
 	local winners = roster.CompleteRun(teamSuccess, not success or not completedRun)
+	state:SetAttribute("ContributionsRound", runNumber)
+	-- Publish the immutable payload last; clients verify all three round identities.
+	state:SetAttribute("ContributionsJson", roster.Contributions(runNumber))
 	if not success or not completedRun then
 		if not success then
 			warn("[RuleRoom] Run aborted and restored:\n" .. tostring(failure))

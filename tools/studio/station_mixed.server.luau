@@ -20,6 +20,10 @@ local profiles = {
 	CompleteRun = function(p)
 		awardCount[p] = (awardCount[p] or 0) + 1
 	end,
+	-- This fixture does not persist or certify mastery rewards.
+	RecordFlawless = function()
+		return false
+	end,
 }
 local roster = require(modules.PlayerRoster).new(world.LobbySpawn, profiles)
 local report = Instance.new("Folder")

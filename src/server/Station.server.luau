@@ -19,6 +19,9 @@ for index = 1, 7 do
 end
 type Attempt = {
 	character: Model,
+	warmup: boolean,
+	goal: number,
+	deathConnection: RBXScriptConnection?,
 	index: number,
 	started: number,
 	checkpointAt: number,
@@ -28,6 +31,65 @@ type Attempt = {
 local attempts: { [Player]: Attempt } = {}
 local lastRequest: { [Player]: number } = {}
 local connections: { RBXScriptConnection } = {}
+local practiceRecordConnections: { [Player]: RBXScriptConnection } = {}
+local admissionConnections: { [Player]: RBXScriptConnection } = {}
+local warnedPracticeBridge = false
+
+local function practiceTime(value: any): number?
+	return if typeof(value) == "number"
+			and value > 0
+			and value <= 1_000_000_000
+			and value == value
+		then value
+		else nil
+end
+
+local function syncPracticeBest(player: Player)
+	local saved = practiceTime(player:GetAttribute("BestPracticeSeconds"))
+	local current = practiceTime(player:GetAttribute("PracticeBestSeconds"))
+	-- Profile loading can finish after Station starts or after a local attempt.
+	-- A later profile update must never replace a faster result from this session.
+	if saved and (not current or saved < current) then
+		player:SetAttribute("PracticeBestSeconds", saved)
+	end
+end
+
+local function recordPractice(player: Player, seconds: number)
+	-- The bridge is server-only and owned by the existing ProfileService instance.
+	-- Lookup stays lazy so script startup order cannot stall the station.
+	local bridge = script.Parent:FindFirstChild("RuleRoomRecordPractice")
+	if not bridge or not bridge:IsA("BindableFunction") then
+		if not warnedPracticeBridge then
+			warnedPracticeBridge = true
+			warn("[RuleRoom station] Practice record service unavailable; session result retained.")
+		end
+		return
+	end
+	local ok, problem = pcall(function()
+		bridge:Invoke(player, seconds)
+	end)
+	if not ok and not warnedPracticeBridge then
+		warnedPracticeBridge = true
+		warn("[RuleRoom station] Practice record failed; session result retained: " .. tostring(problem))
+	end
+end
+
+local function stopAttempt(player: Player)
+	local attempt = attempts[player]
+	attempts[player] = nil
+	if attempt and attempt.deathConnection then
+		attempt.deathConnection:Disconnect()
+	end
+end
+
+local function cancel(player: Player)
+	stopAttempt(player)
+	player:SetAttribute("PracticeState", "Idle")
+	player:SetAttribute("PracticeMode", "")
+	player:SetAttribute("PracticeGoal", 0)
+	player:SetAttribute("PracticeCheckpoint", 0)
+	player:SetAttribute("PracticeStartedAt", 0)
+end
 
 local function initializePlayer(player: Player)
 	-- A first-time arrival chooses when to start. Main also checks EntryChoiceMade,
@@ -39,17 +101,26 @@ local function initializePlayer(player: Player)
 	if player:GetAttribute("TemporaryPlayPrompt") == nil then
 		player:SetAttribute("TemporaryPlayPrompt", false)
 	end
+	if not practiceRecordConnections[player] then
+		practiceRecordConnections[player] = player
+			:GetAttributeChangedSignal("BestPracticeSeconds")
+			:Connect(function()
+				syncPracticeBest(player)
+			end)
+	end
+	if not admissionConnections[player] then
+		admissionConnections[player] = player:GetAttributeChangedSignal("InRound"):Connect(function()
+			if player:GetAttribute("InRound") == true then
+				-- Admission wins immediately. Never move a character after Main admits it.
+				cancel(player)
+			end
+		end)
+	end
+	syncPracticeBest(player)
 end
 table.insert(connections, Players.PlayerAdded:Connect(initializePlayer))
 for _, player in Players:GetPlayers() do
 	initializePlayer(player)
-end
-
-local function cancel(player: Player)
-	attempts[player] = nil
-	player:SetAttribute("PracticeState", "Idle")
-	player:SetAttribute("PracticeCheckpoint", 0)
-	player:SetAttribute("PracticeStartedAt", 0)
 end
 
 local function characterParts(player: Player): (Model?, Humanoid?, BasePart?)
@@ -69,8 +140,33 @@ local function teleport(character: Model, root: BasePart, position: Vector3)
 end
 
 local function setMode(player: Player, action: string, acceptTemporary: any)
-	local character, _, root = characterParts(player)
-	if not character or not root then
+	local character, humanoid, root = characterParts(player)
+	if not character or not humanoid or not root then
+		return
+	end
+	local warmup = action == "Practice"
+		and player:GetAttribute("LobbyOnly") ~= true
+		and player:GetAttribute("EntryChoiceMade") == true
+	if
+		action == "Practice"
+		and ProfileStatus.describe(player:GetAttribute("DataStatus"), player:GetAttribute("DataPersistent")).Loading
+	then
+		-- Do not let a finish outrun profile loading and lose its persistent record.
+		player:SetAttribute(
+			"ActionMessage",
+			"Дождись загрузки прогресса, затем начни паркур."
+		)
+		return
+	end
+	if
+		warmup
+		and not ProfileStatus.canJoin(
+			player:GetAttribute("DataStatus"),
+			player:GetAttribute("DataPersistent"),
+			player:GetAttribute("TemporaryPlayAccepted"),
+			nil
+		)
+	then
 		return
 	end
 	if action == "Join" then
@@ -94,24 +190,39 @@ local function setMode(player: Player, action: string, acceptTemporary: any)
 	end
 	cancel(player)
 	player:SetAttribute("TemporaryPlayPrompt", false)
-	player:SetAttribute("LobbyOnly", action ~= "Join")
-	player:SetAttribute("EntryChoiceMade", true)
-	player:SetAttribute("VotedMode", "")
+	if not warmup then
+		player:SetAttribute("LobbyOnly", action ~= "Join")
+		player:SetAttribute("EntryChoiceMade", true)
+		player:SetAttribute("VotedMode", "")
+	end
 	if action == "Practice" then
 		local now = Workspace:GetServerTimeNow()
 		teleport(character, root, startPad.Position + Vector3.new(0, 4, 0))
-		attempts[player] = {
+		local attempt: Attempt = {
 			character = character,
+			warmup = warmup,
+			goal = if warmup then 2 else #checkpoints,
 			index = 0,
 			started = now,
 			checkpointAt = now,
 			lastPosition = root.Position,
 			lastAt = now,
 		}
+		attempts[player] = attempt
+		attempt.deathConnection = humanoid.Died:Connect(function()
+			if attempts[player] == attempt then
+				cancel(player)
+			end
+		end)
+		player:SetAttribute("PracticeMode", if warmup then "Warmup" else "Course")
+		player:SetAttribute("PracticeGoal", attempt.goal)
 		player:SetAttribute("PracticeCheckpoint", 0)
 		player:SetAttribute("PracticeStartedAt", now)
 		player:SetAttribute("PracticeState", "Running")
 	elseif action == "Join" then
+		-- Only an accepted server action records intent; automatic queue admission does not.
+		local intent = player:GetAttribute("AnalyticsJoinIntent")
+		player:SetAttribute("AnalyticsJoinIntent", (if typeof(intent) == "number" then intent else 0) + 1)
 		teleport(character, root, spawn.Position + Vector3.new(0, 2, -12))
 	end
 end
@@ -205,7 +316,10 @@ local function updatePlayer(player: Player, now: number)
 	if
 		attempt.character ~= character
 		or player:GetAttribute("InRound") == true
-		or player:GetAttribute("LobbyOnly") ~= true
+		or (attempt.warmup and (player:GetAttribute("LobbyOnly") == true or player:GetAttribute(
+			"EntryChoiceMade"
+		) ~= true))
+		or (not attempt.warmup and player:GetAttribute("LobbyOnly") ~= true)
 	then
 		cancel(player)
 		return
@@ -241,15 +355,24 @@ local function updatePlayer(player: Player, now: number)
 			attempt.index += 1
 			attempt.checkpointAt = now
 			player:SetAttribute("PracticeCheckpoint", attempt.index)
-			if attempt.index == #checkpoints then
+			if attempt.index == attempt.goal then
+				-- Warmup only teaches movement. Its finish never becomes a timed record.
+				if attempt.warmup then
+					stopAttempt(player)
+					player:SetAttribute("PracticeState", "Finished")
+					return
+				end
 				local seconds = math.floor((now - attempt.started) * 100) / 100
-				local best = player:GetAttribute("PracticeBestSeconds")
-				if typeof(best) ~= "number" or seconds < best then
+				local best = practiceTime(player:GetAttribute("PracticeBestSeconds"))
+				if not best or seconds < best then
 					player:SetAttribute("PracticeBestSeconds", seconds)
 				end
 				player:SetAttribute("PracticeLastSeconds", seconds)
 				player:SetAttribute("PracticeState", "Finished")
-				attempts[player] = nil
+				-- Complete before invoking the bridge, preventing a yielding callback from
+				-- making a second Heartbeat submit the same finish again.
+				stopAttempt(player)
+				recordPractice(player, seconds)
 			end
 		elseif feetY < (if attempt.index > 0 then checkpoints[attempt.index].Position.Y - 0.5 else -4) then
 			local pad = if attempt.index > 0 then checkpoints[attempt.index] else startPad
@@ -263,8 +386,18 @@ end
 table.insert(
 	connections,
 	Players.PlayerRemoving:Connect(function(player)
-		attempts[player] = nil
+		stopAttempt(player)
 		lastRequest[player] = nil
+		local admission = admissionConnections[player]
+		if admission then
+			admission:Disconnect()
+			admissionConnections[player] = nil
+		end
+		local connection = practiceRecordConnections[player]
+		if connection then
+			connection:Disconnect()
+			practiceRecordConnections[player] = nil
+		end
 	end)
 )
 local accumulated, boardTime = 0, 0
@@ -312,6 +445,14 @@ table.insert(
 script.Destroying:Connect(function()
 	for _, connection in connections do
 		connection:Disconnect()
+	end
+	for player, connection in practiceRecordConnections do
+		connection:Disconnect()
+		practiceRecordConnections[player] = nil
+	end
+	for player, connection in admissionConnections do
+		connection:Disconnect()
+		admissionConnections[player] = nil
 	end
 	for player in attempts do
 		cancel(player)

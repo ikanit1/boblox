@@ -39,4 +39,33 @@ for _, status in { "Session", "Busy", "Unavailable" } do
 	expect(Status.canJoin(status, false, true, nil), "Accepted session can rejoin without repeated prompts")
 end
 expect(Status.describe("Saved", true).Warning == false, "Recovered save clears warning")
+local retry = Status.retry(true, 105, 3, 100)
+expect(
+	retry.Visible and not retry.Enabled and retry.Text == "ПОВТОР ЧЕРЕЗ 5 С",
+	"Retry cooldown uses the shared server clock"
+)
+retry = Status.retry(true, 105, 2, 105)
+expect(
+	retry.Visible and retry.Enabled and retry.Text == "ПОВТОРИТЬ ЗАГРУЗКУ",
+	"Retry becomes usable exactly at the deadline"
+)
+expect(
+	string.find(retry.Hint, "до временной игры", 1, true) ~= nil,
+	"Retry wording explains its admission boundary"
+)
+for _, args in
+	{
+		{ false, 0, 3, 100 },
+		{ "true", 0, 3, 100 },
+		{ true, 0, 0, 100 },
+		{ true, 0, 4, 100 },
+		{ true, 0, 1.5, 100 },
+		{ true, 0 / 0, 3, 100 },
+		{ true, math.huge, 3, 100 },
+		{ true, 0, 3, math.huge },
+	}
+do
+	local view = Status.retry(table.unpack(args))
+	expect(not view.Visible and not view.Enabled, "Missing, exhausted or malformed retry state fails closed")
+end
 print("ProfileStatus: " .. checks .. " checks passed")

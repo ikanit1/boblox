@@ -3,15 +3,18 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local PhysicsService = game:GetService("PhysicsService")
+local HttpService = game:GetService("HttpService")
 local Config = require(ReplicatedStorage:WaitForChild("RuleRoomShared"):WaitForChild("GameConfig"))
 local RunPresentation = require(ReplicatedStorage.RuleRoomShared:WaitForChild("RunPresentation"))
 local RuleMath = require(script.Parent.RuleMath)
+local ContributionLedger = require(script.Parent.ContributionLedger)
 
 type Profiles = {
 	IsReady: (Player) -> boolean,
 	AwardSurvival: (Player) -> (),
-	AwardStar: (Player) -> (),
+	AwardStar: (Player) -> boolean?,
 	CompleteRun: (Player, boolean) -> (),
+	RecordFlawless: (Player, string, "Collected"?) -> boolean,
 }
 type Participant = {
 	character: Model,
@@ -19,6 +22,15 @@ type Participant = {
 	root: BasePart,
 	alive: boolean,
 	rewarded: boolean,
+	forfeited: boolean,
+	rewardForfeited: boolean,
+	generation: number,
+	movementViolations: number,
+	damaged: boolean,
+	lastHealth: number,
+	trialStartedAt: number,
+	trialStars: number,
+	damageConnection: RBXScriptConnection?,
 	walkSpeed: number,
 	jumpPower: number,
 	jumpHeight: number,
@@ -33,6 +45,7 @@ type Participant = {
 	ruleId: string,
 }
 type RunRecord = {
+	contributionToken: number?,
 	points: number,
 	survived: number,
 	finale: boolean,
@@ -40,6 +53,7 @@ type RunRecord = {
 	coins: number,
 	xp: number,
 	stars: number,
+	energy: number,
 }
 type PlayerScope = {
 	character: Model?,
@@ -58,10 +72,12 @@ export type Roster = {
 	EndRound: (boolean?) -> (),
 	PrepareIntermission: () -> (),
 	CompleteRun: (boolean, boolean?) -> number,
+	Contributions: (number) -> string,
 	CheckBoundaries: () -> (),
 	AliveCount: () -> number,
 	ForEachAlive: ((Player, Humanoid, BasePart) -> ()) -> (),
-	AwardSurvivors: (string) -> number,
+	AwardSurvivors: (string) -> (number, number),
+	ForfeitedAliveCount: () -> number,
 	AwardStar: (Player) -> boolean,
 	Destroy: () -> (),
 }
@@ -89,6 +105,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	local scopes: { [Player]: PlayerScope } = {}
 	local participants: { [Player]: Participant } = {}
 	local records: { [Player]: RunRecord } = {}
+	local contributions = ContributionLedger.new(Config.MaxPlayers * Config.RuleCount, Config.RuleCount)
 	local connections: { RBXScriptConnection } = {}
 	local destroyed = false
 	local currentTrial = 0
@@ -114,11 +131,13 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	local function resetRunDisplay(player: Player)
 		player:SetAttribute("ResultReady", false)
 		player:SetAttribute("RunResult", "None")
+		player:SetAttribute("NewRecord", "")
 		player:SetAttribute("RunScore", 0)
 		player:SetAttribute("RunSurvived", 0)
 		player:SetAttribute("RunCoinsEarned", 0)
 		player:SetAttribute("RunXPEarned", 0)
 		player:SetAttribute("RunStars", 0)
+		player:SetAttribute("RunEnergy", 0)
 		player:SetAttribute("LastTrialOutcome", "Pending")
 		player:SetAttribute("LastTrialRule", "")
 		for index = 1, Config.RuleCount do
@@ -161,12 +180,21 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 	end
 
+	local function stopDamageTracking(entry: Participant)
+		if entry.damageConnection then
+			entry.damageConnection:Disconnect()
+			entry.damageConnection = nil
+		end
+	end
+
 	local function eliminate(player: Player, kill: boolean, reason: string?)
 		local entry = participants[player]
 		if not entry or not entry.alive then
 			return
 		end
 		entry.alive = false
+		stopDamageTracking(entry)
+		player:SetAttribute("MovementWarning", false)
 		local lastDamageAt = player:GetAttribute("LastDamageAt")
 		local lastDamageRule = player:GetAttribute("LastDamageRule")
 		local recentDamage = typeof(lastDamageAt) == "number"
@@ -324,6 +352,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		scopes[player] = scope
 		player:SetAttribute("InRound", false)
 		player:SetAttribute("Eliminated", false)
+		player:SetAttribute("MovementWarning", false)
 		resetRunDisplay(player)
 		table.insert(
 			scope.connections,
@@ -349,8 +378,13 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	end
 
 	local function removePlayer(player: Player)
+		local record = records[player]
+		if record then
+			contributions.Leave(player.UserId, record.contributionToken)
+		end
 		local entry = participants[player]
 		if entry then
+			stopDamageTracking(entry)
 			restoreMovement(entry)
 		end
 		local scope = scopes[player]
@@ -366,11 +400,34 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	end
 
 	local function isCurrent(player: Player, entry: Participant): boolean
-		return entry.alive
+		local scope = scopes[player]
+		return scope ~= nil
+			and scope.generation == entry.generation
+			and scope.character == entry.character
+			and entry.alive
 			and player.Parent == Players
 			and player.Character == entry.character
 			and entry.humanoid.Health > 0
 			and entry.root:IsDescendantOf(entry.character)
+	end
+
+	local function resetMovementWindow(entry: Participant)
+		local now = os.clock()
+		entry.lastPosition = entry.root.Position
+		entry.lastSampleAt = now
+		entry.travelStartedAt = now
+		entry.travelDistance = 0
+		entry.airborneSeconds = 0
+		entry.lastVerticalVelocity = 0
+	end
+
+	local function warnMovement(player: Player, entry: Participant)
+		-- Keep the model's pivot offset so the root returns to the last accepted sample.
+		local target = entry.character:GetPivot() + (entry.lastPosition - entry.root.Position)
+		teleport(entry.character, entry.root, target)
+		resetMovementWindow(entry)
+		entry.rewardForfeited = true
+		player:SetAttribute("MovementWarning", true)
 	end
 
 	local function movementPlausible(player: Player, entry: Participant, position: Vector3): boolean
@@ -436,9 +493,6 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 			-- a landing. Otherwise preserve the existing 4s/7s maximum continuous flight.
 			entry.airborneSeconds += math.max(0, sampleSeconds)
 		end
-		entry.lastSampleAt = now
-		entry.lastPosition = position
-		entry.lastVerticalVelocity = verticalVelocity
 		if not RuleMath.airbornePlausible(entry.airborneSeconds, effectiveGravity) then
 			player:SetAttribute("MovementViolation", "Airborne")
 			player:SetAttribute("MovementAirborneSeconds", entry.airborneSeconds)
@@ -446,14 +500,28 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 			player:SetAttribute("MovementVerticalVelocity", verticalVelocity)
 			return false
 		end
+		-- An airborne failure must not replace the position used for recovery.
+		entry.lastSampleAt = now
+		entry.lastPosition = position
+		entry.lastVerticalVelocity = verticalVelocity
 		return true
 	end
 
-	local function award(player: Player, amount: number): boolean
+	local function canAward(player: Player): boolean
 		local entry, scope, record = participants[player], scopes[player], records[player]
-		if not entry or not scope or not record or not isCurrent(player, entry) then
+		return entry ~= nil
+			and scope ~= nil
+			and record ~= nil
+			and not entry.rewardForfeited
+			and player:GetAttribute("MovementWarning") ~= true
+			and isCurrent(player, entry)
+	end
+
+	local function award(player: Player, amount: number): boolean
+		if not canAward(player) then
 			return false
 		end
+		local scope, record = scopes[player], records[player]
 		record.points += amount
 		scope.score.Value += amount
 		scope.best.Value = math.max(scope.best.Value, record.points)
@@ -464,6 +532,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	local roster = {} :: Roster
 	function roster.BeginRun(deck: { string }?)
 		table.clear(records)
+		contributions.Reset()
 		currentTrial = 0
 		runDeck = if deck then table.clone(deck) else {}
 		for _, player in Players:GetPlayers() do
@@ -482,6 +551,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		for _, player in Players:GetPlayers() do
 			player:SetAttribute("InRound", false)
 			player:SetAttribute("Eliminated", false)
+			player:SetAttribute("MovementWarning", false)
 			for index = 1, currentTrial do
 				local outcome = player:GetAttribute("TrialOutcome_" .. index)
 				if outcome == nil or outcome == "Pending" then
@@ -509,6 +579,10 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 			then
 				records[player] = records[player]
 					or {
+						contributionToken = contributions.Admit(
+							player.UserId,
+							player.DisplayName or player.Name
+						),
 						points = 0,
 						survived = 0,
 						finale = false,
@@ -516,6 +590,7 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 						coins = 0,
 						xp = 0,
 						stars = 0,
+						energy = 0,
 					}
 				participants[player] = {
 					character = character,
@@ -523,6 +598,15 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					root = root,
 					alive = true,
 					rewarded = false,
+					forfeited = false,
+					rewardForfeited = false,
+					generation = scope.generation,
+					movementViolations = 0,
+					damaged = false,
+					lastHealth = humanoid.MaxHealth,
+					trialStartedAt = Workspace:GetServerTimeNow(),
+					trialStars = 0,
+					damageConnection = nil,
 					walkSpeed = humanoid.WalkSpeed,
 					jumpPower = humanoid.JumpPower,
 					jumpHeight = humanoid.JumpHeight,
@@ -547,10 +631,21 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					end
 				end
 				humanoid.Health = humanoid.MaxHealth
+				local entry = participants[player]
+				entry.damageConnection = humanoid.HealthChanged:Connect(function(health)
+					-- Remember every health decrease even if regeneration restores full health.
+					-- A stale character/trial callback must never taint a later admission.
+					if participants[player] == entry and entry.alive and not entry.rewarded then
+						if health < entry.lastHealth then
+							entry.damaged = true
+						end
+						entry.lastHealth = health
+					end
+				end)
 				local offset = Vector3.new((entered % 6 - 2.5) * 10, 0, (math.floor(entered / 6) - 0.5) * 20)
 				teleport(character, root, arenaCFrame + offset)
-				-- Only this server-authorized teleport resets the trial's movement anchor.
-				participants[player].lastPosition = root.Position
+				-- Server-authorized teleports start a fresh movement observation window.
+				resetMovementWindow(participants[player])
 				player:SetAttribute("MovementViolation", "")
 				player:SetAttribute("MovementAirborneSeconds", nil)
 				player:SetAttribute("MovementSampleSeconds", nil)
@@ -565,13 +660,29 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 	function roster.EndRound(keepInArena: boolean?)
 		local retained: { [Player]: boolean } = {}
 		for player, entry in participants do
+			stopDamageTracking(entry)
 			if
 				not entry.rewarded
+				and not entry.forfeited
 				and player:GetAttribute("TrialOutcome_" .. entry.trialIndex) == "Playing"
 			then
-				publishOutcome(player, entry, "Eliminated")
+				if
+					isCurrent(player, entry)
+					and entry.root.Position.Y >= 1
+					and (entry.rewardForfeited or player:GetAttribute("MovementWarning") == true)
+				then
+					-- Interrupted cleanup may skip AwardSurvivors; never present a living
+					-- warned participant as dead or grant a reward while closing the trial.
+					entry.forfeited = true
+					entry.rewardForfeited = true
+					publishOutcome(player, entry, "Forfeited")
+				else
+					publishOutcome(player, entry, "Eliminated")
+				end
 			end
-			retained[player] = keepInArena == true and isCurrent(player, entry) and entry.rewarded
+			retained[player] = keepInArena == true
+				and isCurrent(player, entry)
+				and (entry.rewarded or entry.forfeited)
 			restoreMovement(entry)
 			entry.root:SetAttribute("TrialGravityScale", nil)
 		end
@@ -620,6 +731,12 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 							reason = "Boundary"
 						elseif movementPlausible(player, entry, p) then
 							reason = nil
+						else
+							entry.movementViolations += 1
+							if RuleMath.movementResponse(entry.movementViolations) == "Warn" then
+								warnMovement(player, entry)
+								reason = nil
+							end
 						end
 					end
 					if reason then
@@ -648,10 +765,38 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 		end
 	end
 
-	function roster.AwardSurvivors(ruleId: string): number
+	function roster.ForfeitedAliveCount(): number
+		local count = 0
+		for player, entry in participants do
+			if entry.forfeited and entry.root.Position.Y >= 1 and isCurrent(player, entry) then
+				count += 1
+			end
+		end
+		return count
+	end
+
+	function roster.AwardSurvivors(ruleId: string): (number, number)
 		local awarded = 0
 		for player, entry in participants do
-			if not entry.rewarded and entry.root.Position.Y >= 1 and award(player, Config.SurvivorPoints) then
+			if
+				not entry.rewarded
+				and not entry.forfeited
+				and entry.root.Position.Y >= 1
+				and isCurrent(player, entry)
+				and (entry.rewardForfeited or player:GetAttribute("MovementWarning") == true)
+			then
+				-- A warning removes rewards, not survival. Finalize without touching the
+				-- personal success ledger; the reactor can still count this living player.
+				entry.forfeited = true
+				entry.rewardForfeited = true
+				stopDamageTracking(entry)
+				publishOutcome(player, entry, "Forfeited")
+			elseif
+				not entry.rewarded
+				and not entry.forfeited
+				and entry.root.Position.Y >= 1
+				and award(player, Config.SurvivorPoints)
+			then
 				entry.rewarded = true
 				local record = records[player]
 				record.survived += 1
@@ -659,26 +804,71 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 					record.finale = true
 				end
 				player:SetAttribute("RunSurvived", record.survived)
+				contributions.Update(
+					player.UserId,
+					record.contributionToken,
+					record.points,
+					record.survived,
+					record.energy,
+					nil
+				)
 				captureReward(player, function()
 					profiles.AwardSurvival(player)
 				end)
+				local lastDamageAt = player:GetAttribute("LastDamageAt")
+				-- Hazards publish this journal synchronously before TakeDamage. It also
+				-- covers damage and healing before deferred HealthChanged callbacks run.
+				local journaledDamage = typeof(lastDamageAt) == "number"
+					and lastDamageAt >= entry.trialStartedAt
+					and player:GetAttribute("LastDamageRule") ~= ""
+				if
+					not entry.damaged
+					and not journaledDamage
+					and entry.humanoid.Health >= entry.lastHealth
+					and not entry.rewardForfeited
+					and player:GetAttribute("MovementWarning") ~= true
+					and ruleId == entry.ruleId
+				then
+					profiles.RecordFlawless(player, ruleId, if entry.trialStars > 0 then "Collected" else nil)
+				end
+				stopDamageTracking(entry)
 				publishOutcome(player, entry, "Survived")
 				awarded += 1
 			end
 		end
-		return awarded
+		return awarded, roster.ForfeitedAliveCount()
 	end
 
 	function roster.AwardStar(player: Player): boolean
-		if not award(player, Config.StarPoints) then
+		if not canAward(player) or participants[player].rewarded or participants[player].forfeited then
 			return false
 		end
+		local accepted: boolean? = nil
 		captureReward(player, function()
-			profiles.AwardStar(player)
+			accepted = profiles.AwardStar(player)
 		end)
+		-- Production grants return an explicit acknowledgement. Legacy server test
+		-- adapters may return nil; an explicit refusal never consumes a pickup.
+		if accepted == false then
+			return false
+		end
+		award(player, Config.StarPoints)
+		participants[player].trialStars += 1
 		local record = records[player]
 		record.stars += 1
 		player:SetAttribute("RunStars", record.stars)
+		if participants[player].ruleId == "ReactorRush" then
+			record.energy += 1
+			player:SetAttribute("RunEnergy", record.energy)
+		end
+		contributions.Update(
+			player.UserId,
+			record.contributionToken,
+			record.points,
+			record.survived,
+			record.energy,
+			nil
+		)
 		return true
 	end
 
@@ -693,9 +883,16 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 						profiles.CompleteRun(player, won)
 					end)
 				end
-				player:SetAttribute(
-					"RunResult",
+				local outcome =
 					RunPresentation.resultCode(record.survived, record.finale, teamSuccess, aborted)
+				player:SetAttribute("RunResult", outcome)
+				contributions.Update(
+					player.UserId,
+					record.contributionToken,
+					record.points,
+					record.survived,
+					record.energy,
+					outcome
 				)
 				-- Last write is the publication barrier for clients rendering this summary.
 				player:SetAttribute("ResultReady", true)
@@ -705,6 +902,12 @@ function PlayerRoster.new(lobbyCFrame: CFrame, profiles: Profiles): Roster
 			end
 		end
 		return winners
+	end
+
+	function roster.Contributions(round: number): string
+		return contributions.Encode(round, function(snapshot)
+			return HttpService:JSONEncode(snapshot)
+		end)
 	end
 
 	function roster.Destroy()

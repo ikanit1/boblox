@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "status": "not_run",
+  "participant": "P01",
+  "candidateFingerprint": null,
+  "date": null,
+  "device": {
+    "model": null,
+    "input": null,
+    "viewport": null,
+    "graphicsQuality": null,
+    "networkConditions": null
+  },
+  "mode": null,
+  "profileMode": null,
+  "observations": {
+    "firstMeaningfulActionSeconds": null,
+    "firstChoice": null,
+    "firstRuleUnderstood": null,
+    "firstDeathUnderstood": null,
+    "helpRequests": null,
+    "firstRunSurvived": null,
+    "personalVersusTeamResultUnderstood": null,
+    "saveStatusUnderstood": null,
+    "voluntaryNextChoice": null,
+    "secondRunActuallyPlayed": null,
+    "previewVersusPurchaseUnderstood": null,
+    "sessionMinutes": null,
+    "heatOrInputProblems": null
+  },
+  "issues": [],
+  "notes": []
+}

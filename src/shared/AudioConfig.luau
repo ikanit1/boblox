@@ -5,6 +5,26 @@ return {
 	Enabled = true,
 	MasterGainDb = -2,
 	FadeSeconds = 0.045,
+	-- Original sparse laboratory phrase, performed locally with the bundled Tone sample.
+	Music = {
+		Voices = 2,
+		GainDb = -29,
+		Seconds = 0.28,
+		FadeSeconds = 0.14,
+		LoopSeconds = 24,
+		DuckGain = 0.22,
+		DuckSeconds = 0.8,
+		Notes = {
+			{ At = 0, Speed = 0.56 },
+			{ At = 2.4, Speed = 0.749 },
+			{ At = 4.8, Speed = 0.666 },
+			{ At = 8, Speed = 0.499 },
+			{ At = 8.16, Speed = 0.749 },
+			{ At = 11.2, Speed = 0.84 },
+			{ At = 14.4, Speed = 0.666 },
+			{ At = 18, Speed = 0.56 },
+		},
+	},
 	Sources = {
 		Tone = { SoundId = "rbxasset://sounds/volume_slider.ogg", Voices = 3 },
 		Impact = { SoundId = "rbxasset://sounds/action_jump_land.mp3", Voices = 1 },
@@ -34,6 +54,15 @@ return {
 			Notes = { 1, 0.75 },
 			Spacing = 0.14,
 		},
+		-- LastTrialOutcome = "Forfeited": one flat, quiet note.
+		Forfeited = {
+			Source = "Tone",
+			GainDb = -25,
+			Speed = 0.95,
+			Seconds = 0.16,
+			Cooldown = 1,
+			Priority = 3,
+		},
 		TeamReady = {
 			Source = "Tone",
 			GainDb = -21,
@@ -51,6 +80,31 @@ return {
 			Seconds = 0.12,
 			Cooldown = 0.45,
 			Priority = 2,
+		},
+		-- Replaces the plain tick in the final second of HazardStage=Warning: three rising notes.
+		-- ReducedNotes is used while the player has reduced motion/effects enabled.
+		WarningFinal = {
+			Source = "Tone",
+			GainDb = -21,
+			Speed = 1.3,
+			Seconds = 0.09,
+			Cooldown = 0.6,
+			Priority = 3,
+			Notes = { 1, 1.19, 1.41 },
+			ReducedNotes = { 1.19 },
+			Spacing = 0.09,
+		},
+		-- HazardStage changes to Recovery: the danger wave is over. Soft falling pair.
+		Safe = {
+			Source = "Tone",
+			GainDb = -25,
+			Speed = 1.0,
+			Seconds = 0.14,
+			Cooldown = 0.8,
+			Priority = 2,
+			Notes = { 1.33, 1 },
+			ReducedNotes = { 1 },
+			Spacing = 0.13,
 		},
 		Damage = {
 			Source = "Impact",

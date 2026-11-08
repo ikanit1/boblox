@@ -37,6 +37,10 @@ def item(parent, cls: str, name: str):
 def prop(node, kind: str, name: str, value):
     props = node.find("Properties")
     assert props is not None
+    # Overrides must replace the property, not emit conflicting XML values.
+    for previous in list(props):
+        if previous.get("name") == name:
+            props.remove(previous)
     element = ET.SubElement(props, kind, {"name": name})
     if kind == "bool":
         element.text = "true" if value else "false"
@@ -354,6 +358,9 @@ def station_hud():
     label(bar, "Detail", "Паркур слева · архив правил справа · галерея впереди", (1, -24, 0, 20), (0, 12, 0, 34), color=MUTED, text_size=13, align=2, scaled=True)
     button(bar, "Join", "В ИСПЫТАНИЯ", (0.5, -18, 0, 44), (0, 12, 0, 59), color=COLORS[2][3], ink=NAVY)
     button(bar, "Explore", "ИССЛЕДОВАТЬ", (0.5, -18, 0, 44), (0.5, 6, 0, 59), color=COLORS[0][3], ink=NAVY)
+    # Hidden until SocialService confirms invites are allowed; Station.client then splits the row in thirds.
+    invite = button(bar, "Invite", "ПОЗВАТЬ ДРУЗЕЙ", (1 / 3, -13, 0, 44), (2 / 3, 2, 0, 59), color=COLORS[1][3], ink=NAVY, text_size=14)
+    prop(invite, "bool", "Visible", False)
     # An unobtrusive top-right opt-out remains available while queued in the lobby.
     toggle = button(gui, "ExploreToggle", "ЛАБОРАТОРИЯ", (0, 155, 0, 44), (1, -168, 0, 178), text_size=13)
     prop(toggle, "bool", "Visible", False)

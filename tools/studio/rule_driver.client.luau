@@ -242,6 +242,117 @@ local function nearest(root, list, predicate)
 	end
 	return result, best
 end
+-- QA_FLOOR_ROUTING_BEGIN
+local function visiblePickup(player, pickup)
+	if pickup.Transparency >= 1 or pickup.LocalTransparencyModifier >= 1 then
+		return false
+	end
+	local index = pickup:GetAttribute("LunarStarIndex")
+	if index == nil then
+		return true
+	end
+	if type(index) ~= "number" or index % 1 ~= 0 or index < 1 or index > 9 then
+		return false
+	end
+	local goal = player:GetAttribute("LunarStarGoal") or 0
+	local count = player:GetAttribute("LunarStarCount") or 0
+	local mask = player:GetAttribute("LunarStarMask") or 0
+	return player:GetAttribute("InRound") == true
+		and player:GetAttribute("MovementWarning") ~= true
+		and goal > count
+		and bit32.band(mask, bit32.lshift(1, index - 1)) == 0
+end
+
+-- This driver chooses ordinary walking waypoints from the visible floor state.
+-- It cannot prove native reachability, simulate a jump, or rescue a falling character.
+local function safeFloorTarget(position, tiles, pickups, warningWord)
+	local function marked(tile)
+		local label = tile:FindFirstChild("TileLabel")
+		local text = label and label:FindFirstChild("ColorText")
+		return text and text.Text == warningWord
+	end
+	local function containing(point)
+		local found, distance = nil, math.huge
+		for _, tile in tiles do
+			local delta = point - tile.Position
+			if math.abs(delta.X) <= tile.Size.X / 2 and math.abs(delta.Z) <= tile.Size.Z / 2 then
+				local d = delta.X * delta.X + delta.Z * delta.Z
+				if d < distance then
+					found, distance = tile, d
+				end
+			end
+		end
+		return found
+	end
+	local function safe(tile)
+		return tile and tile.CanCollide and not marked(tile)
+	end
+	local start = containing(position)
+	if not start then
+		return nil, false
+	end
+	local queue, previous, depth = { start }, { [start] = start }, { [start] = 0 }
+	local cursor = 1
+	while cursor <= #queue do
+		local tile = queue[cursor]
+		cursor += 1
+		for _, nextTile in tiles do
+			local delta = nextTile.Position - tile.Position
+			local adjacent = (
+				math.abs(delta.X) < 0.01
+				and math.abs(math.abs(delta.Z) - (tile.Size.Z + nextTile.Size.Z) / 2) < 0.01
+			)
+				or (
+					math.abs(delta.Z) < 0.01
+					and math.abs(math.abs(delta.X) - (tile.Size.X + nextTile.Size.X) / 2) < 0.01
+				)
+			if not previous[nextTile] and adjacent and safe(nextTile) then
+				previous[nextTile], depth[nextTile] = tile, depth[tile] + 1
+				table.insert(queue, nextTile)
+			end
+		end
+	end
+	local destination, target, score = nil, nil, math.huge
+	-- Leaving a tile already marked for removal takes priority over bonus collection.
+	if safe(start) then
+		for _, pickup in pickups do
+			local tile = containing(pickup.Position)
+			local clearance = safe(tile) and previous[tile] ~= nil
+			for _, x in { -0.75, 0.75 } do
+				for _, z in { -0.75, 0.75 } do
+					clearance = clearance and safe(containing(pickup.Position + Vector3.new(x, 0, z)))
+				end
+			end
+			if clearance then
+				local delta = pickup.Position - position
+				local cost = depth[tile] * 14 + math.sqrt(delta.X * delta.X + delta.Z * delta.Z)
+				if cost < score then
+					destination, target, score = tile, pickup.Position, cost
+				end
+			end
+		end
+	end
+	if not destination then
+		for _, tile in queue do
+			if safe(tile) and depth[tile] < score then
+				destination, score = tile, depth[tile]
+			end
+		end
+	end
+	if not destination then
+		return nil, false
+	end
+	if destination == start then
+		return target or position, target ~= nil
+	end
+	local step = destination
+	while previous[step] ~= start do
+		step = previous[step]
+	end
+	return step.Position, false
+end
+-- QA_FLOOR_ROUTING_END
+
 local ok, message = xpcall(function()
 	while not stopped and qa.Parent and not qa:GetAttribute("Complete") do
 		local behavior = qa:GetAttribute("Behavior_" .. p.UserId) or qa:GetAttribute("Behavior") or "manual"
@@ -387,26 +498,45 @@ local ok, message = xpcall(function()
 					return v.CanCollide and v.Transparency < 0.1
 				end)
 				target = t and t.Position
-			elseif id == "LowGravity" or id == "RedLight" or id == "ReactorRush" then
-				local prefix = if id == "ReactorRush" then "Energy" else "Star"
-				local t, d = nearest(r, list, function(v)
+			elseif id == "LowGravity" or id == "RedLight" then
+				if id == "RedLight" and state:GetAttribute("HazardStage") ~= "Recovery" then
+					-- Yellow and red both mean stop; never chase the last green star.
+					target = r.Position
+				else
+					local stars = {}
+					for _, item in list do
+						if
+							item:IsA("BasePart")
+							and string.sub(item.Name, 1, 4) == "Star"
+							and visiblePickup(p, item)
+						then
+							table.insert(stars, item)
+						end
+					end
+					local atPickup
+					target, atPickup = safeFloorTarget(
+						r.Position,
+						arena.Tiles:GetChildren(),
+						stars,
+						if id == "LowGravity" then "ПРОВАЛ" else "УЙДИ"
+					)
+					jump = id == "LowGravity" and atPickup and target and dist(r.Position, target) < 5
+				end
+			elseif id == "PressureWave" or id == "ChangingWalls" then
+				local t = nearest(r, list, function(v)
+					return v:IsA("BasePart")
+						and (string.sub(v.Name, 1, 15) == "PressureShelter" or v.Name == "WallOpening")
+				end)
+				target = t and t.Position
+			elseif id == "ReactorRush" then
+				local prefix = "Energy"
+				local t = nearest(r, list, function(v)
 					return string.sub(v.Name, 1, #prefix) == prefix
 				end)
 				target = t and t.Position
-				if id == "LowGravity" then
-					jump = t and d < 5
-				end
-				if
-					id == "RedLight"
-					and not string.find(state:GetAttribute("Instruction") or "", "ЗЕЛЁНЫЙ", 1, true)
-				then
-					target = r.Position
-				end
-				if id == "ReactorRush" then
-					jump = arena.Laser.Transparency < 0.2
-						and math.abs(r.Position.Z - arena.Laser.Position.Z)
-							< (qa:GetAttribute("JumpLead") or 3)
-				end
+				jump = arena.Laser.Transparency < 0.2
+					and math.abs(r.Position.Z - arena.Laser.Position.Z)
+						< (qa:GetAttribute("JumpLead") or 3)
 			elseif id == "MeteorRain" then
 				local warnings = {}
 				for _, v in list do
